@@ -12,3 +12,23 @@
     icon = "github"
     showName = true
     target = "_blank"
+
+[[main]]
+  name = "LinkedIn"
+  url = "https://www.linkedin.com/in/skylerkingnetwork"
+  weight = 30
+
+  [main.params]
+    icon = "linkedin"
+    showName = true
+    target = "_blank"
+
+[[main]]
+  name = "Instagram"
+  url = "https://instagram.com/moshthesubnet"
+  weight = 40
+
+  [main.params]
+    icon = "instagram"
+    showName = true
+    target = "_blank"
