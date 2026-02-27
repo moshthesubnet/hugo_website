@@ -18,7 +18,7 @@ Successfully migrated from a basic VLAN configuration using the insecure default
 {{< callout type="info" >}}
 **Interactive Diagram**
 
-View the **[interactive network topology diagram →](network-topology-diagram.html)** showing the before and after configurations side-by-side.
+View the **[interactive network topology diagram →](/projects/network-topology-diagram.html)** showing the before and after configurations side-by-side.
 
 The diagram features:
 
