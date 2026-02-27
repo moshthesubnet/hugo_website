@@ -1,0 +1,17 @@
+baseURL = "https://moshthesubnet.com"
+theme = "congo"
+defaultContentLanguage = "en"
+enableRobotsTXT = true
+enableGitInfo = true
+enableInlineShortcodes = true
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS"]
+  page = ["HTML"]
+
+[markup]
+  [markup.highlight]
+    noClasses = false
+  [markup.goldmark.renderer]
+    unsafe = true

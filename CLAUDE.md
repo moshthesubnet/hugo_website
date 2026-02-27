@@ -4,10 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Hugo static site using the [Hextra](https://github.com/imfing/hextra) theme, migrated from MkDocs Material. Deployed on Cloudflare Pages.
+Hugo static site using the [Congo](https://github.com/jpanther/congo) theme, migrated from MkDocs Material. Deployed on Cloudflare Pages.
 
-- **Hugo version**: 0.157.0 Extended (required — Hextra needs the extended build for CSS processing)
-- **Theme**: Hextra, added as a git submodule at `themes/hextra/`
+- **Hugo version**: 0.157.0 Extended (required — Congo needs the extended build for CSS processing)
+- **Theme**: Congo v2.13.0, added as a git submodule at `themes/congo/`
 - **Content**: Markdown files in `content/`
 - **Deploy target**: Cloudflare Pages (build output: `public/`)
 
@@ -28,7 +28,10 @@ Requires PyYAML (`python3 -m pip install pyyaml`). The script handles admonition
 ## Commands
 
 ```bash
-# Local dev server (live reload, includes drafts)
+# Local dev server — accessible on the host IP (recommended)
+make serve
+
+# Local dev server — localhost only
 hugo server -D
 
 # Production build
@@ -38,13 +41,15 @@ hugo --minify
 hugo new content docs/my-page.md
 ```
 
+`make serve` auto-detects the host IP via `hostname -I` and binds to all interfaces, so the site is reachable from other devices on the network at `http://<host-ip>:1313/`.
+
 ## Architecture
 
 ### Content Structure
 
 Content lives in `content/` and maps directly to URL paths:
 
-- `content/_index.md` — home page (uses `layout: hextra-home`)
+- `content/_index.md` — home page
 - `content/docs/` — documentation section (sidebar auto-generated from directory structure)
 - Add new sections by creating `content/<section>/_index.md`
 
@@ -52,12 +57,11 @@ Sidebar navigation is **automatically generated** from the `content/docs/` direc
 
 ### Configuration
 
-`hugo.toml` — main site config. Key areas:
-- `baseURL` and `title` — update before deploying
-- `[menu.main]` — top navbar links
-- `[params]` — Hextra theme options (search, footer, page width, etc.)
-
-Re-enable `enableGitInfo = true` in `hugo.toml` after the first git commit to show last-modified dates on pages.
+Config is split into `config/_default/`:
+- `hugo.toml` — baseURL, theme, markup, outputs
+- `languages.en.toml` — title, `[params.author]` block, description
+- `menus.en.toml` — top navbar links
+- `params.toml` — colorScheme, appearance, search, homepage layout, article display, footer
 
 ### Cloudflare Pages Deployment
 
@@ -66,19 +70,26 @@ Re-enable `enableGitInfo = true` in `hugo.toml` after the first git commit to sh
 - **Build output directory**: `public`
 - **Environment variable**: `HUGO_VERSION = 0.157.0`
 
-### Hextra Shortcodes
+### Congo Shortcodes
 
-Hextra provides shortcodes for common documentation patterns — use these instead of raw HTML:
+Congo provides shortcodes for common documentation patterns — use these instead of raw HTML:
 
-- `{{< callout type="info" >}}` — note/warning/info boxes (replaces MkDocs admonitions)
-- `{{< tabs >}}` / `{{< tab >}}` — tabbed content
-- `{{< cards >}}` / `{{< card >}}` — card grids
-- `{{< steps >}}` — numbered step lists
-- `{{< filetree >}}` — directory tree display
-- `{{< details >}}` — collapsible sections
+- `{{< alert >}}` — info callout box
+- `{{< alert "danger" >}}` — danger/error callout box
+- `{{< alert "warning" >}}` — warning callout box
+- `{{< mermaid >}} ... {{< /mermaid >}}` — Mermaid diagrams
+- `{{< badge >}}` — inline badges
+- `{{< button >}}` — styled buttons
+- `{{< figure >}}` — images with captions
+- `{{< lead >}}` — lead/intro paragraph text
 
 ### Customization
 
-- Override any theme layout by copying it from `themes/hextra/layouts/` to the site's `layouts/`
-- Add custom CSS in `assets/css/custom.css` (create this file)
-- Theme partials meant to be overridden live in `themes/hextra/layouts/_partials/custom/`
+- Override any theme layout by copying it from `themes/congo/layouts/` to the site's `layouts/`
+- Congo uses `_partials/` and `_shortcodes/` (underscore prefix, Hugo 0.126+ convention)
+- Add custom CSS in `assets/css/custom.css` — Congo bundles it automatically
+- Extend the `<head>` via `layouts/_partials/extend-head.html`
+
+### Known Compatibility Issue
+
+Congo v2.13.0 has a bug with Hugo 0.157.0: `_partials/functions/warnings.html` calls `{{ if .Author }}` on the site object, which panics because `.Site.Author` was removed in Hugo 0.124+. This is worked around by overriding that partial at `layouts/_partials/functions/warnings.html`.

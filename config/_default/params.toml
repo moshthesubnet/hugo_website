@@ -1,0 +1,23 @@
+colorScheme = "ocean"
+defaultAppearance = "dark"
+autoSwitchAppearance = true
+
+enableSearch = true
+enableCodeCopy = true
+mainSections = ["docs"]
+
+[homepage]
+  layout = "page"
+
+[article]
+  showDate = true
+  showDateUpdated = true
+  showReadingTime = false
+  showTableOfContents = true
+
+[list]
+  showSummary = true
+
+[footer]
+  showCopyright = true
+  showThemeAttribution = false

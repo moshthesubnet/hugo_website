@@ -52,16 +52,16 @@ curl -sSL https://install.pi-hole.net | bash
 
 Follow the on-screen prompts to complete the setup.
 
-{{< callout type="info" >}}
+{{< alert >}}
 **Official Resources**
 
 * [Pi-hole Official Site](https://pi-hole.net)
 * [Official Installation Guide](https://docs.pi-hole.net/main/basic-install/)
 * [Post-Installation Steps](https://docs.pi-hole.net/guides/post-install/)
 * [Pi-hole CLI Command Reference](https://docs.pi-hole.net/core/pihole-command/)
-{{< /callout >}}
+{{< /alert >}}
 
-{{< callout type="error" >}}
+{{< alert "danger" >}}
 **Troubleshooting**
 
 If you lose the admin password generated at the end of the install, run this command in the LXC console to set a new one:
@@ -69,10 +69,10 @@ If you lose the admin password generated at the end of the install, run this com
 ```bash
 pihole -a -p
 ```
-{{< /callout >}}
+{{< /alert >}}
 
-{{< callout type="info" >}}
+{{< alert >}}
 **(Optional) Secondary DNS**
 
 Set your Secondary DNS to `1.1.1.1` for a fallback if your lab goes down.
-{{< /callout >}}
+{{< /alert >}}

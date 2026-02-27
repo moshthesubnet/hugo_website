@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(
-    ".md-content h1, .md-content h2, .md-content h3, .md-content p, .md-content pre, .md-content ul, .md-content ol, .md-content div[align='center'], .md-content table"
+    "article h1, article h2, article h3, article p, article pre, article ul, article ol, article table"
   ).forEach(function (el, index) {
     if (!el.hasAttribute("data-aos")) {
       el.setAttribute("data-aos", "fade-up");
