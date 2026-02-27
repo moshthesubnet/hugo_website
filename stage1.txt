@@ -1,0 +1,204 @@
+Stage 1 – Hugo Project Setup & MkDocs Migration
+================================================
+Date: 2026-02-27
+Source repo: https://github.com/moshthesubnet/my-lab-docs
+Hugo site:   /home/skyler/website
+Live URL:    https://moshthesubnet.com
+
+
+── Step 1: Fix directory permissions ────────────────────────────────────────
+  sudo chown skyler:skyler /home/skyler/website
+
+
+── Step 2: Install Hugo Extended ────────────────────────────────────────────
+  sudo snap install hugo
+  # Installed: hugo v0.157.0 Extended
+
+
+── Step 3: Initialize Hugo project ──────────────────────────────────────────
+  hugo new site . --force
+  git init
+  git branch -m main
+
+
+── Step 4: Add Hextra theme (git submodule) ─────────────────────────────────
+  git submodule add https://github.com/imfing/hextra.git themes/hextra
+
+  Chosen because it is the closest Hugo equivalent to MkDocs Material:
+  sidebar navigation, search, dark mode, callouts, tabs, cards, steps.
+
+
+── Step 5: Configure hugo.toml ──────────────────────────────────────────────
+  Created hugo.toml with:
+  - baseURL = "https://moshthesubnet.com"
+  - title   = "Mosh The Subnet"
+  - theme   = "hextra"
+  - Navbar menu: Docs, Search, GitHub
+  - Hextra params: search (flexsearch), dark/light toggle, copy-code button
+  - markup.goldmark.renderer.unsafe = true  (required for HTML in Markdown)
+
+  NOTE: enableGitInfo is set to false initially.
+        Change to `enableGitInfo = true` after at least one commit exists
+        so Hugo can read last-modified dates from git history.
+
+
+── Step 6: Configure Cloudflare Pages (wrangler.toml) ───────────────────────
+  Created wrangler.toml:
+  - name = "hugo_website"
+  - pages_build_output_dir = "public"
+  - HUGO_VERSION = "0.157.0" set for both production and preview environments
+
+  Cloudflare Pages dashboard settings:
+  - Build command:          hugo --minify
+  - Build output directory: public
+  - Environment variable:   HUGO_VERSION = 0.157.0
+
+
+── Step 7: Create .gitignore ────────────────────────────────────────────────
+  Ignores: public/, resources/, .hugo_build.lock
+
+
+── Step 8: Initial commit ───────────────────────────────────────────────────
+  Committed: CLAUDE.md, hugo.toml, wrangler.toml, .gitignore,
+             content/_index.md, content/docs/_index.md
+
+
+── Step 9: Write migration script (migrate.py) ──────────────────────────────
+  migrate.py clones moshthesubnet/my-lab-docs and converts all content.
+
+  Conversions performed automatically:
+  ┌─────────────────────────────────────────┬────────────────────────────────┐
+  │ MkDocs syntax                           │ Hugo/Hextra equivalent         │
+  ├─────────────────────────────────────────┼────────────────────────────────┤
+  │ !!! info/tip "Title"                    │ {{< callout type="info" >}}    │
+  │ !!! warning/caution                     │ {{< callout type="warning" >}} │
+  │ !!! danger/bug/error                    │ {{< callout type="error" >}}   │
+  │ !!! note (no type)                      │ {{< callout >}}                │
+  │ ??? type "Title"  (collapsible)         │ {{< details "Title" >}}        │
+  │ === "Tab" blocks                        │ {{< tabs >}} / {{< tab >}}     │
+  │ [text](file.md) internal links          │ [text](file/)                  │
+  │ { .md-button .md-button--primary }      │ (stripped)                     │
+  │ :material-*: / :fontawesome-*: icons   │ (stripped)                     │
+  │ Relative image paths (../assets/x.png) │ /assets/x.png (absolute)       │
+  │ YAML front matter                       │ Preserved + title/weight added │
+  └─────────────────────────────────────────┴────────────────────────────────┘
+
+  Assets handled:
+  - docs/assets/         → static/assets/        (images, SVG, favicon)
+  - docs/stylesheets/extra.css → assets/css/custom.css  (Hextra auto-loads)
+  - docs/stylesheets/aos.css  → static/css/aos.css
+  - docs/javascripts/aos.js   → static/js/aos.js
+  - docs/javascripts/extra.js → static/js/extra.js
+  - projects/network-topology-diagram.html → static/projects/ (served at
+                                             /projects/network-topology-diagram.html)
+
+  AOS (Animate On Scroll) injection:
+  - Created layouts/_partials/custom/head.html
+  - Loads /css/aos.css, /js/aos.js, /js/extra.js on every page
+
+  Section _index.md files created:
+  - content/docs/_index.md        (Documentation, weight 1)
+  - content/docs/lab/_index.md    (My Lab,         weight 1)
+  - content/docs/guides/_index.md (Guides,         weight 2)
+  - content/docs/projects/_index.md (Projects,     weight 3)
+
+  Dependency: PyYAML  →  python3 -m pip install pyyaml
+  Known issue fixed:  mkdocs.yml uses !!python/name: YAML tags that
+                      PyYAML's SafeLoader rejects. Resolved with a custom
+                      multi-constructor that ignores python/ tags.
+
+  Usage:
+    python3 migrate.py                         # clone from GitHub + migrate
+    python3 migrate.py --source /path/to/repo  # use local clone
+    python3 migrate.py --dest /path/to/site    # custom Hugo root
+
+
+── Step 10: Run migration ───────────────────────────────────────────────────
+  python3 migrate.py
+
+  Result: 9 Markdown files migrated
+  ┌──────────────────────────────────────┬────────────────────────────────────┐
+  │ Source (docs/)                       │ Destination (content/)             │
+  ├──────────────────────────────────────┼────────────────────────────────────┤
+  │ index.md                             │ content/_index.md                  │
+  │ bio.md                               │ content/docs/bio.md                │
+  │ lab/overview.md                      │ content/docs/lab/overview.md       │
+  │ lab/proxmox.md                       │ content/docs/lab/proxmox.md        │
+  │ guides/pihole-lxc.md                 │ content/docs/guides/pihole-lxc.md  │
+  │ projects/projects.md                 │ content/docs/projects/projects.md  │
+  │ projects/VLAN_segmentation.md        │ content/docs/projects/             │
+  │ projects/Local_AI_Coding_Agent.md    │ content/docs/projects/             │
+  │ projects/ospf_lab.md                 │ content/docs/projects/             │
+  └──────────────────────────────────────┴────────────────────────────────────┘
+
+
+── Step 11: Fix internal links (post-migration audit) ───────────────────────
+  Hugo lowercases all URL slugs. 13 links were broken and fixed:
+
+  content/_index.md (5 fixes — missing docs/ prefix from root page):
+    projects/Local_AI_Coding_Agent/  →  /docs/projects/local_ai_coding_agent/
+    projects/VLAN_segmentation/      →  /docs/projects/vlan_segmentation/
+    ./bio/                           →  /docs/bio/
+    ./lab/overview/                  →  /docs/lab/overview/
+    ./projects/projects/             →  /docs/projects/projects/
+
+  content/docs/bio.md (2 fixes — missing ../ prefix):
+    projects/VLAN_segmentation/  →  ../projects/vlan_segmentation/
+    projects/projects/           →  ../projects/projects/
+
+  content/docs/projects/projects.md (4 fixes — uppercase slugs):
+    ./Local_AI_Coding_Agent/  →  ./local_ai_coding_agent/  (×2)
+    ./VLAN_segmentation/      →  ./vlan_segmentation/       (×2)
+
+  content/docs/lab/overview.md (1 fix — uppercase slug):
+    ../projects/VLAN_segmentation/  →  ../projects/vlan_segmentation/
+
+  content/docs/lab/proxmox.md (1 fix — uppercase slug):
+    ../projects/VLAN_segmentation/  →  ../projects/vlan_segmentation/
+
+  content/docs/projects/VLAN_segmentation.md (1 fix — wrong relative path):
+    network-topology-diagram.html  →  /projects/network-topology-diagram.html
+
+
+── Step 12: Dev server ──────────────────────────────────────────────────────
+  # Local only:
+  hugo server -D
+
+  # Accessible from other machines on the network:
+  hugo server -D --bind 0.0.0.0
+
+  Default port: 1313
+  LAN address:  http://10.30.30.30:1313
+
+
+── Manual items still outstanding ──────────────────────────────────────────
+  1. assets/css/custom.css
+     Still contains MkDocs Material selectors (.md-typeset, .md-admonition,
+     etc.) that don't exist in Hextra. Needs rewrite to match Hextra markup.
+
+  2. static/js/extra.js
+     AOS initialiser queries '.md-content h1' — a MkDocs-specific class.
+     Update selectors to Hextra's markup for scroll animations to fire.
+
+  3. content/_index.md (home page)
+     The page renders but uses a plain Markdown layout. The original MkDocs
+     home had AOS-animated hero sections. Consider redesigning with Hextra's
+     {{< cards >}} and hero shortcodes for a better landing page.
+
+  4. :material-*: icons
+     Stripped during migration (no direct equivalent in Hextra). Headings
+     that relied on them for visual identity now have plain text.
+     Replace with emoji or Hextra's {{< icon "name" >}} shortcode.
+
+  5. enableGitInfo
+     Set to false in hugo.toml. Enable once git history has commits so
+     "last updated" dates appear on pages.
+
+  6. Push to GitHub remote and connect to Cloudflare Pages
+     (not yet done — local only at this stage)
+
+
+── Git log at end of session ────────────────────────────────────────────────
+  1d2b6e1  Fix internal links across all migrated content
+  65cf53c  Migrate MkDocs content to Hugo/Hextra
+  d1b0544  Initial Hugo project setup
