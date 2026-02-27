@@ -10,7 +10,7 @@ mainSections = ["docs"]
   layout = "page"
 
 [article]
-  showDate = true
+  showDate = false
   showDateUpdated = true
   showReadingTime = false
   showTableOfContents = true
