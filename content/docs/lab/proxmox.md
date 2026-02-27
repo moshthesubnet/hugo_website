@@ -52,7 +52,7 @@ Both Proxmox nodes are **trunked to the UniFi switch**, allowing VMs and contain
 
 **Bridge Configuration:** Each Proxmox node uses a VLAN-aware bridge (`vmbr0`) configured to trunk VLANs 10, 20, 30, 40, 50, and 99.
 
-[Learn more about my VLAN architecture →](../projects/VLAN_segmentation/)
+[Learn more about my VLAN architecture →](../projects/vlan_segmentation/)
 
 ---
 

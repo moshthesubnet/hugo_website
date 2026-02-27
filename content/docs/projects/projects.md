@@ -11,7 +11,7 @@ Welcome to my homelab and networking projects portfolio. Here you'll find docume
 
 ## Network Infrastructure Projects
 
-### [Privacy-First Local AI Coding Assistant](./Local_AI_Coding_Agent/)
+### [Privacy-First Local AI Coding Assistant](./local_ai_coding_agent/)
 
 **Status:** ✅ Complete | **Date:** February 2026
 
@@ -27,11 +27,11 @@ Deployed a fully localized, privacy-first AI coding assistant for secure, termin
 
 **Technologies:** Proxmox, Ubuntu Server, Ollama, Qwen2.5-Coder, Aider, Python, Generative AI
 
-[Read Full Documentation →](./Local_AI_Coding_Agent/)
+[Read Full Documentation →](./local_ai_coding_agent/)
 
 ---
 
-### [VLAN Segmentation and Security Hardening](./VLAN_segmentation/)
+### [VLAN Segmentation and Security Hardening](./vlan_segmentation/)
 
 **Status:** ✅ Complete | **Date:** January 2026
 
@@ -47,7 +47,7 @@ Comprehensive network redesign implementing proper VLAN segmentation, security h
 
 **Technologies:** VLANs, 802.1Q, Inter-VLAN Routing, Access Control Lists, Network Segmentation
 
-[Read Full Documentation →](./VLAN_segmentation/)
+[Read Full Documentation →](./vlan_segmentation/)
 
 ---
 

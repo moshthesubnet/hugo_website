@@ -50,7 +50,7 @@ My network follows enterprise segmentation principles with dedicated VLANs for s
 | 50 | IoT | Smart home devices (isolated) |
 | 99 | Management | Network device administration |
 
-[Read the full VLAN Segmentation project documentation →](../projects/VLAN_segmentation/)
+[Read the full VLAN Segmentation project documentation →](../projects/vlan_segmentation/)
 
 ### Networking Philosophy
 

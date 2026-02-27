@@ -76,7 +76,7 @@ Deployed a fully localized, privacy-first AI coding assistant using Ollama and A
 - Integrated Aider CLI for seamless, terminal-based AI pair programming and automated Git commits
 - Established secure API access controls across isolated network VLANs
 
-[View Full Documentation →](projects/Local_AI_Coding_Agent/)
+[View Full Documentation →](/docs/projects/local_ai_coding_agent/)
 
 ---
 
@@ -91,13 +91,13 @@ Redesigned my homelab network from an insecure flat configuration to a properly 
 - Created dedicated management network (VLAN 99) for administrative access
 - Deployed 7-VLAN architecture isolating home, malware analysis, homelab, servers, IoT, and management traffic
 
-[View Full Documentation →](projects/VLAN_segmentation/)
+[View Full Documentation →](/docs/projects/vlan_segmentation/)
 
 ---
 
-[Read My Full Story](./bio/)
-[Explore The Lab](./lab/overview/)
-[View All Projects](./projects/projects/)
+[Read My Full Story](/docs/bio/)
+[Explore The Lab](/docs/lab/overview/)
+[View All Projects](/docs/projects/projects/)
 
 ---
 
