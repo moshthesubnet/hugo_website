@@ -16,7 +16,7 @@ mainSections = ["docs"]
   showTableOfContents = true
 
 [list]
-  showSummary = true
+  showSummary = false
   groupByYear = false
 
 [footer]
