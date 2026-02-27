@@ -37,7 +37,7 @@ weight: 1
 
 *Validated skills. No paper tigers here.*
 
-<div class="certifications-table" markdown>
+<div class="certifications-table">
 
 | Badge | Certification | Date |
 | :--- | :--- | :--- |

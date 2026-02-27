@@ -79,7 +79,7 @@ I recently optimized my container strategy for efficiency and simplified managem
 | **Home Assistant** | Smart home orchestration | 40 |
 | **Pi-hole** | Network-wide DNS filtering & ad blocking | 40 |
 | **Uptime Kuma** | Service monitoring & alerting | 40 |
-| **MkDocs** | Documentation site (this site!) | 40 |
+| **Hugo/Congo** | Documentation site (this site!) | 40 |
 
 ---
 
