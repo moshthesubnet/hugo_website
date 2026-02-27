@@ -3,7 +3,7 @@ title = "Mosh The Subnet"
 theme = "hextra"
 
 enableRobotsTXT = true
-enableGitInfo = false  # enable after first git commit
+enableGitInfo = true  # enable after first git commit
 enableInlineShortcodes = true
 
 [outputs]

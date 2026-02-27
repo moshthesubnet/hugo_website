@@ -11,6 +11,20 @@ Hugo static site using the [Hextra](https://github.com/imfing/hextra) theme, mig
 - **Content**: Markdown files in `content/`
 - **Deploy target**: Cloudflare Pages (build output: `public/`)
 
+## Migration
+
+`migrate.py` migrates content from the MkDocs source repo (`moshthesubnet/my-lab-docs`) into this Hugo project.
+
+```bash
+# Clone from GitHub and migrate (default)
+python3 migrate.py
+
+# Use an existing local clone
+python3 migrate.py --source /path/to/my-lab-docs
+```
+
+Requires PyYAML (`python3 -m pip install pyyaml`). The script handles admonitions, tabs, internal links, icons, image paths, front matter, assets, and AOS scripts. See the end-of-run summary for manual follow-up items (custom CSS selectors, home page layout, material icons).
+
 ## Commands
 
 ```bash
