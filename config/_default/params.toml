@@ -17,6 +17,7 @@ mainSections = ["docs"]
 
 [list]
   showSummary = true
+  groupByYear = false
 
 [footer]
   showCopyright = true
