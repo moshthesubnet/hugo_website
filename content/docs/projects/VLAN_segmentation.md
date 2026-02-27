@@ -15,7 +15,7 @@ Successfully migrated from a basic VLAN configuration using the insecure default
 
 ## Network Topology
 
-{{< callout type="info" >}}
+{{< alert >}}
 **Interactive Diagram**
 
 View the **[interactive network topology diagram →](/projects/network-topology-diagram.html)** showing the before and after configurations side-by-side.
@@ -26,7 +26,7 @@ The diagram features:
 - Color-coded VLANs for easy identification
 - Security improvements highlighted
 - Interactive hover effects
-{{< /callout >}}
+{{< /alert >}}
 
 ---
 
@@ -353,11 +353,11 @@ ping 10.30.X.10 source 10.10.X.100
 
 ### Network Diagram
 
-{{< callout type="info" >}}
+{{< alert >}}
 **Visual Reference**
 
 Refer to the interactive network topology diagram for a visual representation of this architecture. The diagram shows the before and after configurations side-by-side.
-{{< /callout >}}
+{{< /alert >}}
 
 ### IP Address Management (IPAM)
 

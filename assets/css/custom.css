@@ -1,70 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
-[data-md-color-scheme="slate"] {
-  /* This changes the top navigation bar and main headers */
-  --md-primary-fg-color: #240046 !important; 
-  
-  /* This changes your links, buttons, and highlights */
-  --md-accent-fg-color:  #00E5FF !important; 
-}
-
-/* Makes the active (currently selected) page link Electric Blue */
-.md-nav__link--active {
-  color: #00E5FF !important;
-  font-weight: bold;
-}
-
-/* Makes the inactive links a bright, readable white so they don't fade away */
-.md-nav__link {
-  color: #ffffff !important; 
-}
-
-/* Adds a bright blue glow to links when you hover over them with your mouse */
-.md-nav__link:hover {
-  color: #00E5FF !important;
-  transition: color 0.2s ease-in-out;
-}
-/* Custom Admonition Glow */
-.md-typeset .admonition, 
-.md-typeset details {
-  border-width: 2px;
-  border-radius: 0px !important;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 15px rgba(63, 81, 181, 0.2);
-  border-left-width: .4rem;
-}
-
-/* Specific styling for 'info' boxes - Swapped to Electric Blue */
-.md-typeset .admonition.info {
-  border-color: #00E5FF;
-  box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
-}
-
-/* Specific styling for 'bug' (Troubleshooting) boxes - Swapped to Neon Pink/Red */
-.md-typeset .admonition.bug {
-  border-color: #FF0055;
-  box-shadow: 0 0 12px rgba(255, 0, 85, 0.4);
-}
-
-/* Specific styling for 'tip' boxes - Swapped to Toxic Green */
-.md-typeset .admonition.tip {
-  border-color: #39FF14;
-  box-shadow: 0 0 12px rgba(57, 255, 20, 0.4);
-}
-
-/* Make all tables scrollable horizontally instead of wrapping */
-.md-content table {
-  display: block;
-  overflow-x: auto;
-  white-space: normal;
-}
-
-/* Certifications table exempt from nowrap */
-.certifications-table table {
-  white-space: normal;
-}
-
 /* Page load animation */
-.md-content {
+article,
+main {
   animation: fadeInPage 0.8s ease-in-out;
 }
 
@@ -79,10 +17,35 @@
   }
 }
 
+/* Target all markdown headers */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Bebas Neue', sans-serif !important;
+  text-transform: uppercase;
+  font-weight: 400 !important;
+  letter-spacing: 2px !important;
+  line-height: 1.2 !important;
+}
+
+/* Make all tables scrollable horizontally instead of wrapping */
+article table,
+main table {
+  display: block;
+  overflow-x: auto;
+  white-space: normal;
+}
+
+/* Certifications table exempt from nowrap */
+.certifications-table table {
+  white-space: normal;
+}
+
 /* Prevent AOS from animating inside table cells */
-.md-content table td,
-.md-content table th,
-.md-content table tr {
+article table td,
+article table th,
+article table tr,
+main table td,
+main table th,
+main table tr {
   min-width: 120px;
   padding: 8px 12px;
   animation: none !important;
@@ -90,36 +53,35 @@
   transform: none !important;
 }
 
-/* Target all markdown headers and the navigation title */
-h1, h2, h3, h4, h5, h6, .md-header__button.md-logo, .md-nav__title {
-  font-family: 'Bebas Neue', sans-serif !important;
-  text-transform: uppercase;
-  
-  /* Forces the browser to stop applying "faux bold" to smaller headers */
-  font-weight: 400 !important; 
-  
-  /* Increased from 1.5px to 2px to give the letters more breathing room */
-  letter-spacing: 2px !important; 
-  
-  /* Adds a tiny bit of extra height between multi-line headers */
-  line-height: 1.2 !important; 
+/* Alert box glow — Congo renders alerts as .not-prose divs */
+article .not-prose {
+  border-left-width: 0.4rem;
+  border-radius: 0px !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 15px rgba(63, 81, 181, 0.2);
 }
 
-/* Optional: Make the site title in the header slightly larger to stand out */
-.md-header__topic {
-  font-family: 'Bebas Neue', sans-serif !important;
-  font-size: 1.5rem !important;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+/* Info / default alert — Electric Blue */
+article .not-prose:not([class*="danger"]):not([class*="warning"]) {
+  border-color: #00E5FF;
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
 }
 
-/* Brutalist Aesthetic: Kill all rounded corners */
-.md-search__input,
-.md-search__form,
-.md-button,
-.md-typeset pre > code,
-.md-typeset .highlight,
-.md-nav__link,
-.md-header {
+/* Danger alert — Neon Pink/Red */
+article .not-prose[class*="danger"] {
+  border-color: #FF0055;
+  box-shadow: 0 0 12px rgba(255, 0, 85, 0.4);
+}
+
+/* Warning alert — Toxic Green */
+article .not-prose[class*="warning"] {
+  border-color: #39FF14;
+  box-shadow: 0 0 12px rgba(57, 255, 20, 0.4);
+}
+
+/* Brutalist Aesthetic: Kill all rounded corners on code blocks */
+article pre,
+article code,
+main pre,
+main code {
   border-radius: 0px !important;
 }

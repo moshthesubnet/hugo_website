@@ -23,14 +23,14 @@ Successfully migrated from cloud-dependent AI coding assistants (e.g., GitHub Co
 ## System Architecture
 
 ### Interactive Topology
-```mermaid
+{{< mermaid >}}
 graph LR
     %% Workstation
     subgraph DevEnv["VLAN 10 - Home"]
         Aider["Aider CLI Agent<br/>(Developer Workstation)"]
         Git["Local Git Repo"]
     end
-    
+
     %% Homelab
     subgraph LabEnv["VLAN 30 - Homelab"]
         subgraph UbuntuVM["Ubuntu Server VM (10.30.X.30)"]
@@ -49,12 +49,12 @@ graph LR
     classDef device fill:#234e52,stroke:#4fd1c5,stroke-width:2px,color:#e6fffa
     classDef service fill:#44337a,stroke:#b794f4,stroke-width:2px,color:#faf5ff
     classDef storage fill:#5f370e,stroke:#f6ad55,stroke-width:2px,color:#ffffff
-    
+
     class DevEnv,LabEnv vlan
     class Aider,Git,UbuntuVM device
     class Ollama service
     class Models storage
-```
+{{< /mermaid >}}
 
 ## Architecture Evolution
 

@@ -1,0 +1,16 @@
+title = "Mosh The Subnet"
+languageName = "English"
+weight = 1
+
+[params]
+  description = "Network and cloud engineering documentation, homelab projects, and guides."
+
+  [params.author]
+    name = "Skyler King"
+    image = "assets/github_profile.png"
+    headline = "Cloud/Network Engineering Student"
+    bio = "Documenting the journey from homelab to enterprise-grade networking."
+    links = [
+      { github = "https://github.com/moshthesubnet" },
+      { linkedin = "https://www.linkedin.com/in/skylerkingnetwork" }
+    ]
