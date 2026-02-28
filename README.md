@@ -146,7 +146,7 @@ Set these under **Settings → Secrets and variables → Actions** in the GitHub
 | Secret | Description |
 |--------|-------------|
 | `CLOUDFLARE_API_TOKEN` | Cloudflare API token with **Cloudflare Pages: Edit** permission |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID (visible in the Cloudflare dashboard URL or via `wrangler whoami`) |
 
 ---
 
