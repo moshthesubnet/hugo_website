@@ -4,11 +4,14 @@ showTitle: false
 
 #   My career path has more hops than my traceroute
 
-<div data-aos="zoom-in" data-aos-duration="800" align="center">
-  <img src="/assets/github_profile.png" alt="Skyler King" width="350" style="border-radius: 50%; margin: 30px 0; border: 4px solid #b84fff; box-shadow: 0 8px 24px rgba(184,79,255,0.4);">
+<div style="display: flex; align-items: center; gap: 2.5rem; flex-wrap: wrap; margin: 2rem 0;">
+  <div data-aos="zoom-in" data-aos-duration="800" style="flex: 0 0 auto;">
+    <img class="profile-photo" src="/assets/github_profile.png" alt="Skyler King" style="width: 220px; border: 4px solid #b84fff; box-shadow: 0 8px 24px rgba(184,79,255,0.4); display: block;">
+  </div>
+  <div style="flex: 1 1 260px;">
+    <p>I'm <strong>Skyler King</strong> — a Cloud/Network Engineering student, homelab enthusiast, and emo/punk rock fan. I document everything from breaking OSPF in the lab to fixing critical infrastructure in production.</p>
+  </div>
 </div>
-
-<p>I'm <strong>Skyler King</strong> — a Cloud/Network Engineering student, homelab enthusiast, and emo/punk rock fan. I document everything from breaking OSPF in the lab to fixing critical infrastructure in production.</p>
 
 ---
 

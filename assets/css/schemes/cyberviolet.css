@@ -1,0 +1,40 @@
+/* Cyberviolet scheme — Cyber Violet base + Electric Blue accent */
+:root {
+  --color-neutral: 255, 255, 255;
+  /* Violet-tinted neutrals */
+  --color-neutral-50:  250, 247, 255;
+  --color-neutral-100: 242, 235, 255;
+  --color-neutral-200: 225, 210, 250;
+  --color-neutral-300: 195, 170, 230;
+  --color-neutral-400: 145, 110, 185;
+  --color-neutral-500: 100,  65, 140;
+  --color-neutral-600:  65,  30, 100;
+  --color-neutral-700:  40,  10,  65;
+  --color-neutral-800:  24,   4,  42;
+  --color-neutral-900:  14,   1,  25;
+  --color-neutral-950:   6,   0,  12;
+  /* Electric Blue primary */
+  --color-primary-50:  236, 254, 255;
+  --color-primary-100: 210, 252, 255;
+  --color-primary-200: 165, 248, 255;
+  --color-primary-300: 100, 242, 255;
+  --color-primary-400:  50, 238, 255;
+  --color-primary-500:   0, 229, 255;
+  --color-primary-600:   0, 188, 212;
+  --color-primary-700:   0, 151, 172;
+  --color-primary-800:   0, 118, 137;
+  --color-primary-900:   0,  90, 105;
+  --color-primary-950:   0,  52,  64;
+  /* Cyber Violet secondary */
+  --color-secondary-50:  248, 240, 255;
+  --color-secondary-100: 238, 220, 255;
+  --color-secondary-200: 215, 180, 254;
+  --color-secondary-300: 180, 130, 250;
+  --color-secondary-400: 140,  70, 240;
+  --color-secondary-500: 100,  20, 200;
+  --color-secondary-600:  65,   5, 150;
+  --color-secondary-700:  45,   0, 110;
+  --color-secondary-800:  36,   0,  70;
+  --color-secondary-900:  20,   0,  42;
+  --color-secondary-950:  10,   0,  20;
+}
