@@ -1,10 +1,14 @@
-colorScheme = "ocean"
+colorScheme = "cyberviolet"
 defaultAppearance = "dark"
-autoSwitchAppearance = true
-
+autoSwitchAppearance = false
 enableSearch = true
 enableCodeCopy = true
 mainSections = ["docs"]
+
+[header]
+  layout = "basic"
+  logo = "img/logo.png"
+  showTitle = false
 
 [homepage]
   layout = "page"
