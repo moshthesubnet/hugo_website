@@ -2,3 +2,6 @@ public/
 resources/
 .hugo_build.lock
 .claude/
+__pycache__/
+homelab_topology
+static/assets/homelab_topology.svg

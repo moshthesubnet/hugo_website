@@ -38,6 +38,12 @@ My lab is built on three core pillars:
 
 My network follows enterprise segmentation principles with dedicated VLANs for security and performance optimization.
 
+### Topology
+
+An interactive diagram of the full lab network — physical hierarchy, VLAN segments, and all VMs/LXCs across both Proxmox nodes.
+
+[View the Interactive Network Topology →](/projects/homelab-topology.html)
+
 ### VLAN Structure
 
 | VLAN ID | Name | Purpose |
