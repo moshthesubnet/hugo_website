@@ -17,7 +17,7 @@
 
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1629 100%);
+            background: linear-gradient(135deg, #06000C 0%, #18042A 50%, #0E0119 100%);
             color: #e0e6f0;
             min-height: 100vh;
             padding: 40px 20px;
@@ -82,7 +82,7 @@
         }
 
         .stat-card {
-            background: rgba(15, 22, 41, 0.6);
+            background: rgba(24, 4, 42, 0.6);
             border: 1px solid rgba(0, 217, 255, 0.2);
             border-radius: 12px;
             padding: 24px 16px;
@@ -116,7 +116,7 @@
 
         /* ── Section wrapper ─────────────────────────────────────────────── */
         .topology-section {
-            background: rgba(15, 22, 41, 0.6);
+            background: rgba(24, 4, 42, 0.6);
             border: 1px solid rgba(0, 217, 255, 0.2);
             border-radius: 20px;
             padding: 40px;
@@ -175,7 +175,7 @@
 
         /* ── Device cards — same shape as template's .device ────────────── */
         .device {
-            background: linear-gradient(135deg, rgba(20, 30, 55, 0.8), rgba(15, 22, 41, 0.9));
+            background: linear-gradient(135deg, rgba(40, 10, 65, 0.8), rgba(24, 4, 42, 0.9));
             border: 2px solid rgba(0, 217, 255, 0.3);
             border-radius: 12px;
             padding: 18px 22px;
@@ -314,7 +314,7 @@
         }
 
         .guest-card {
-            background: rgba(10, 14, 39, 0.6);
+            background: rgba(6, 0, 12, 0.6);
             border-left: 3px solid;
             border-radius: 8px;
             padding: 9px 12px;
@@ -328,7 +328,7 @@
         }
 
         .guest-card:hover {
-            background: rgba(10, 14, 39, 0.9);
+            background: rgba(6, 0, 12, 0.9);
             transform: translateX(3px);
         }
 
@@ -345,7 +345,7 @@
         }
 
         .vlan-item {
-            background: rgba(10, 14, 39, 0.5);
+            background: rgba(6, 0, 12, 0.5);
             border-left: 4px solid;
             border-radius: 8px;
             padding: 15px 18px;
@@ -361,7 +361,7 @@
 
         .vlan-item:hover,
         .vlan-item.active {
-            background: rgba(10, 14, 39, 0.8);
+            background: rgba(6, 0, 12, 0.8);
             transform: translateX(5px);
         }
 
@@ -431,7 +431,7 @@
         }
 
         .improvement-card {
-            background: rgba(10, 14, 39, 0.6);
+            background: rgba(6, 0, 12, 0.6);
             border: 1px solid rgba(0, 217, 255, 0.2);
             border-radius: 12px;
             padding: 25px;
@@ -468,7 +468,7 @@
 
         /* ── Legend — identical to template ─────────────────────────────── */
         .legend {
-            background: rgba(15, 22, 41, 0.6);
+            background: rgba(24, 4, 42, 0.6);
             border: 1px solid rgba(0, 217, 255, 0.2);
             border-radius: 12px;
             padding: 25px;
@@ -545,7 +545,7 @@
         const VLANS = [
             {
                 id: 10,  name: 'HOME',    subnet: '10.10.0.0/24',
-                devices: ['Windows 11 VM', 'Home Assistant VM', 'Workstation', 'Raspberry Pi', 'Routers of Rohan (WiFi)'],
+                devices: ['Workstation', 'Routers of Rohan (WiFi)'],
             },
             {
                 id: 20,  name: 'MALWARE', subnet: '10.20.0.0/24',
@@ -553,11 +553,11 @@
             },
             {
                 id: 30,  name: 'LAB',     subnet: '10.30.0.0/24',
-                devices: ['Docker Host 1 VM', 'Docker Host 2 VM', 'Docker Host 3 VM', 'Podman Host VM', 'Cisco CML VM', 'Netbox VM'],
+                devices: ['Cisco CML VM', 'Netbox VM', 'LLM Server VM', 'Windows 11 VM', 'Home Assistant VM', 'Raspberry Pi', 'MkDocs LXC', 'Bookstack LXC', 'Twingate LXC'],
             },
             {
                 id: 40,  name: 'SERVERS', subnet: '10.40.0.0/28',
-                devices: ['TrueNAS VM', 'Bookstack LXC', 'MkDocs LXC', 'DNS 1', 'DNS 2 LXC', 'Twingate LXC', 'Ollama VM', 'NAS (Backup)'],
+                devices: ['TrueNAS VM', 'NAS (Backup)', 'Docker Host 1 VM', 'Docker Host 2 VM', 'Docker Host 3 VM', 'Podman Host VM'],
             },
             {
                 id: 50,  name: 'IoT',     subnet: '10.50.0.0/24',
@@ -565,7 +565,7 @@
             },
             {
                 id: 99,  name: 'MGMT',    subnet: '10.99.0.0/24',
-                devices: ['OPNsense VM', 'USW Pro Max 16 PoE', 'Cisco Catalyst 2960X', 'Unifi AP'],
+                devices: ['OPNsense VM', 'USW Pro Max 16 PoE', 'Cisco Catalyst 2960X', 'Unifi AP', 'DNS 1', 'DNS 2 LXC'],
             },
             {
                 id: 999, name: 'NATIVE',  subnet: 'No IP — trunk only',
@@ -574,23 +574,23 @@
         ];
 
         const PROXMOX_GUESTS = [
-            { name: 'DNS 2',         type: 'LXC', vlanId: 40, icon: '📡' },
-            { name: 'Twingate',      type: 'LXC', vlanId: 40, icon: '🔗' },
-            { name: 'Bookstack',     type: 'LXC', vlanId: 40, icon: '📚' },
-            { name: 'MkDocs',        type: 'LXC', vlanId: 40, icon: '📄' },
+            { name: 'DNS 2',         type: 'LXC', vlanId: 99, icon: '📡' },
+            { name: 'Twingate',      type: 'LXC', vlanId: 30, icon: '🔗' },
+            { name: 'Bookstack',     type: 'LXC', vlanId: 30, icon: '📚' },
+            { name: 'MkDocs',        type: 'LXC', vlanId: 30, icon: '📄' },
             { name: 'TrueNAS',       type: 'VM',  vlanId: 40, icon: '💿' },
-            { name: 'Docker Host 1', type: 'VM',  vlanId: 30, icon: '🐳' },
-            { name: 'Docker Host 2', type: 'VM',  vlanId: 30, icon: '🐳' },
-            { name: 'Docker Host 3', type: 'VM',  vlanId: 30, icon: '🐳' },
-            { name: 'Windows 11',    type: 'VM',  vlanId: 10, icon: '🪟' },
-            { name: 'Home Asst.',    type: 'VM',  vlanId: 10, icon: '🏠' },
+            { name: 'Docker Host 1', type: 'VM',  vlanId: 40, icon: '🐳' },
+            { name: 'Docker Host 2', type: 'VM',  vlanId: 40, icon: '🐳' },
+            { name: 'Docker Host 3', type: 'VM',  vlanId: 40, icon: '🐳' },
+            { name: 'Windows 11',    type: 'VM',  vlanId: 30, icon: '🪟' },
+            { name: 'Home Asst.',    type: 'VM',  vlanId: 30, icon: '🏠' },
             { name: 'Netbox',        type: 'VM',  vlanId: 30, icon: '🗃️'  },
             { name: 'Cisco CML',     type: 'VM',  vlanId: 30, icon: '🌐' },
-            { name: 'Ollama',        type: 'VM',  vlanId: 40, icon: '🤖' },
+            { name: 'LLM Server',    type: 'VM',  vlanId: 30, icon: '🤖' },
             { name: 'Kali Linux',    type: 'VM',  vlanId: 20, icon: '💀' },
             { name: 'Parrot OS',     type: 'VM',  vlanId: 20, icon: '🦜' },
             { name: 'Sec. Onion',    type: 'VM',  vlanId: 20, icon: '🧅' },
-            { name: 'Podman Host',   type: 'VM',  vlanId: 30, icon: '📦' },
+            { name: 'Podman Host',   type: 'VM',  vlanId: 40, icon: '📦' },
         ];
 
         const HIGHLIGHTS = [
@@ -607,7 +607,7 @@
             {
                 icon: '🧪',
                 title: 'Isolated Lab Segment',
-                desc:  'VLAN 30 (Lab) contains Docker Hosts, Podman, Cisco CML and Netbox — kept completely separate from the home network so experiments stay contained.',
+                desc:  'VLAN 30 (Lab) contains the LLM Server, Cisco CML, Netbox, Windows 11, Home Assistant, Raspberry Pi, and internal services — kept completely separate from the home network so experiments stay contained.',
             },
             {
                 icon: '🔒',
@@ -617,12 +617,12 @@
             {
                 icon: '📡',
                 title: 'Dedicated Management',
-                desc:  'VLAN 99 carries only management traffic to network devices. VLAN 999 is the secure native/trunk VLAN with no IP assignment, mitigating VLAN hopping.',
+                desc:  'VLAN 99 hosts network management devices alongside DNS infrastructure (DNS 1 &amp; DNS 2). VLAN 999 is the secure native/trunk VLAN with no IP assignment, mitigating VLAN hopping.',
             },
             {
                 icon: '🌐',
                 title: 'Zero Trust Remote Access',
-                desc:  'Twingate LXC on VLAN 40 provides Zero Trust Network Access to internal services without exposing any ports or running a traditional VPN.',
+                desc:  'Twingate LXC on VLAN 30 provides Zero Trust Network Access to internal services without exposing any ports or running a traditional VPN.',
             },
         ];
 
@@ -746,8 +746,8 @@
                                         onClick={() => toggleFilter(99)} />
                                     <DeviceNode
                                         icon="📡" name="DNS 1" subtitle="Primary DNS Server"
-                                        vlanId={40}
-                                        onClick={() => toggleFilter(40)} />
+                                        vlanId={99}
+                                        onClick={() => toggleFilter(99)} />
                                 </div>
                             </div>
 
@@ -862,11 +862,11 @@
                                         onClick={() => toggleFilter(50)} />
                                     <DeviceNode
                                         icon="🥧" name="Raspberry Pi" subtitle="via Catalyst 2960X"
-                                        vlanId={10}
-                                        borderColor="rgba(100,118,135,0.4)"
-                                        iconBg="linear-gradient(135deg,#647687,#314354)"
-                                        nameColor="#adb5c2"
-                                        onClick={() => toggleFilter(10)} />
+                                        vlanId={30}
+                                        borderColor="rgba(255,164,27,0.4)"
+                                        iconBg="linear-gradient(135deg,#ffa41b,#b07010)"
+                                        nameColor="#ffa41b"
+                                        onClick={() => toggleFilter(30)} />
                                 </div>
                             </div>
 
@@ -891,7 +891,7 @@
                                 style={{
                                     borderColor: '#8b95b0',
                                     background:  selectedVlan === null ? '#8b95b0' : 'transparent',
-                                    color:       selectedVlan === null ? '#0a0e27' : '#8b95b0',
+                                    color:       selectedVlan === null ? '#06000C' : '#8b95b0',
                                 }}
                                 onClick={() => setSelectedVlan(null)}>
                                 All
@@ -902,7 +902,7 @@
                                     style={{
                                         borderColor: vc(v.id),
                                         background:  selectedVlan === v.id ? vc(v.id) : 'transparent',
-                                        color:       selectedVlan === v.id ? '#0a0e27' : vc(v.id),
+                                        color:       selectedVlan === v.id ? '#06000C' : vc(v.id),
                                     }}
                                     onClick={() => toggleFilter(v.id)}>
                                     VLAN {v.id}
@@ -925,7 +925,7 @@
                                     </div>
                                     {expandedVlan === vlan.id && (
                                         <div style={{
-                                            background: 'rgba(10,14,39,0.35)',
+                                            background: 'rgba(6,0,12,0.35)',
                                             borderLeft: `4px solid ${vc(vlan.id)}`,
                                             borderRadius: '0 0 8px 8px',
                                             padding: '14px 18px',
@@ -947,7 +947,7 @@
                             <ul style={{ marginLeft: '20px', lineHeight: '1.8' }}>
                                 <li>VLAN 999 is the secure native trunk VLAN — no IP assignment</li>
                                 <li>Malware lab (VLAN 20) isolated with strict deny-all firewall rules</li>
-                                <li>VLAN 99 restricts management access to network devices only</li>
+                                <li>VLAN 99 hosts management devices and DNS infrastructure (DNS 1 &amp; DNS 2)</li>
                                 <li>Zero Trust remote access via Twingate — no exposed public ports</li>
                             </ul>
                         </div>
