@@ -59,7 +59,19 @@ showTitle: false
 * **Automation:** Python, Ansible, Terraform
 
 ---
-![Homelab Topology](/assets/homelab_topology.svg)
+
+## 🗺️ Lab Network Topology
+
+An interactive map of my home lab's physical hierarchy and network segmentation — from the OPNsense firewall through the Unifi distribution core down to 17 VMs and LXCs spread across two Proxmox nodes, isolated across 7 VLANs.
+
+The diagram covers:
+
+- **Physical topology** — layer-by-layer view from WAN to wireless endpoints
+- **VLAN map** — all 7 segments with filterable device lists and subnets
+- **Proxmox Node 2 inventory** — every VM and LXC color-coded by VLAN
+- **Lab highlights** — firewall design, malware sandbox, Zero Trust access, and more
+
+[Explore the Interactive Diagram →](/projects/homelab-topology.html)
 
 ---
 
