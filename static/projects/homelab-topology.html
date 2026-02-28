@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Lab Network Topology</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1629 100%);
+            color: #e0e6f0;
+            min-height: 100vh;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        /* ── Header ─────────────────────────────────────────────────────── */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #00d9ff, transparent);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50%       { opacity: 1;   }
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #00d9ff 0%, #7b61ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            color: #8b95b0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* ── Stats row ──────────────────────────────────────────────────── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(15, 22, 41, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 12px;
+            padding: 24px 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(0, 217, 255, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .stat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d9ff, #7b61ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: #8b95b0;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 6px;
+        }
+
+        /* ── Section wrapper ─────────────────────────────────────────────── */
+        .topology-section {
+            background: rgba(15, 22, 41, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            margin-bottom: 40px;
+        }
+
+        .topology-section:hover {
+            border-color: rgba(0, 217, 255, 0.4);
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #00d9ff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ── Physical topology layers ────────────────────────────────────── */
+        .topology-layers {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .topology-layer {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .layer-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #8b95b0;
+            margin-bottom: 10px;
+        }
+
+        .layer-nodes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            justify-content: center;
+        }
+
+        /* ── Device cards — same shape as template's .device ────────────── */
+        .device {
+            background: linear-gradient(135deg, rgba(20, 30, 55, 0.8), rgba(15, 22, 41, 0.9));
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            border-radius: 12px;
+            padding: 18px 22px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            min-width: 175px;
+        }
+
+        .device::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .device:hover::before { left: 100%; }
+
+        .device:hover {
+            border-color: rgba(0, 217, 255, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 217, 255, 0.15);
+        }
+
+        .device.clickable { cursor: pointer; }
+
+        .device-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .device-icon {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, #00d9ff, #7b61ff);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .device-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #00d9ff;
+        }
+
+        .device-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: #8b95b0;
+            margin-top: 3px;
+        }
+
+        .vlan-badge {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-top: 8px;
+        }
+
+        /* ── Connectors ──────────────────────────────────────────────────── */
+        .layer-connector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4px 0;
+        }
+
+        .connector-line {
+            width: 2px; height: 28px;
+            background: linear-gradient(180deg, rgba(0,217,255,0.6), rgba(123,97,255,0.6));
+        }
+
+        .connector-arrow {
+            font-size: 1rem;
+            color: #00d9ff;
+            animation: bounce-down 2s ease-in-out infinite;
+        }
+
+        .connector-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: #8b95b0;
+            margin-top: 4px;
+        }
+
+        @keyframes bounce-down {
+            0%, 100% { transform: translateY(0);   }
+            50%       { transform: translateY(4px); }
+        }
+
+        /* ── Proxmox compound box ────────────────────────────────────────── */
+        .proxmox-compound {
+            width: 100%;
+            background: rgba(27, 161, 226, 0.06);
+            border: 2px solid rgba(27, 161, 226, 0.4);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .proxmox-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .proxmox-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1ba1e2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .proxmox-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: #8b95b0;
+        }
+
+        .guest-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+            gap: 9px;
+            margin-top: 20px;
+        }
+
+        .guest-card {
+            background: rgba(10, 14, 39, 0.6);
+            border-left: 3px solid;
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .guest-card:hover {
+            background: rgba(10, 14, 39, 0.9);
+            transform: translateX(3px);
+        }
+
+        .guest-card.dimmed { opacity: 0.18; }
+
+        .guest-name { color: #c8d1e0; font-weight: 500; }
+        .guest-type { font-size: 0.65rem; color: #8b95b0; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* ── VLAN items — identical to template ─────────────────────────── */
+        .vlan-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .vlan-item {
+            background: rgba(10, 14, 39, 0.5);
+            border-left: 4px solid;
+            border-radius: 8px;
+            padding: 15px 18px;
+            display: grid;
+            grid-template-columns: 90px 1fr 160px;
+            gap: 15px;
+            align-items: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .vlan-item:hover,
+        .vlan-item.active {
+            background: rgba(10, 14, 39, 0.8);
+            transform: translateX(5px);
+        }
+
+        .vlan-id   { font-weight: 700; font-size: 1rem; }
+        .vlan-name { font-weight: 500; color: #c8d1e0; }
+        .vlan-subnet { text-align: right; color: #8b95b0; font-size: 0.85rem; }
+
+        /* VLAN color coding — same as template */
+        .vlan-10  { border-left-color: #00d9ff; }
+        .vlan-20  { border-left-color: #ff3d71; }
+        .vlan-30  { border-left-color: #ffa41b; }
+        .vlan-40  { border-left-color: #4caf50; }
+        .vlan-50  { border-left-color: #9c27b0; }
+        .vlan-99  { border-left-color: #00ff9d; }
+        .vlan-999 { border-left-color: #7b61ff; }
+
+        /* Expanded device list under a VLAN row */
+        .vlan-device-list {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            margin-top: 4px;
+        }
+
+        .vlan-device-chip {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: #b0b9cc;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 6px;
+            padding: 4px 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .vlan-device-chip::before { content: '›'; color: #00d9ff; font-weight: 700; }
+
+        /* ── Improvements / highlights ───────────────────────────────────── */
+        .improvements-section {
+            background: linear-gradient(135deg, rgba(0, 217, 136, 0.05), rgba(0, 217, 255, 0.05));
+            border: 2px solid rgba(0, 217, 136, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .improvements-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #00ff9d;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .improvements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 20px;
+        }
+
+        .improvement-card {
+            background: rgba(10, 14, 39, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .improvement-card:hover {
+            border-color: rgba(0, 217, 136, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .improvement-icon { font-size: 2rem; margin-bottom: 15px; }
+        .improvement-title { font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; color: #00d9ff; }
+        .improvement-desc  { font-size: 0.95rem; line-height: 1.6; color: #b0b9cc; }
+
+        /* ── Security boxes — same as template ──────────────────────────── */
+        .security-check {
+            background: linear-gradient(135deg, rgba(0, 217, 136, 0.1), rgba(0, 217, 136, 0.05));
+            border-left: 4px solid #00d988;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .security-check-title {
+            font-weight: 700;
+            color: #00ff9d;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ── Legend — identical to template ─────────────────────────────── */
+        .legend {
+            background: rgba(15, 22, 41, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .legend-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            color: #8b95b0;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .legend-color { width: 40px; height: 4px; border-radius: 2px; }
+
+        /* ── Filter tab buttons ──────────────────────────────────────────── */
+        .filter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .filter-tab {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 7px 18px;
+            border-radius: 20px;
+            border: 2px solid;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.25s ease;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .topology-section { padding: 24px; }
+            .vlan-item { grid-template-columns: 80px 1fr; }
+            .vlan-subnet { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        /* ── Data ─────────────────────────────────────────────────────────── */
+
+        const VLAN_COLOR = {
+            10: '#00d9ff', 20: '#ff3d71', 30: '#ffa41b',
+            40: '#4caf50', 50: '#9c27b0', 99: '#00ff9d', 999: '#7b61ff',
+        };
+
+        const VLANS = [
+            {
+                id: 10,  name: 'HOME',    subnet: '10.10.0.0/24',
+                devices: ['Windows 11 VM', 'Home Assistant VM', 'Workstation', 'Raspberry Pi', 'Routers of Rohan (WiFi)'],
+            },
+            {
+                id: 20,  name: 'MALWARE', subnet: '10.20.0.0/24',
+                devices: ['Kali Linux VM', 'Parrot OS VM', 'Security Onion VM'],
+            },
+            {
+                id: 30,  name: 'LAB',     subnet: '10.30.0.0/24',
+                devices: ['Docker Host 1 VM', 'Docker Host 2 VM', 'Docker Host 3 VM', 'Podman Host VM', 'Cisco CML VM', 'Netbox VM'],
+            },
+            {
+                id: 40,  name: 'SERVERS', subnet: '10.40.0.0/28',
+                devices: ['TrueNAS VM', 'Bookstack LXC', 'MkDocs LXC', 'DNS 1', 'DNS 2 LXC', 'Twingate LXC', 'Ollama VM', 'NAS (Backup)'],
+            },
+            {
+                id: 50,  name: 'IoT',     subnet: '10.50.0.0/24',
+                devices: ['IoT devices (SSID: IoT WiFi)'],
+            },
+            {
+                id: 99,  name: 'MGMT',    subnet: '10.99.0.0/24',
+                devices: ['OPNsense VM', 'USW Pro Max 16 PoE', 'Cisco Catalyst 2960X', 'Unifi AP'],
+            },
+            {
+                id: 999, name: 'NATIVE',  subnet: 'No IP — trunk only',
+                devices: ['Trunk: OPNsense → Dist Switch', 'All inter-switch links'],
+            },
+        ];
+
+        const PROXMOX_GUESTS = [
+            { name: 'DNS 2',         type: 'LXC', vlanId: 40, icon: '📡' },
+            { name: 'Twingate',      type: 'LXC', vlanId: 40, icon: '🔗' },
+            { name: 'Bookstack',     type: 'LXC', vlanId: 40, icon: '📚' },
+            { name: 'MkDocs',        type: 'LXC', vlanId: 40, icon: '📄' },
+            { name: 'TrueNAS',       type: 'VM',  vlanId: 40, icon: '💿' },
+            { name: 'Docker Host 1', type: 'VM',  vlanId: 30, icon: '🐳' },
+            { name: 'Docker Host 2', type: 'VM',  vlanId: 30, icon: '🐳' },
+            { name: 'Docker Host 3', type: 'VM',  vlanId: 30, icon: '🐳' },
+            { name: 'Windows 11',    type: 'VM',  vlanId: 10, icon: '🪟' },
+            { name: 'Home Asst.',    type: 'VM',  vlanId: 10, icon: '🏠' },
+            { name: 'Netbox',        type: 'VM',  vlanId: 30, icon: '🗃️'  },
+            { name: 'Cisco CML',     type: 'VM',  vlanId: 30, icon: '🌐' },
+            { name: 'Ollama',        type: 'VM',  vlanId: 40, icon: '🤖' },
+            { name: 'Kali Linux',    type: 'VM',  vlanId: 20, icon: '💀' },
+            { name: 'Parrot OS',     type: 'VM',  vlanId: 20, icon: '🦜' },
+            { name: 'Sec. Onion',    type: 'VM',  vlanId: 20, icon: '🧅' },
+            { name: 'Podman Host',   type: 'VM',  vlanId: 30, icon: '📦' },
+        ];
+
+        const HIGHLIGHTS = [
+            {
+                icon: '🔥',
+                title: 'Virtualised Firewall',
+                desc:  'OPNsense runs as a VM on Proxmox Node 1. All traffic passes through it before reaching the distribution switch, with VLAN-aware firewall rules per segment.',
+            },
+            {
+                icon: '🔀',
+                title: 'Unifi Distribution Core',
+                desc:  'USW Pro Max 16 PoE aggregates every VLAN trunk and provides PoE to the access point. Managed centrally via the Unifi Network Application.',
+            },
+            {
+                icon: '🧪',
+                title: 'Isolated Lab Segment',
+                desc:  'VLAN 30 (Lab) contains Docker Hosts, Podman, Cisco CML and Netbox — kept completely separate from the home network so experiments stay contained.',
+            },
+            {
+                icon: '🔒',
+                title: 'Malware Sandbox',
+                desc:  'VLAN 20 hard-isolates Kali, Parrot OS and Security Onion with a deny-all outbound firewall rule, preventing any lateral movement into the main network.',
+            },
+            {
+                icon: '📡',
+                title: 'Dedicated Management',
+                desc:  'VLAN 99 carries only management traffic to network devices. VLAN 999 is the secure native/trunk VLAN with no IP assignment, mitigating VLAN hopping.',
+            },
+            {
+                icon: '🌐',
+                title: 'Zero Trust Remote Access',
+                desc:  'Twingate LXC on VLAN 40 provides Zero Trust Network Access to internal services without exposing any ports or running a traditional VPN.',
+            },
+        ];
+
+        /* ── Helpers ──────────────────────────────────────────────────────── */
+
+        const vc = (id) => VLAN_COLOR[id] || '#8b95b0';
+
+        /* ── Sub-components ───────────────────────────────────────────────── */
+
+        const Connector = ({ label }) => (
+            <div className="layer-connector">
+                <div className="connector-line" />
+                <div className="connector-arrow">▼</div>
+                {label && <div className="connector-label">{label}</div>}
+            </div>
+        );
+
+        const DeviceNode = ({
+            icon, name, subtitle, vlanId,
+            borderColor, iconBg, nameColor,
+            onClick,
+        }) => (
+            <div
+                className={`device${onClick ? ' clickable' : ''}`}
+                style={borderColor ? { borderColor } : {}}
+                onClick={onClick}
+            >
+                <div className="device-header">
+                    <div className="device-icon" style={iconBg ? { background: iconBg } : {}}>
+                        {icon}
+                    </div>
+                    <div>
+                        <div className="device-name" style={nameColor ? { color: nameColor } : {}}>
+                            {name}
+                        </div>
+                        {subtitle && <div className="device-subtitle">{subtitle}</div>}
+                    </div>
+                </div>
+                {vlanId && (
+                    <span className="vlan-badge" style={{
+                        background: `${vc(vlanId)}20`,
+                        color:       vc(vlanId),
+                        border:     `1px solid ${vc(vlanId)}55`,
+                    }}>
+                        VLAN {vlanId}
+                    </span>
+                )}
+            </div>
+        );
+
+        /* ── Root component ───────────────────────────────────────────────── */
+
+        const HomelabTopology = () => {
+            const [selectedVlan, setSelectedVlan] = useState(null);
+            const [pveExpanded,  setPveExpanded]  = useState(true);
+            const [expandedVlan, setExpandedVlan] = useState(null);
+
+            const toggleFilter = (id) => setSelectedVlan(prev => prev === id ? null : id);
+            const toggleVlanRow = (id) => setExpandedVlan(prev => prev === id ? null : id);
+
+            const dimmed = (g) => selectedVlan !== null && g.vlanId !== selectedVlan;
+
+            const filteredVlans = selectedVlan
+                ? VLANS.filter(v => v.id === selectedVlan)
+                : VLANS;
+
+            return (
+                <div className="container">
+
+                    {/* Header */}
+                    <div className="header">
+                        <h1>Home Lab Network Topology</h1>
+                        <p className="subtitle">Proxmox · OPNsense · Unifi · 7 VLANs · 17 Guests</p>
+                    </div>
+
+                    {/* Stats */}
+                    <div className="stats-row">
+                        {[
+                            ['2',  'Proxmox Nodes'],
+                            ['13', 'Virtual Machines'],
+                            ['4',  'LXC Containers'],
+                            ['7',  'VLANs'],
+                            ['3',  'Switches / APs'],
+                            ['2',  'WiFi SSIDs'],
+                        ].map(([n, l]) => (
+                            <div key={l} className="stat-card">
+                                <div className="stat-number">{n}</div>
+                                <div className="stat-label">{l}</div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* ── Physical Topology ── */}
+                    <div className="topology-section">
+                        <div className="section-title">🗺️ Physical Topology</div>
+
+                        <div className="topology-layers">
+
+                            {/* WAN */}
+                            <div className="topology-layer">
+                                <div className="layer-label">WAN</div>
+                                <div className="layer-nodes">
+                                    <DeviceNode icon="🌐" name="Internet" subtitle="ISP Upstream"
+                                        borderColor="rgba(139,149,176,0.35)"
+                                        iconBg="linear-gradient(135deg,#4a5270,#2a3050)" />
+                                </div>
+                            </div>
+
+                            <Connector label="WAN uplink" />
+
+                            {/* Edge — Proxmox Node 1 */}
+                            <div className="topology-layer">
+                                <div className="layer-label">Edge · Proxmox Node 1</div>
+                                <div className="layer-nodes">
+                                    <DeviceNode
+                                        icon="🔥" name="OPNsense VM" subtitle="Firewall / Router"
+                                        vlanId={99}
+                                        borderColor="rgba(229,20,0,0.45)"
+                                        iconBg="linear-gradient(135deg,#e51400,#8b0000)"
+                                        nameColor="#ff6b6b"
+                                        onClick={() => toggleFilter(99)} />
+                                    <DeviceNode
+                                        icon="📡" name="DNS 1" subtitle="Primary DNS Server"
+                                        vlanId={40}
+                                        onClick={() => toggleFilter(40)} />
+                                </div>
+                            </div>
+
+                            <Connector label="Trunk port · VLAN 999" />
+
+                            {/* Distribution */}
+                            <div className="topology-layer">
+                                <div className="layer-label">Distribution Layer</div>
+                                <div className="layer-nodes">
+                                    <DeviceNode
+                                        icon="🔀" name="USW Pro Max 16 PoE" subtitle="Distribution Switch"
+                                        vlanId={99}
+                                        borderColor="rgba(250,104,0,0.5)"
+                                        iconBg="linear-gradient(135deg,#fa6800,#c73500)"
+                                        nameColor="#fa9c50"
+                                        onClick={() => toggleFilter(99)} />
+                                </div>
+                            </div>
+
+                            <Connector label="Tagged VLANs on all trunk ports" />
+
+                            {/* Access */}
+                            <div className="topology-layer">
+                                <div className="layer-label">Access Layer</div>
+                                <div className="layer-nodes">
+                                    <DeviceNode
+                                        icon="⚡" name="Catalyst 2960X" subtitle="Cisco Access Switch"
+                                        vlanId={99}
+                                        borderColor="rgba(229,20,0,0.4)"
+                                        iconBg="linear-gradient(135deg,#e51400,#8b0000)"
+                                        nameColor="#ff6b6b"
+                                        onClick={() => toggleFilter(99)} />
+                                    <DeviceNode
+                                        icon="📶" name="Unifi AP" subtitle="Wireless Access Point"
+                                        vlanId={99}
+                                        borderColor="rgba(156,39,176,0.4)"
+                                        iconBg="linear-gradient(135deg,#9c27b0,#6a1b9a)"
+                                        nameColor="#ce93d8"
+                                        onClick={() => toggleFilter(99)} />
+                                    <DeviceNode
+                                        icon="💻" name="Workstation" subtitle="Direct Connect"
+                                        vlanId={10}
+                                        onClick={() => toggleFilter(10)} />
+                                    <DeviceNode
+                                        icon="💾" name="NAS (Backup)" subtitle="Direct Connect"
+                                        vlanId={40}
+                                        borderColor="rgba(76,175,80,0.4)"
+                                        iconBg="linear-gradient(135deg,#4caf50,#2e7d32)"
+                                        nameColor="#81c784"
+                                        onClick={() => toggleFilter(40)} />
+                                </div>
+                            </div>
+
+                            <Connector label="Trunk · all VLANs" />
+
+                            {/* Proxmox Node 2 */}
+                            <div className="topology-layer">
+                                <div className="layer-label">Server Layer · Proxmox Node 2</div>
+                                <div style={{ width: '100%' }}>
+                                    <div className="proxmox-compound">
+                                        <div className="proxmox-header"
+                                            onClick={() => setPveExpanded(e => !e)}>
+                                            <div className="proxmox-title">
+                                                🖥️ &nbsp;PROXMOX NODE 2
+                                            </div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                                                <span className="proxmox-meta">13 VMs · 4 LXCs</span>
+                                                <span style={{ color: '#1ba1e2', fontSize: '1.1rem' }}>
+                                                    {pveExpanded ? '▲' : '▼'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        {pveExpanded && (
+                                            <div className="guest-grid">
+                                                {PROXMOX_GUESTS.map((g, i) => (
+                                                    <div key={i}
+                                                        className={`guest-card${dimmed(g) ? ' dimmed' : ''}`}
+                                                        style={{ borderLeftColor: vc(g.vlanId) }}
+                                                        onClick={() => toggleFilter(g.vlanId)}>
+                                                        <span>{g.icon}</span>
+                                                        <div>
+                                                            <div className="guest-name">{g.name}</div>
+                                                            <div className="guest-type">{g.type}</div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Connector label="Wireless SSIDs via Unifi AP · wired via Catalyst 2960X" />
+
+                            {/* Wireless / edge endpoints */}
+                            <div className="topology-layer">
+                                <div className="layer-label">Wireless &amp; Edge Endpoints</div>
+                                <div className="layer-nodes">
+                                    <DeviceNode
+                                        icon="📡" name="Routers of Rohan" subtitle="Home WiFi SSID"
+                                        vlanId={10}
+                                        borderColor="rgba(0,217,255,0.4)"
+                                        iconBg="linear-gradient(135deg,#00d9ff,#0086a6)"
+                                        nameColor="#00d9ff"
+                                        onClick={() => toggleFilter(10)} />
+                                    <DeviceNode
+                                        icon="📡" name="IoT WiFi" subtitle="IoT SSID"
+                                        vlanId={50}
+                                        borderColor="rgba(156,39,176,0.4)"
+                                        iconBg="linear-gradient(135deg,#9c27b0,#6a1b9a)"
+                                        nameColor="#ce93d8"
+                                        onClick={() => toggleFilter(50)} />
+                                    <DeviceNode
+                                        icon="🥧" name="Raspberry Pi" subtitle="via Catalyst 2960X"
+                                        vlanId={10}
+                                        borderColor="rgba(100,118,135,0.4)"
+                                        iconBg="linear-gradient(135deg,#647687,#314354)"
+                                        nameColor="#adb5c2"
+                                        onClick={() => toggleFilter(10)} />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {selectedVlan && (
+                            <div style={{ marginTop: 24, fontFamily: "'JetBrains Mono',monospace",
+                                fontSize: '0.78rem', color: '#8b95b0', textAlign: 'center' }}>
+                                Showing VLAN {selectedVlan} — click any node or "All" to clear filter
+                            </div>
+                        )}
+                    </div>
+
+                    {/* ── VLAN Map ── */}
+                    <div className="topology-section">
+                        <div className="section-title">📊 VLAN Map</div>
+
+                        {/* Filter tabs */}
+                        <div className="filter-tabs">
+                            <button
+                                className="filter-tab"
+                                style={{
+                                    borderColor: '#8b95b0',
+                                    background:  selectedVlan === null ? '#8b95b0' : 'transparent',
+                                    color:       selectedVlan === null ? '#0a0e27' : '#8b95b0',
+                                }}
+                                onClick={() => setSelectedVlan(null)}>
+                                All
+                            </button>
+                            {VLANS.map(v => (
+                                <button key={v.id}
+                                    className="filter-tab"
+                                    style={{
+                                        borderColor: vc(v.id),
+                                        background:  selectedVlan === v.id ? vc(v.id) : 'transparent',
+                                        color:       selectedVlan === v.id ? '#0a0e27' : vc(v.id),
+                                    }}
+                                    onClick={() => toggleFilter(v.id)}>
+                                    VLAN {v.id}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* VLAN rows */}
+                        <div className="vlan-list">
+                            {filteredVlans.map(vlan => (
+                                <div key={vlan.id}>
+                                    <div
+                                        className={`vlan-item vlan-${vlan.id}${expandedVlan === vlan.id ? ' active' : ''}`}
+                                        onClick={() => toggleVlanRow(vlan.id)}>
+                                        <div className="vlan-id" style={{ color: vc(vlan.id) }}>
+                                            VLAN {vlan.id}
+                                        </div>
+                                        <div className="vlan-name">{vlan.name}</div>
+                                        <div className="vlan-subnet">{vlan.subnet}</div>
+                                    </div>
+                                    {expandedVlan === vlan.id && (
+                                        <div style={{
+                                            background: 'rgba(10,14,39,0.35)',
+                                            borderLeft: `4px solid ${vc(vlan.id)}`,
+                                            borderRadius: '0 0 8px 8px',
+                                            padding: '14px 18px',
+                                            marginTop: -4,
+                                        }}>
+                                            <div className="vlan-device-list">
+                                                {vlan.devices.map((d, i) => (
+                                                    <span key={i} className="vlan-device-chip">{d}</span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="security-check">
+                            <div className="security-check-title">✓ Security Posture</div>
+                            <ul style={{ marginLeft: '20px', lineHeight: '1.8' }}>
+                                <li>VLAN 999 is the secure native trunk VLAN — no IP assignment</li>
+                                <li>Malware lab (VLAN 20) isolated with strict deny-all firewall rules</li>
+                                <li>VLAN 99 restricts management access to network devices only</li>
+                                <li>Zero Trust remote access via Twingate — no exposed public ports</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {/* ── Lab Highlights ── */}
+                    <div className="improvements-section">
+                        <div className="improvements-title">
+                            <span>✨</span> Lab Highlights
+                        </div>
+                        <div className="improvements-grid">
+                            {HIGHLIGHTS.map((h, i) => (
+                                <div key={i} className="improvement-card">
+                                    <div className="improvement-icon">{h.icon}</div>
+                                    <div className="improvement-title">{h.title}</div>
+                                    <div className="improvement-desc">{h.desc}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* ── Legend ── */}
+                    <div className="legend">
+                        <div className="legend-title">VLAN Color Legend</div>
+                        <div className="legend-grid">
+                            {VLANS.map(v => (
+                                <div key={v.id} className="legend-item">
+                                    <div className="legend-color" style={{ backgroundColor: vc(v.id) }} />
+                                    <span>VLAN {v.id} — {v.name}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                </div>
+            );
+        };
+
+        ReactDOM.render(<HomelabTopology />, document.getElementById('root'));
+    </script>
+</body>
+</html>
