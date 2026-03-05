@@ -29,34 +29,43 @@ Zero manual steps. The docs update themselves.
 
 ## Architecture
 
+<div class="mermaid-zoom-container" id="arch-diagram">
+  <div class="mermaid-zoom-controls">
+    <button class="mermaid-btn" id="arch-zoom-in" title="Zoom in">+</button>
+    <button class="mermaid-btn" id="arch-zoom-reset" title="Reset view">↺</button>
+    <button class="mermaid-btn" id="arch-zoom-out" title="Zoom out">−</button>
+  </div>
+  <div class="mermaid-zoom-hint">scroll to zoom &middot; drag to pan</div>
+  <div class="mermaid-zoom-viewport" id="arch-viewport">
+
 {{< mermaid >}}
 graph LR
   subgraph trigger["Trigger"]
     CRON["Weekly Cron<br/>(n8n Scheduler)"]
     MANUAL["Manual Trigger"]
   end
-  
+
   subgraph servers["Servers VLAN - DockerHost1"]
     N8N["n8n 2.10.3<br/>(Docker)"]
     DIFF["Diff vs saved state"]
   end
-  
+
   subgraph mgmt["MGMT VLAN"]
     OPN["OPNsense 26.1<br/>REST API"]
     TRUENAS["TrueNAS<br/>NFS Share"]
   end
-  
+
   subgraph lab["Lab VLAN"]
     CLAUDE["Claude Code VM<br/>Ubuntu 24.04"]
   end
-  
+
   subgraph sync["Syncthing"]
     OBSIDIAN["Obsidian Vault<br/>(all devices)"]
   end
 
   CRON --> N8N
   MANUAL --> N8N
-  
+
   %% Corrected data flow
   N8N -->|"1. GET API state"| OPN
   OPN -->|"2. Return JSON"| DIFF
@@ -75,6 +84,173 @@ graph LR
   class TRUENAS,OBSIDIAN storage
   class CRON,MANUAL trigger
 {{< /mermaid >}}
+
+  </div>
+</div>
+
+<style>
+.mermaid-zoom-container {
+  position: relative;
+  border: 1px solid #2d2d2d;
+  border-radius: 8px;
+  background: #0d0d0d;
+  overflow: hidden;
+  min-height: 420px;
+  margin: 1.5rem 0;
+  user-select: none;
+}
+.mermaid-zoom-controls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  display: flex;
+  gap: 6px;
+}
+.mermaid-btn {
+  background: #1a1a2e;
+  color: #b794f4;
+  border: 1px solid #553c9a;
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+.mermaid-btn:hover {
+  background: #553c9a;
+  color: #faf5ff;
+}
+.mermaid-zoom-hint {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  color: #4a4a6a;
+  pointer-events: none;
+  z-index: 10;
+  white-space: nowrap;
+}
+.mermaid-zoom-viewport {
+  cursor: grab;
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+.mermaid-zoom-viewport:active {
+  cursor: grabbing;
+}
+.mermaid-zoom-viewport svg {
+  display: block;
+  transform-origin: center center;
+  will-change: transform;
+  max-width: none !important;
+}
+</style>
+
+<script>
+(function () {
+  function initZoom() {
+    var viewport = document.getElementById('arch-viewport');
+    if (!viewport) return;
+
+    var scale = 1, panX = 0, panY = 0;
+    var dragging = false, startX, startY, startPanX, startPanY;
+
+    function getSvg() { return viewport.querySelector('svg'); }
+
+    function applyTransform() {
+      var svg = getSvg();
+      if (svg) svg.style.transform = 'translate(' + panX + 'px,' + panY + 'px) scale(' + scale + ')';
+    }
+
+    function waitForSvg() {
+      if (getSvg()) return;
+      new MutationObserver(function (mutations, obs) {
+        if (getSvg()) { obs.disconnect(); }
+      }).observe(viewport, { childList: true, subtree: true });
+    }
+    waitForSvg();
+
+    document.getElementById('arch-zoom-in').addEventListener('click', function () {
+      scale = Math.min(scale * 1.3, 6);
+      applyTransform();
+    });
+    document.getElementById('arch-zoom-out').addEventListener('click', function () {
+      scale = Math.max(scale / 1.3, 0.2);
+      applyTransform();
+    });
+    document.getElementById('arch-zoom-reset').addEventListener('click', function () {
+      scale = 1; panX = 0; panY = 0;
+      applyTransform();
+    });
+
+    viewport.addEventListener('wheel', function (e) {
+      e.preventDefault();
+      var factor = e.deltaY < 0 ? 1.1 : 0.9;
+      scale = Math.min(Math.max(scale * factor, 0.2), 6);
+      applyTransform();
+    }, { passive: false });
+
+    viewport.addEventListener('mousedown', function (e) {
+      if (e.button !== 0) return;
+      dragging = true;
+      startX = e.clientX; startY = e.clientY;
+      startPanX = panX; startPanY = panY;
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', function (e) {
+      if (!dragging) return;
+      panX = startPanX + (e.clientX - startX);
+      panY = startPanY + (e.clientY - startY);
+      applyTransform();
+    });
+    window.addEventListener('mouseup', function () { dragging = false; });
+
+    var lastDist = null;
+    viewport.addEventListener('touchstart', function (e) {
+      if (e.touches.length === 2) {
+        lastDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      } else if (e.touches.length === 1) {
+        dragging = true;
+        startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+        startPanX = panX; startPanY = panY;
+      }
+    }, { passive: true });
+    viewport.addEventListener('touchmove', function (e) {
+      if (e.touches.length === 2 && lastDist) {
+        var dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+        scale = Math.min(Math.max(scale * (dist / lastDist), 0.2), 6);
+        lastDist = dist;
+        applyTransform();
+        e.preventDefault();
+      } else if (e.touches.length === 1 && dragging) {
+        panX = startPanX + (e.touches[0].clientX - startX);
+        panY = startPanY + (e.touches[0].clientY - startY);
+        applyTransform();
+      }
+    }, { passive: false });
+    viewport.addEventListener('touchend', function () { dragging = false; lastDist = null; });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initZoom);
+  } else {
+    initZoom();
+  }
+})();
+</script>
 
 ---
 
