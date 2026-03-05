@@ -29,13 +29,11 @@ Homelab documentation has a half-life. You write it once, it's accurate for mayb
 **TL;DR:** n8n polls the OPNsense REST API on a weekly schedule, diffs against saved state, and SSHs into a dedicated Claude Code VM on the Lab VLAN when something changes. Updated NetBox YAML and Obsidian Markdown land on NFS-mounted TrueNAS storage and sync everywhere via Syncthing. Zero manual steps. Five gotchas below.
 {{< /alert >}}
 
-The [Stack Overflow 2024 developer survey](https://survey.stackoverflow.co/2024/) found developers spend over 30 minutes a day searching for solutions because documentation is wrong or missing. In a homelab where you're also the one letting the docs rot, it's worse. My setup is a seven-VLAN OPNsense network — Lab, Servers, IoT, Home, MGMT, Malware analysis, and WireGuard for remote access — and the state changes constantly. The fix I wanted: documentation that updates itself.
+My setup is a seven-VLAN OPNsense network — Lab, Servers, IoT, Home, MGMT, Malware analysis, and WireGuard for remote access — and the state changes constantly. The fix I wanted: documentation that updates itself.
 
-## How Does the Pipeline Actually Work?
+## How It Works
 
-<!-- [PERSONAL EXPERIENCE] -->
-
-The architecture treats live network state as the single source of truth. n8n polls four OPNsense REST endpoints on a weekly schedule, compares the response against a saved JSON snapshot, and only routes to a Claude Code SSH session when something actually changed. According to n8n's own stats, the platform now has [230,000+ active users](https://flowlyn.com/blog/n8n-user-count-statistics-growth) — a lot of homelabbers have discovered what makes it useful here: the SSH node is a first-class citizen, not an afterthought.
+The architecture treats live network state as the single source of truth. n8n polls four OPNsense REST endpoints on a weekly schedule, compares the response against a saved JSON snapshot, and only routes to a Claude Code SSH session when something actually changed. If nothing changed — a quiet week with no new leases, no modified aliases, no route additions — the workflow ends silently and logs nothing. No noise. No manual steps. No "I'll update the docs later."
 
 n8n runs in Docker on **DockerHost1** in the Servers VLAN (10.30.40.0/28), alongside the other production containers. The generated docs land on NFS-mounted TrueNAS storage in the MGMT VLAN, which Syncthing replicates to every device.
 
@@ -59,17 +57,17 @@ SSH → Claude Code VM — Lab VLAN (10.30.30.0/24)
     NFS mount → TrueNAS (MGMT VLAN) → Syncthing → Obsidian vault
 ```
 
-If nothing changed — a quiet week with no new leases, no modified aliases, no route additions — the workflow ends silently and logs nothing. No noise. No manual steps. No "I'll update the docs later." Later never comes.
+Later never comes. This is why that matters.
 
-## Why Use Claude Code Over SSH Instead of the Direct API?
+## Why SSH Into Claude Code
 
-Routing automation through Claude Code via SSH costs nothing beyond an existing Claude Pro subscription. The obvious approach — hitting the Anthropic API directly from n8n — bills separately from Pro. Claude Pro token usage isn't unlimited though, so the workflow runs on a weekly schedule rather than hammering the API every few minutes. Weekly cadence is enough for a homelab where the network topology doesn't change hourly.
+The obvious approach is hitting the Anthropic API directly from n8n. It's cleaner, completes in seconds, has fewer failure modes. The reason to route through Claude Code over SSH instead: Claude Pro. If you're already paying for it, Claude Code automation runs on that subscription at no additional cost. The API bills separately per token.
 
-The other reason is context. Claude Code can see the existing documentation files, understand the structure, and update them incrementally rather than regenerating from scratch on every run. A direct API call has no awareness of what the docs looked like before.
+The other reason is context. Claude Code can see the existing documentation files, understand the structure, and update them incrementally rather than regenerating from scratch on every run. A direct API call doesn't know what the docs looked like before.
 
-<!-- [ORIGINAL DATA] -->
+The tradeoff is latency and brittleness. An SSH session that spins up Claude Code, hands it context, and waits for file writes takes longer and has more failure modes than an HTTP request. For a scheduled documentation job, that's acceptable. For anything interactive or latency-sensitive, use the API instead.
 
-The tradeoff is latency and brittleness. An HTTP request completes in seconds. An SSH session that spins up Claude Code, hands it context, and waits for file writes takes longer and has more failure modes. For a scheduled documentation job, that's acceptable. For anything interactive or latency-sensitive, use the API instead.
+Weekly cadence is enough for a homelab where the network topology doesn't change hourly. The workflow runs on schedule rather than constantly — not because of architectural preference, but because Claude Pro token usage isn't unlimited.
 
 ## Setting Up the OPNsense API
 
@@ -90,9 +88,7 @@ That last endpoint matters, and I'll come back to it in the gotchas.
 
 n8n's HTTP Request nodes handle auth with HTTP Basic using the API key and secret. The OPNsense API returns JSON, which n8n works with natively.
 
-## How Does the n8n Workflow Pull and Diff Network State?
-
-<!-- [PERSONAL EXPERIENCE] -->
+## Pulling and Diffing Network State
 
 n8n 2.10.3 runs in Docker on DockerHost1 in the Servers VLAN (10.30.40.0/28). The workflow has six stages: a schedule trigger, four parallel HTTP Request nodes, chained Merge nodes to consolidate the results, a Code node that diffs against saved state, an IF node that branches on whether anything changed, and the SSH execution node.
 
@@ -139,11 +135,9 @@ The command:
 
 The prompt is pre-written by the n8n Code node and dropped to `/tmp/doc-prompt.txt` via a separate Write File operation before the SSH call. The `--print` flag makes Claude Code output to stdout and exit rather than opening an interactive session — that's the behavior you need for automation.
 
-## What Are the Five Gotchas That Cost Real Time?
+## Five Gotchas That Cost Real Time
 
-<!-- [PERSONAL EXPERIENCE] -->
-
-This is the section that took the most time. Everything above sounds clean in retrospect. Getting there involved a lot of `exit code 1` and `permission denied`. Worth documenting so you don't spend an afternoon on the same things.
+Everything above sounds clean in retrospect. Getting there involved a lot of `exit code 1` and `permission denied`. Worth documenting so you don't spend an afternoon on the same things.
 
 ### 1. Non-Interactive SSH Sessions Don't Load .bashrc
 
@@ -195,7 +189,7 @@ Make sure your NFS export has `mapall user` set appropriately or that the GID is
 
 **Merge nodes accept exactly two inputs.** If you have four parallel data sources, you need three Merge nodes chained in sequence. The visual result looks like an ugly binary tree. Not the prettiest, but it gets the job done.
 
-## What Does the Documentation Output Look Like?
+## The Output
 
 The generated output has two forms: structured YAML for NetBox and narrative Markdown for the Obsidian vault. Both are written in the same Claude Code session, targeting the same NFS mount on TrueNAS.
 
@@ -219,7 +213,7 @@ ip_addresses:
 
 The Obsidian Markdown output reads like a network diagram in prose: a table of current leases, a section for each defined alias, and a diff summary at the top showing what changed since the last run. The diff is the part I actually look at. The full state is background context; the diff is the news.
 
-## What's Next for the Pipeline?
+## What's Next
 
 Three additions are on the list, in rough priority order.
 
@@ -231,7 +225,7 @@ Three additions are on the list, in rough priority order.
 
 The longer-term goal: treat the Obsidian vault as a queryable graph. Link firewall alias definitions to the services that use them. Cross-reference DHCP leases against VM inventory. Surface when a lease exists for an IP with no corresponding DNS entry. Documentation as infrastructure, not an afterthought.
 
-The pipeline is running. The docs are updating. [r/homelab](https://www.reddit.com/r/homelab/) has over 900,000 members as of early 2026 — that's a lot of stale documentation. This one's for them.
+That's the whole thing. A weekly cron, four API calls, a string comparison, and an SSH session that hands off to Claude Code. The docs update themselves now. The vault stopped lying.
 
 ---
 
