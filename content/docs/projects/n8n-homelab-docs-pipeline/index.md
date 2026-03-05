@@ -1,6 +1,7 @@
 ---
 title: "n8n Homelab Docs Pipeline"
-date: 2026-03-05
+date: 2026-02-28
+lastmod: 2026-03-05
 description: "Automated homelab documentation pipeline. n8n pulls live state from OPNsense, diffs it, and triggers Claude Code over SSH to regenerate Obsidian Markdown and NetBox YAML on every change."
 summary: "An n8n workflow that keeps homelab docs honest — polling OPNsense weekly, detecting drift, and invoking Claude Code via SSH to rewrite topology docs automatically."
 tags:
