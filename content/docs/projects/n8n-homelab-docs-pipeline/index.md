@@ -39,50 +39,47 @@ Zero manual steps. The docs update themselves.
   <div class="mermaid-zoom-viewport" id="arch-viewport">
 
 {{< mermaid >}}
-graph LR
-  subgraph trigger["Trigger"]
-    CRON["Weekly Cron<br/>(n8n Scheduler)"]
-    MANUAL["Manual Trigger"]
-  end
+flowchart TD
+    subgraph trigger["Triggers"]
+        SCHED["Weekly 6am<br/>(Schedule)"]
+        MANUAL["Manual Trigger"]
+    end
 
-  subgraph servers["Servers VLAN - DockerHost1"]
-    N8N["n8n 2.10.3<br/>(Docker)"]
-    DIFF["Diff vs saved state"]
-  end
+    subgraph servers["Servers VLAN — DockerHost1"]
+        N8N["n8n 2.10.3<br/>(Docker)"]
+    end
 
-  subgraph mgmt["MGMT VLAN"]
-    OPN["OPNsense 26.1<br/>REST API"]
-    TRUENAS["TrueNAS<br/>NFS Share"]
-  end
+    subgraph mgmt["MGMT VLAN"]
+        OPN["OPNsense 26.1<br/>REST API"]
+        TRUENAS["TrueNAS<br/>NFS Share"]
+    end
 
-  subgraph lab["Lab VLAN"]
-    CLAUDE["Claude Code VM<br/>Ubuntu 24.04"]
-  end
+    subgraph lab["Lab VLAN"]
+        CLAUDE["Claude Code VM<br/>Ubuntu 24.04"]
+    end
 
-  subgraph sync["Syncthing"]
-    OBSIDIAN["Obsidian Vault<br/>(all devices)"]
-  end
+    subgraph sync["Syncthing"]
+        OBSIDIAN["Obsidian Vault<br/>(all devices)"]
+    end
 
-  CRON --> N8N
-  MANUAL --> N8N
+    SCHED --> N8N
+    MANUAL --> N8N
+    N8N -->|"GET interfaces, aliases,<br/>routes, DHCP leases"| OPN
+    OPN -->|"JSON state"| N8N
+    N8N -->|"SSH — claude -p<br/>(if changes detected)"| CLAUDE
+    CLAUDE -->|"YAML + Markdown"| N8N
+    N8N -->|"NFS write"| TRUENAS
+    TRUENAS -->|"Background sync"| OBSIDIAN
 
-  %% Corrected data flow
-  N8N -->|"1. GET API state"| OPN
-  OPN -->|"2. Return JSON"| DIFF
-  DIFF -->|"3. SSH claude -p<br/>(if changed)"| CLAUDE
-  CLAUDE -->|"4. Return stdout"| N8N
-  N8N -->|"5. Write via NFS"| TRUENAS
-  TRUENAS -->|"6. Background Sync"| OBSIDIAN
+    classDef trigger fill:#1a365d,stroke:#63b3ed,stroke-width:2px,color:#ebf8ff
+    classDef api fill:#1a202c,stroke:#4fd1c5,stroke-width:2px,color:#e6fffa
+    classDef code fill:#44337a,stroke:#b794f4,stroke-width:2px,color:#faf5ff
+    classDef io fill:#5f370e,stroke:#f6ad55,stroke-width:2px,color:#fffaf0
 
-  classDef vlan fill:#121212,stroke:#4fd1c5,stroke-dasharray: 5 5,color:#eeeeee
-  classDef service fill:#44337a,stroke:#b794f4,stroke-width:2px,color:#faf5ff
-  classDef storage fill:#5f370e,stroke:#f6ad55,stroke-width:2px,color:#ffffff
-  classDef trigger fill:#1a365d,stroke:#63b3ed,stroke-width:2px,color:#ebf8ff
-
-  class trigger,servers,mgmt,lab,sync vlan
-  class N8N,DIFF,CLAUDE service
-  class TRUENAS,OBSIDIAN storage
-  class CRON,MANUAL trigger
+    class SCHED,MANUAL trigger
+    class OPN api
+    class N8N,CLAUDE code
+    class TRUENAS,OBSIDIAN io
 {{< /mermaid >}}
 
   </div>
