@@ -39,14 +39,14 @@ Zero manual steps. The docs update themselves.
   <div class="mermaid-zoom-viewport" id="arch-viewport">
 
 {{< mermaid >}}
-flowchart TD
+flowchart LR
     subgraph trigger["Triggers"]
         SCHED["Weekly 6am<br/>(Schedule)"]
         MANUAL["Manual Trigger"]
     end
 
-    subgraph servers["Servers VLAN — DockerHost1"]
-        N8N["n8n 2.10.3<br/>(Docker)"]
+    subgraph servers["Servers VLAN"]
+        N8N["n8n 2.10.3<br/>DockerHost1"]
     end
 
     subgraph mgmt["MGMT VLAN"]
@@ -64,10 +64,8 @@ flowchart TD
 
     SCHED --> N8N
     MANUAL --> N8N
-    N8N -->|"GET interfaces, aliases,<br/>routes, DHCP leases"| OPN
-    OPN -->|"JSON state"| N8N
-    N8N -->|"SSH — claude -p<br/>(if changes detected)"| CLAUDE
-    CLAUDE -->|"YAML + Markdown"| N8N
+    N8N <-->|"REST API state"| OPN
+    N8N <-->|"SSH claude -p<br/>(if changes)"| CLAUDE
     N8N -->|"NFS write"| TRUENAS
     TRUENAS -->|"Background sync"| OBSIDIAN
 
