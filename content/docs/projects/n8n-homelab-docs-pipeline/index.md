@@ -153,9 +153,9 @@ graph LR
 }
 .mermaid-zoom-viewport svg {
   display: block;
-  transform-origin: center center;
-  will-change: transform;
+  width: 100%;
   max-width: none !important;
+  height: auto;
 }
 </style>
 
@@ -165,56 +165,85 @@ graph LR
     var viewport = document.getElementById('arch-viewport');
     if (!viewport) return;
 
-    var scale = 1, panX = 0, panY = 0;
-    var dragging = false, startX, startY, startPanX, startPanY;
+    var origVB = null;
+    var curVB  = null;
+    var dragging = false, startX, startY, startVBX, startVBY;
 
     function getSvg() { return viewport.querySelector('svg'); }
 
-    function applyTransform() {
+    /* Store original viewBox once SVG is ready */
+    function initSvg(svg) {
+      var vb = svg.viewBox.baseVal;
+      origVB = { x: vb.x, y: vb.y, w: vb.width, h: vb.height };
+      curVB  = { x: vb.x, y: vb.y, w: vb.width, h: vb.height };
+    }
+
+    /* Write curVB back to the SVG — pure vector, always crisp */
+    function applyViewBox() {
       var svg = getSvg();
-      if (svg) svg.style.transform = 'translate(' + panX + 'px,' + panY + 'px) scale(' + scale + ')';
+      if (svg && curVB) {
+        svg.setAttribute('viewBox', curVB.x + ' ' + curVB.y + ' ' + curVB.w + ' ' + curVB.h);
+      }
+    }
+
+    /* Convert screen-pixel delta to SVG-unit delta at current zoom */
+    function pxToSvgUnits(dx, dy) {
+      var rect = getSvg().getBoundingClientRect();
+      return {
+        x: dx * (curVB.w / rect.width),
+        y: dy * (curVB.h / rect.height)
+      };
+    }
+
+    function zoomBy(factor) {
+      var newW = curVB.w / factor;
+      var newH = curVB.h / factor;
+      curVB.x += (curVB.w - newW) / 2;
+      curVB.y += (curVB.h - newH) / 2;
+      curVB.w  = newW;
+      curVB.h  = newH;
+      applyViewBox();
     }
 
     function waitForSvg() {
-      if (getSvg()) return;
-      new MutationObserver(function (mutations, obs) {
-        if (getSvg()) { obs.disconnect(); }
-      }).observe(viewport, { childList: true, subtree: true });
+      var svg = getSvg();
+      if (svg && svg.viewBox.baseVal.width > 0) { initSvg(svg); return; }
+      new MutationObserver(function (_, obs) {
+        var s = getSvg();
+        if (s && s.viewBox.baseVal.width > 0) { obs.disconnect(); initSvg(s); }
+      }).observe(viewport, { childList: true, subtree: true, attributes: true });
     }
     waitForSvg();
 
     document.getElementById('arch-zoom-in').addEventListener('click', function () {
-      scale = Math.min(scale * 1.3, 6);
-      applyTransform();
+      if (curVB) zoomBy(1.3);
     });
     document.getElementById('arch-zoom-out').addEventListener('click', function () {
-      scale = Math.max(scale / 1.3, 0.2);
-      applyTransform();
+      if (curVB) zoomBy(1 / 1.3);
     });
     document.getElementById('arch-zoom-reset').addEventListener('click', function () {
-      scale = 1; panX = 0; panY = 0;
-      applyTransform();
+      if (origVB) { curVB = { x: origVB.x, y: origVB.y, w: origVB.w, h: origVB.h }; applyViewBox(); }
     });
 
     viewport.addEventListener('wheel', function (e) {
       e.preventDefault();
-      var factor = e.deltaY < 0 ? 1.1 : 0.9;
-      scale = Math.min(Math.max(scale * factor, 0.2), 6);
-      applyTransform();
+      if (!curVB) return;
+      zoomBy(e.deltaY < 0 ? 1.1 : 1 / 1.1);
     }, { passive: false });
 
     viewport.addEventListener('mousedown', function (e) {
-      if (e.button !== 0) return;
+      if (e.button !== 0 || !curVB) return;
       dragging = true;
       startX = e.clientX; startY = e.clientY;
-      startPanX = panX; startPanY = panY;
+      startVBX = curVB.x; startVBY = curVB.y;
       e.preventDefault();
     });
     window.addEventListener('mousemove', function (e) {
-      if (!dragging) return;
-      panX = startPanX + (e.clientX - startX);
-      panY = startPanY + (e.clientY - startY);
-      applyTransform();
+      if (!dragging || !curVB) return;
+      var delta = pxToSvgUnits(startX - e.clientX, startY - e.clientY);
+      curVB.x = startVBX + delta.x;
+      curVB.y = startVBY + delta.y;
+      applyViewBox();
     });
     window.addEventListener('mouseup', function () { dragging = false; });
 
@@ -222,23 +251,23 @@ graph LR
     viewport.addEventListener('touchstart', function (e) {
       if (e.touches.length === 2) {
         lastDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-      } else if (e.touches.length === 1) {
+      } else if (e.touches.length === 1 && curVB) {
         dragging = true;
         startX = e.touches[0].clientX; startY = e.touches[0].clientY;
-        startPanX = panX; startPanY = panY;
+        startVBX = curVB.x; startVBY = curVB.y;
       }
     }, { passive: true });
     viewport.addEventListener('touchmove', function (e) {
-      if (e.touches.length === 2 && lastDist) {
+      if (e.touches.length === 2 && lastDist && curVB) {
         var dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-        scale = Math.min(Math.max(scale * (dist / lastDist), 0.2), 6);
+        zoomBy(dist / lastDist);
         lastDist = dist;
-        applyTransform();
         e.preventDefault();
-      } else if (e.touches.length === 1 && dragging) {
-        panX = startPanX + (e.touches[0].clientX - startX);
-        panY = startPanY + (e.touches[0].clientY - startY);
-        applyTransform();
+      } else if (e.touches.length === 1 && dragging && curVB) {
+        var delta = pxToSvgUnits(startX - e.touches[0].clientX, startY - e.touches[0].clientY);
+        curVB.x = startVBX + delta.x;
+        curVB.y = startVBY + delta.y;
+        applyViewBox();
       }
     }, { passive: false });
     viewport.addEventListener('touchend', function () { dragging = false; lastDist = null; });
