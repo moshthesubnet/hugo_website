@@ -7,3 +7,4 @@ homelab_topology
 static/assets/homelab_topology.svg
 .env
 .wrangler/
+opnsense.md
