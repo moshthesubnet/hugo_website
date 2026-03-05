@@ -8,3 +8,5 @@ static/assets/homelab_topology.svg
 .env
 .wrangler/
 opnsense.md
+prompt.md
+Homelab Topology Docs Pipeline.json
