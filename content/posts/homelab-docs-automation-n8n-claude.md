@@ -35,7 +35,7 @@ The [Stack Overflow 2024 developer survey](https://survey.stackoverflow.co/2024/
 
 <!-- [PERSONAL EXPERIENCE] -->
 
-The architecture treats live network state as the single source of truth. n8n polls four OPNsense REST endpoints on a 15-minute schedule, compares the response against a saved JSON snapshot, and only routes to a Claude Code SSH session when something actually changed. According to n8n's own stats, the platform now has [230,000+ active users](https://flowlyn.com/blog/n8n-user-count-statistics-growth) — a lot of homelabbers have discovered what makes it useful here: the SSH node is a first-class citizen, not an afterthought.
+The architecture treats live network state as the single source of truth. n8n polls four OPNsense REST endpoints on a weekly schedule, compares the response against a saved JSON snapshot, and only routes to a Claude Code SSH session when something actually changed. According to n8n's own stats, the platform now has [230,000+ active users](https://flowlyn.com/blog/n8n-user-count-statistics-growth) — a lot of homelabbers have discovered what makes it useful here: the SSH node is a first-class citizen, not an afterthought.
 
 n8n runs in Docker on **DockerHost1** in the Servers VLAN (10.30.40.0/28), alongside the other production containers. The generated docs land on NFS-mounted TrueNAS storage in the MGMT VLAN, which Syncthing replicates to every device.
 
@@ -96,7 +96,7 @@ n8n's HTTP Request nodes handle auth with HTTP Basic using the API key and secre
 
 n8n 2.10.3 runs in Docker on DockerHost1 in the Servers VLAN (10.30.40.0/28). The workflow has six stages: a schedule trigger, four parallel HTTP Request nodes, chained Merge nodes to consolidate the results, a Code node that diffs against saved state, an IF node that branches on whether anything changed, and the SSH execution node.
 
-The parallel API pull nodes each connect to a Merge node. n8n Merge nodes only accept two inputs — you discover this the first time you try to fan in four data sources at once. The fix: chain them. Merge A+B into AB, merge AB+C into ABC, merge ABC+D into final. Annoying, functional, expanded in gotcha five.
+The parallel API pull nodes each connect to a Merge node. n8n Merge nodes only accept two inputs — you discover this the first time you try to fan in four data sources at once. The fix: chain them. Merge A+B into C. Merge C into the Build State Object node. Annoying, functional, expanded in gotcha five.
 
 The diff logic in the Code node:
 
@@ -193,7 +193,7 @@ Make sure your NFS export has `mapall user` set appropriately or that the GID is
 
 ### 5. Merge Node Chaining for 4+ Inputs
 
-**Merge nodes accept exactly two inputs.** If you have four parallel data sources, you need three Merge nodes chained in sequence. The visual result looks like an ugly binary tree. That's fine — it works.
+**Merge nodes accept exactly two inputs.** If you have four parallel data sources, you need three Merge nodes chained in sequence. The visual result looks like an ugly binary tree. Not the prettiest, but it gets the job done.
 
 ## What Does the Documentation Output Look Like?
 
