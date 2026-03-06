@@ -57,8 +57,6 @@ SSH → Claude Code VM — Lab VLAN (10.30.30.0/24)
     NFS mount → TrueNAS (MGMT VLAN) → Syncthing → Obsidian vault
 ```
 
-Later never comes. This is why that matters.
-
 ## Why SSH Into Claude Code
 
 The obvious approach is hitting the Anthropic API directly from n8n. It's cleaner, completes in seconds, has fewer failure modes. The reason to route through Claude Code over SSH instead: Claude Pro. If you're already paying for it, Claude Code automation runs on that subscription at no additional cost. The API bills separately per token.
@@ -215,13 +213,11 @@ The Obsidian Markdown output reads like a network diagram in prose: a table of c
 
 ## What's Next
 
-Three additions are on the list, in rough priority order.
+Next is Proxmox API collection. Same workflow pattern, pointed at the Proxmox API instead of OPNsense — VM inventory, container states, storage pools. Pve1 and Pve3 are both on the MGMT VLAN, so the API is already reachable from DockerHost1. Auth model is the same: API tokens with explicit permission scopes.
 
-**Proxmox API collection.** The same n8n workflow pattern, pointed at the Proxmox API instead of OPNsense. VM inventory, container states, storage pools. Pve1 and Pve3 are both on the MGMT VLAN — the API is already accessible from where n8n runs. The Proxmox API auth model is similar: API tokens with explicit permission scopes.
+After that, Pi-hole. DNS query logs and the local record list from both instances on the Servers VLAN. Mostly useful for maintaining a source-of-truth list of local DNS entries that doesn't live exclusively inside Pi-hole's admin UI.
 
-**Pi-hole integration.** DNS query logs and the local DNS record list from the primary and secondary Pi-hole instances on the Servers VLAN (10.30.40.0/28). Useful for tracking which services are actually getting hit, and for maintaining a source-of-truth list of local DNS entries that doesn't live only inside Pi-hole's admin UI.
-
-**NetBox push.** Right now the YAML output lands in the vault as reference material. The next step is wiring up the NetBox API — NetBox runs on the Lab VLAN and already has IPAM data. The goal is automatic import so the YAML doesn't just document the network, it *is* the network record.
+The one I actually want most: NetBox push. Right now the YAML lands in the vault as reference material. The next step is wiring up the NetBox API — NetBox runs on the Lab VLAN and already has IPAM data — so records go directly into IPAM. Not just documenting the network; being the network record.
 
 The longer-term goal: treat the Obsidian vault as a queryable graph. Link firewall alias definitions to the services that use them. Cross-reference DHCP leases against VM inventory. Surface when a lease exists for an IP with no corresponding DNS entry. Documentation as infrastructure, not an afterthought.
 
