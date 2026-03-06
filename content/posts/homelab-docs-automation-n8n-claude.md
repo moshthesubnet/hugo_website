@@ -90,7 +90,7 @@ n8n's HTTP Request nodes handle auth with HTTP Basic using the API key and secre
 
 n8n 2.10.3 runs in Docker on DockerHost1 in the Servers VLAN (10.30.40.0/28). The workflow has six stages: a schedule trigger, four parallel HTTP Request nodes, chained Merge nodes to consolidate the results, a Code node that diffs against saved state, an IF node that branches on whether anything changed, and the SSH execution node.
 
-The parallel API pull nodes each connect to a Merge node. n8n Merge nodes only accept two inputs — you discover this the first time you try to fan in four data sources at once. The fix: chain them. Merge A+B into C. Merge C into the Build State Object node. Annoying, functional, expanded in gotcha five.
+The parallel API pull nodes each connect to a chain of Merge nodes. n8n Merge nodes only accept two inputs — you discover this the first time you try to fan in four data sources at once. The fix: chain them. Interfaces + Aliases into Merge1, Routes + DHCP into Merge2, then Merge1 + Merge2 into Merge3, which feeds Build State Object. Annoying, functional, expanded in gotcha five.
 
 The diff logic in the Code node:
 
@@ -185,7 +185,7 @@ Make sure your NFS export has `mapall user` set appropriately or that the GID is
 
 ### 5. Merge Node Chaining for 4+ Inputs
 
-**Merge nodes accept exactly two inputs.** If you have four parallel data sources, you need three Merge nodes chained in sequence. The visual result looks like an ugly binary tree. Not the prettiest, but it gets the job done.
+Merge nodes accept exactly two inputs. With four parallel API calls, you need three Merge nodes: Interfaces + Aliases into Merge1, Routes + DHCP into Merge2, then Merge1 + Merge2 into Merge3. The visual result is an ugly binary tree. Not the prettiest, but it gets the job done.
 
 ## The Output
 
