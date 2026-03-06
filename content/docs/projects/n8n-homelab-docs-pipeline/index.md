@@ -265,7 +265,7 @@ flowchart TD
         M3["Merge3<br/>All 4 combined"]
     end
 
-    subgraph state["State & Diff"]
+    subgraph state["State + Diff"]
         BSO["Build State Object<br/>(Code)"]
         RPS["Read Previous State<br/>(ReadWriteFile)"]
         DIFF["Diff: Detect Changes<br/>(Code — per section)"]
@@ -275,7 +275,7 @@ flowchart TD
     subgraph claude["Claude Pipeline"]
         BCP["Build Claude Prompt<br/>(Code)"]
         SSH["SSH: Claude Code<br/>claude -p --dangerously-skip-permissions"]
-        PCR["Parse Claude Response<br/>(Code — split on ===SPLIT===)"]
+        PCR["Parse Claude Response<br/>(Code — delimiter split)"]
     end
 
     subgraph output["Output (parallel)"]

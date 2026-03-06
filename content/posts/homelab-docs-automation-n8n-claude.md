@@ -1,7 +1,7 @@
 ---
 title: "Automating Homelab Documentation with n8n and Claude Code"
 date: 2026-03-05
-lastmod: 2026-03-05
+lastmod: 2026-03-06
 draft: false
 description: "Homelab docs go stale fast. My n8n pipeline polls OPNsense weekly, diffs state, and triggers Claude Code via SSH to rewrite docs automatically. Five gotchas that cost real time."
 summary: "OPNsense REST API → n8n on DockerHost1 → Claude Code VM via SSH → NetBox YAML + Obsidian Markdown → Syncthing vault on TrueNAS. A documentation pipeline that updates itself, plus the five gotchas that nearly broke it."
@@ -65,7 +65,7 @@ The other reason is context. Claude Code can see the existing documentation file
 
 The tradeoff is latency and brittleness. An SSH session that spins up Claude Code, hands it context, and waits for file writes takes longer and has more failure modes than an HTTP request. For a scheduled documentation job, that's acceptable. For anything interactive or latency-sensitive, use the API instead.
 
-Weekly cadence is enough for a homelab where the network topology doesn't change hourly. The workflow runs on schedule rather than constantly — not because of architectural preference, but because Claude Pro token usage isn't unlimited.
+Weekly cadence fits a homelab where the network topology doesn't change daily. If you rename an alias or spin up a new VM mid-week, the docs catch up Monday at 6am. Good enough.
 
 ## Setting Up the OPNsense API
 
@@ -157,13 +157,35 @@ GET /api/dhcpv4/leases/search_lease
 
 If you wrote automation against an older OPNsense version, test the endpoint before assuming the schema is identical. The `active_lease` field moved. I was filtering on a key that no longer existed and getting empty results with no error — valid JSON, just not the JSON I expected. The [OPNsense 26.1 release notes](https://docs.opnsense.org/releases/CE_26.1.html) document this under the DHCP section.
 
-### 3. n8n's Write to File Node Expects Binary, Not Text
+### 3. n8n's Write Node Only Accepts Binary — So Skip It
 
-n8n 2.10.3's "Read/Write Files from Disk" node does not accept plain text strings. It expects binary data.
+n8n 2.10.3's "Read/Write Files from Disk" node doesn't accept plain text. It expects binary. Pass it a string and you get `Property 'data' is missing` with zero indication of what's actually wrong.
 
-The fix: add a "Convert to File" node between your text output and the write node. Set the input field to the text string, output MIME type `text/plain` or `text/markdown`. The Convert to File node produces a binary blob the Write node can handle.
+First instinct: add a "Convert to File" node before every write, set MIME type to `text/plain`, let it produce the binary blob the Write node needs. It works. It also means an extra node per file write, and a workflow that's harder to follow than it needs to be.
 
-The error message — `Property 'data' is missing` — does not suggest "convert your string to binary first." It just doesn't.
+The real fix: unlock the `fs` built-in for Code nodes. Add `NODE_FUNCTION_ALLOW_BUILTIN=fs` to the n8n service in Docker Compose:
+
+```yaml
+services:
+  n8n:
+    image: n8nio/n8n:2.10.3
+    environment:
+      - NODE_FUNCTION_ALLOW_BUILTIN=fs
+    group_add:
+      - "3000"
+    volumes:
+      - /mnt/docs:/docs
+```
+
+Then write files directly from a Code node, the same way you would in any Node script:
+
+```javascript
+const fs = require('fs');
+fs.writeFileSync('/docs/homelab/topology/opnsense.md', markdownOutput);
+fs.writeFileSync('/docs/homelab/topology/opnsense.yml', yamlOutput);
+```
+
+No Write node. No Convert to File node. The Code node parses Claude's response and writes both files in the same step.
 
 ### 4. NFS Permissions: TrueNAS and Container UIDs
 
@@ -189,7 +211,7 @@ Merge nodes accept exactly two inputs. With four parallel API calls, you need th
 
 ## The Output
 
-The generated output has two forms: structured YAML for NetBox and narrative Markdown for the Obsidian vault. Both are written in the same Claude Code session, targeting the same NFS mount on TrueNAS.
+The generated output has two forms: structured YAML for NetBox and narrative Markdown for the Obsidian vault. Claude returns both in a single stdout response, separated by a `===SPLIT===` delimiter. The Parse Claude Response Code node splits on that, strips any code fences Claude adds, and the Write to Vault Code node writes both files to the NFS-mounted TrueNAS share via `fs.writeFileSync`.
 
 The NetBox YAML output for a DHCP entry on the Lab VLAN:
 
@@ -243,7 +265,7 @@ SSH key authentication. The n8n container mounts a private key at a known path; 
 
 **What happens when the pipeline fails?**
 
-n8n logs all execution failures with the error message and the node that threw it. I set up an Error Trigger workflow that sends a notification on failure. Because documentation isn't real-time-critical, a few missed runs means docs lag by an hour at most — acceptable for a homelab.
+n8n logs all execution failures with the error message and the node that threw it. I set up an Error Trigger workflow that sends a notification on failure. Because documentation isn't real-time-critical, a missed run means the docs are one week behind — acceptable for a homelab.
 
 **Is the Claude Code VM always running?**
 
@@ -259,7 +281,7 @@ Yes, it's a persistent Ubuntu 24.04 VM on Proxmox in the Lab VLAN — 2 vCPUs, 4
       "headline": "Automating Homelab Documentation with n8n and Claude Code",
       "description": "Homelab docs go stale fast. My n8n pipeline polls OPNsense weekly, diffs state, and triggers Claude Code via SSH to rewrite docs automatically. Five gotchas that cost real time.",
       "datePublished": "2026-03-05T00:00:00Z",
-      "dateModified": "2026-03-05T00:00:00Z",
+      "dateModified": "2026-03-06T00:00:00Z",
       "author": {
         "@type": "Person",
         "@id": "https://moshthesubnet.com/#author",
@@ -344,7 +366,7 @@ Yes, it's a persistent Ubuntu 24.04 VM on Proxmox in the Lab VLAN — 2 vCPUs, 4
           "name": "What happens when the n8n to Claude Code automation pipeline fails?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "n8n logs all execution failures with the error message and the node that threw it. An Error Trigger workflow sends a notification on failure. Because documentation is not real-time-critical, a few missed runs means docs lag by an hour at most — acceptable for a homelab environment."
+            "text": "n8n logs all execution failures with the error message and the node that threw it. An Error Trigger workflow sends a notification on failure. Because documentation is not real-time-critical, a failed run means the docs miss one weekly update — acceptable for a homelab environment."
           }
         },
         {
