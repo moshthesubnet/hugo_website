@@ -328,9 +328,13 @@ flowchart TD
     class SKIP skip
 {{< /mermaid >}}
 
-**Stage 1 — Triggers:** Both the weekly schedule (Monday, 6am) and the manual trigger fan out simultaneously to all four HTTP Request nodes. There's no ordering between them — n8n fires all four in parallel.
+### Stage 1 — Triggers
 
-**Stage 2 — API Collection:** Four HTTP Request nodes hit the OPNsense REST API with Basic auth using a dedicated read-only API key. All four run in parallel:
+Both the weekly schedule (Monday, 6am) and the manual trigger fan out simultaneously to all four HTTP Request nodes. There's no ordering between them — n8n fires all four in parallel.
+
+### Stage 2 — API Collection
+
+Four HTTP Request nodes hit the OPNsense REST API with Basic auth using a dedicated read-only API key. All four run in parallel:
 
 | Node | Endpoint |
 |------|----------|
@@ -339,11 +343,17 @@ flowchart TD
 | Get Routes | `/api/routes/routes/searchroute` |
 | Get DHCP Leases | `/api/dnsmasq/leases/search` |
 
-**Stage 3 — Merge Chain:** Merge nodes accept exactly two inputs, so the four responses are consolidated with a binary tree: Interfaces + Aliases → Merge1, Routes + DHCP → Merge2, then Merge1 + Merge2 → Merge3.
+### Stage 3 — Merge Chain
 
-**Stage 4 — State & Diff:** `Build State Object` assembles a single JSON document with a `collected_at` timestamp and all four data sections, then fans out to two nodes simultaneously: it triggers `Read Previous State` (a ReadWriteFile node reading `opnsense-state.json` from the vault, `continueOnFail: true` to handle the first run) and feeds `Diff: Detect Changes` directly. Both paths converge at the Diff node, which compares each section independently — interfaces, aliases, routes, and DHCP leases — and produces a `has_changes` boolean and a human-readable `changes` array.
+Merge nodes accept exactly two inputs, so the four responses are consolidated with a binary tree: Interfaces + Aliases → Merge1, Routes + DHCP → Merge2, then Merge1 + Merge2 → Merge3.
 
-**Stage 5 — Claude Pipeline:** If changes are detected, `Build Claude Prompt` constructs the full prompt with the current state JSON and the changes list, then passes it inline to the SSH node. The command run on the Claude Code VM:
+### Stage 4 — State & Diff
+
+`Build State Object` assembles a single JSON document with a `collected_at` timestamp and all four data sections, then fans out to two nodes simultaneously: it triggers `Read Previous State` (a ReadWriteFile node reading `opnsense-state.json` from the vault, `continueOnFail: true` to handle the first run) and feeds `Diff: Detect Changes` directly. Both paths converge at the Diff node, which compares each section independently — interfaces, aliases, routes, and DHCP leases — and produces a `has_changes` boolean and a human-readable `changes` array.
+
+### Stage 5 — Claude Pipeline
+
+If changes are detected, `Build Claude Prompt` constructs the full prompt with the current state JSON and the changes list, then passes it inline to the SSH node. The command run on the Claude Code VM:
 
 ```bash
 /home/skyler/.local/bin/claude -p --dangerously-skip-permissions '{prompt}'
@@ -351,10 +361,12 @@ flowchart TD
 
 Claude is instructed to return two outputs separated by `===SPLIT===`: a NetBox-compatible YAML file first, then the Obsidian Markdown doc. `Parse Claude Response` splits on that delimiter and strips any code fences Claude adds.
 
-**Stage 6 — Output (parallel):** `Parse Claude Response` fans out to three Code nodes simultaneously:
-- **Write to Vault** — writes `opnsense.yml` and `opnsense.md` to `/vault/homelab/topology/devices/` using `fs.writeFileSync`
-- **Build Changelog Entry** → **Append Changelog** — formats a timestamped markdown entry and appends it to `/vault/homelab/topology/changelog.md`
-- **Save Current State** — overwrites `opnsense-state.json` with the current run's data so the next diff has a baseline
+### Stage 6 — Output (parallel)
+
+`Parse Claude Response` fans out to three Code nodes simultaneously:
+- Write to Vault — writes `opnsense.yml` and `opnsense.md` to `/vault/homelab/topology/devices/` using `fs.writeFileSync`
+- Build Changelog Entry → Append Changelog — formats a timestamped markdown entry and appends it to `/vault/homelab/topology/changelog.md`
+- Save Current State — overwrites `opnsense-state.json` with the current run's data so the next diff has a baseline
 
 ---
 
@@ -375,7 +387,7 @@ Auth is HTTP Basic with a read-only API key scoped to `status` and `firewall` pe
 
 ## Documentation Output
 
-**NetBox YAML** — structured topology data formatted for NetBox IPAM import:
+NetBox YAML — structured topology data formatted for NetBox IPAM import:
 
 ```yaml
 prefixes:
@@ -393,7 +405,7 @@ ip_addresses:
     assigned_object_type: dcim.interface
 ```
 
-**Obsidian Markdown** — a human-readable topology doc with:
+Obsidian Markdown — a human-readable topology doc with:
 - Wiki-links to host entries (`[[NetBox]]`, `[[DockerHost1]]`, etc.)
 - DHCP lease tables per VLAN
 - Firewall alias inventory
@@ -409,7 +421,7 @@ The changelog is what actually gets read. Full state is background context. The 
 
 TrueNAS runs Syncthing at UID 568 — a platform-specific service account. The n8n Docker container runs as its own user. Writes to the NFS share fail by default.
 
-**Fix:** Created a supplementary group (GID 3000) on TrueNAS, added it to the dataset ACL with write permissions, and added it to the n8n container via `group_add` in Docker Compose:
+Fix: Created a supplementary group (GID 3000) on TrueNAS, added it to the dataset ACL with write permissions, and added it to the n8n container via `group_add` in Docker Compose:
 
 ```yaml
 services:
@@ -425,7 +437,7 @@ services:
 
 n8n SSH sessions are non-interactive and non-login — `.bashrc` and `.profile` don't load. The `claude` binary is invisible to the shell.
 
-**Fix:** Hardcode the full binary path. For a user-local npm install:
+Fix: Hardcode the full binary path. For a user-local npm install:
 
 ```bash
 /home/skyler/.local/bin/claude --print --no-auto-updates "$(cat /tmp/doc-prompt.txt)"
@@ -437,13 +449,13 @@ Find it with `which claude` in an interactive session, then never use a shell al
 
 The n8n Code node sandboxes JavaScript and blocks Node built-ins including `fs`. Reading and writing files from the Code node directly isn't possible.
 
-**Fix:** Use the dedicated **Read/Write Files from Disk** node for file operations. The Code node handles the diff logic only; file I/O is a separate node.
+Fix: Use the dedicated **Read/Write Files from Disk** node for file operations. The Code node handles the diff logic only; file I/O is a separate node.
 
 ### n8n Write Node — Binary Only
 
 The Write node doesn't accept plain text strings. Passing a string directly throws `Property 'data' is missing`.
 
-**Fix:** Add a **Convert to File** node before the Write node. Input: the text string. Output MIME type: `text/plain`. The Convert node produces the binary blob the Write node expects.
+Fix: Add a **Convert to File** node before the Write node. Input: the text string. Output MIME type: `text/plain`. The Convert node produces the binary blob the Write node expects.
 
 ### OPNsense 26.1 DHCP Endpoint Change
 
@@ -464,21 +476,23 @@ The old endpoint returns valid JSON with zero results — no error, just silence
 n8n Merge nodes accept exactly two inputs. With four parallel API calls, you need three chained Merge nodes:
 
 ```
-A ──┐
-    Merge(AB) ──┐
-B ──┘            Merge(ABC) ──┐
-C ──────────────┘              Merge(ABCD) → next node
-D ─────────────────────────────┘
+Interfaces ──┐
+             Merge1 ──┐
+Aliases ─────┘         │
+                       Merge3 → Build State Object
+Routes ──┐             │
+         Merge2 ───────┘
+DHCP ────┘
 ```
 
 ---
 
 ## Planned Additions
 
-- **Proxmox API integration** — VM inventory, container states, storage pool usage from Pve1 and Pve3
-- **Pi-hole integration** — DNS record list and query stats from both Pi-hole instances on the Servers VLAN
-- **NetBox push** — auto-import the generated YAML via the NetBox REST API instead of leaving it as reference material
-- **Vault graph queries** — cross-reference DHCP leases against VM inventory; surface hosts with no DNS entry
+- Proxmox API integration — VM inventory, container states, storage pool usage from Pve1 and Pve3
+- Pi-hole integration — DNS record list and query stats from both Pi-hole instances on the Servers VLAN
+- NetBox push — auto-import the generated YAML via the NetBox REST API instead of leaving it as reference material
+- Vault graph queries — cross-reference DHCP leases against VM inventory; surface hosts with no DNS entry
 
 ---
 
