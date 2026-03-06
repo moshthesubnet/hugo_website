@@ -247,6 +247,10 @@ Ready to set up your own Homelab Topology Pipeline? Grab the template below. Onc
 
 {{< button href="/downloads/Homelab%20Topology%20Docs%20Pipeline%20template.json" download="Homelab Topology Docs Pipeline template.json" >}}Download Workflow Template{{< /button >}}
 
+{{< alert >}}
+**Note:** This workflow assumes a self-hosted n8n instance running in Docker with your Obsidian vault mounted and accessible to the container. The file write operations in the Code nodes will not work on n8n Cloud or any setup where the vault path isn't directly accessible from the n8n container.
+{{< /alert >}}
+
 ## What's Next
 
 Next is Proxmox API collection. Same workflow pattern, pointed at the Proxmox API instead of OPNsense — VM inventory, container states, storage pools. Pve1 and Pve3 are both on the MGMT VLAN, so the API is already reachable from DockerHost1. Auth model is the same: API tokens with explicit permission scopes.
