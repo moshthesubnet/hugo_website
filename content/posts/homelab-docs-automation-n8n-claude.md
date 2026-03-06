@@ -29,6 +29,8 @@ Homelab documentation has a half-life. You write it once, it's accurate for mayb
 **TL;DR:** n8n polls the OPNsense REST API on a weekly schedule, diffs against saved state, and SSHs into a dedicated Claude Code VM on the Lab VLAN when something changes. Updated NetBox YAML and Obsidian Markdown land on NFS-mounted TrueNAS storage and sync everywhere via Syncthing. Zero manual steps. Five gotchas below.
 {{< /alert >}}
 
+[Jump to download ↓](#how-to-import-this-workflow)
+
 My setup is a seven-VLAN OPNsense network — Lab, Servers, IoT, Home, MGMT, Malware analysis, and WireGuard for remote access — and the state changes constantly. The fix I wanted: documentation that updates itself.
 
 ## How It Works
@@ -232,6 +234,18 @@ ip_addresses:
 ```
 
 The Obsidian Markdown output reads like a network diagram in prose: a table of current leases, a section for each defined alias, and a diff summary at the top showing what changed since the last run. The diff is the part I actually look at. The full state is background context; the diff is the news.
+
+## How to Import This Workflow
+
+Ready to set up your own Homelab Topology Pipeline? Grab the template below. Once downloaded, importing it into your n8n workspace takes just a few seconds:
+
+1. Click the button below to download the `.json` file.
+2. Open your n8n instance and create a New Workflow.
+3. Click the menu icon (three dots) in the top right corner and select **Import from File...**, then choose the downloaded file.
+   *(Pro-tip: You can also open the file in any text editor, copy the raw JSON, and paste it directly onto your blank n8n canvas.)*
+4. Open the OPNsense API, SSH Claude Code, and Code nodes to swap in your own credentials and file paths. You'll need an OPNsense API credential saved in n8n and SSH access configured to wherever Claude Code is running. Then toggle the workflow to **Active**.
+
+{{< button href="/downloads/Homelab%20Topology%20Docs%20Pipeline%20template.json" download="Homelab Topology Docs Pipeline template.json" >}}Download Workflow Template{{< /button >}}
 
 ## What's Next
 
