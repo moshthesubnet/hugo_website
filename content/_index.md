@@ -77,18 +77,18 @@ The diagram covers:
 
 ## 🔥 Featured Projects
 
-### Local AI Coding Agent (Ollama + Aider)
+### n8n Homelab Docs Pipeline
 
-Deployed a fully localized, privacy-first AI coding assistant using Ollama and Aider to eliminate external API dependencies and subscription costs.
+Built an automated documentation pipeline that treats live network state as the source of truth — polling OPNsense weekly, diffing against saved state, and triggering Claude Code via SSH to regenerate topology docs on every change.
 
 **Key Achievements:**
 
-- Achieved 100% code privacy with an air-gapped, zero-cost LLM inference engine
-- Provisioned a dedicated Ubuntu VM for resource-isolated AI workloads
-- Integrated Aider CLI for seamless, terminal-based AI pair programming and automated Git commits
-- Established secure API access controls across isolated network VLANs
+- Eliminated documentation drift by pulling live state from four OPNsense REST API endpoints on a weekly schedule
+- Designed a 20-node n8n workflow with parallel API collection, state diffing, and conditional SSH execution
+- Integrated Claude Code over SSH to generate both NetBox-compatible YAML and Obsidian Markdown automatically
+- Enabled `fs` in n8n Code nodes to write directly to NFS-mounted TrueNAS storage, synced everywhere via Syncthing
 
-[View Full Documentation →](/docs/projects/local_ai_coding_agent/)
+[View Full Documentation →](/docs/projects/n8n-homelab-docs-pipeline/)
 
 ---
 
@@ -104,6 +104,21 @@ Redesigned my homelab network from an insecure flat configuration to a properly 
 - Deployed 7-VLAN architecture isolating home, malware analysis, homelab, servers, IoT, and management traffic
 
 [View Full Documentation →](/docs/projects/vlan_segmentation/)
+
+---
+
+### Local AI Coding Agent (Ollama + Aider)
+
+Deployed a fully localized, privacy-first AI coding assistant using Ollama and Aider to eliminate external API dependencies and subscription costs.
+
+**Key Achievements:**
+
+- Achieved 100% code privacy with an air-gapped, zero-cost LLM inference engine
+- Provisioned a dedicated Ubuntu VM for resource-isolated AI workloads
+- Integrated Aider CLI for seamless, terminal-based AI pair programming and automated Git commits
+- Established secure API access controls across isolated network VLANs
+
+[View Full Documentation →](/docs/projects/local_ai_coding_agent/)
 
 ---
 
