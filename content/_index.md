@@ -9,7 +9,7 @@ showTitle: false
     <img class="profile-photo" src="/assets/github_profile.png" alt="Skyler King" style="width: 220px; border: 4px solid #00E5FF; box-shadow: 0 8px 24px rgba(0,229,255,0.4); display: block;">
   </div>
   <div style="flex: 1 1 260px;">
-    <p>I'm <strong>Skyler King</strong> — a Cloud/Network Engineering student, homelab enthusiast, and emo/punk rock fan. I document everything from breaking OSPF in the lab to fixing critical infrastructure in production.</p>
+    <p>I'm <strong>Skyler King</strong> — a Cloud/Network Engineering student, career changer, homelab enthusiast, and emo/punk rock fan. I document everything from breaking OSPF in the lab to fixing critical infrastructure in production.</p>
   </div>
 </div>
 
