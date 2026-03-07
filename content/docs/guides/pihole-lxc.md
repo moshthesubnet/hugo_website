@@ -3,7 +3,7 @@ title: Pi-hole LXC
 weight: 1
 ---
 
-# 🚫 Pi-hole (LXC Deployment)
+# Pi-hole on LXC
 Pi-hole is a network-wide ad blocker that acts as a DNS sinkhole. By intercepting DNS requests for known ad servers and trackers, it prevents them from ever reaching your devices. LXC (Linux Containers) offer a lightweight, "bare-metal" feel for virtualization, giving your Pi-hole high performance with minimal overhead compared to a full VM.
 
 ### 1. Prerequisites

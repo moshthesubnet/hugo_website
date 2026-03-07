@@ -13,8 +13,6 @@ weight: 5
 
 This lab demonstrates the configuration of a two-area OSPF network using Cisco Modeling Labs (CML) Free Tier. The goal was to build a realistic enterprise-style routing topology, troubleshoot adjacency issues, configure DHCP for an end host, and verify end-to-end connectivity across OSPF area boundaries.
 
-This type of lab is foundational for anyone pursuing CCNA or CCNP certifications and reflects real-world network segmentation practices used in enterprise environments.
-
 ---
 
 ## Lab Topology
@@ -134,6 +132,6 @@ The following commands were used to confirm successful lab completion:
 
 ## Conclusion
 
-This lab provided hands-on experience with one of the most important routing protocols in enterprise networking. By working through real configuration errors and troubleshooting them systematically, the lab reinforced both theoretical OSPF knowledge and practical IOS command-line skills.
+The /31 subnet mismatch was the most interesting failure — it's the kind of thing that looks right until you do the math on paper. Everything else was a config typo that `show ip interface brief` cleaned up fast. DHCP on the wrong interface was just forgetting that Alpine's eth numbering doesn't match CML's port labels.
 
-The complete topology — from DHCP-assigned end host through two OSPF areas to a remote router — mirrors the kind of multi-area designs found in real enterprise and service provider environments, making it directly applicable to both certification study and professional networking work.
+Multi-area OSPF clicks differently once you've debugged it. The ABR configuration especially — seeing why R2 needs separate network statements for each area is easier to understand after you've broken it.

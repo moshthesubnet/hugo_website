@@ -9,9 +9,9 @@ weight: 2
 
 This project documents the redesign and implementation of network segmentation using VLANs to improve security, management, and network isolation in my homelab environment.
 
-## Executive Summary
+## Summary
 
-Successfully migrated from a basic VLAN configuration using the insecure default VLAN 1 for LAN traffic to a properly segmented network with a secure native VLAN and dedicated management VLAN. This implementation follows industry best practices for network security and segmentation.
+Moved from VLAN 1 carrying all traffic to a 7-VLAN layout with a dedicated management VLAN and an unused native VLAN (999).
 
 ## Network Topology
 
@@ -396,17 +396,9 @@ All network changes follow this process:
 
 ## Conclusion
 
-This VLAN segmentation project significantly improved the security posture and manageability of my homelab network. By following industry best practices and implementing proper network segmentation, I've created a more secure, scalable, and maintainable network infrastructure.
+The management VLAN lockout risk was real — keeping a console cable connected during the changeover saved me at least once. The native VLAN mismatch on trunk links also caused an outage that `show interfaces trunk` diagnosed in about 30 seconds once I knew what to look for.
 
-### Key Achievements
-
-- Eliminated VLAN 1 security vulnerabilities
-- Implemented secure native VLAN (999)
-- Created dedicated management network (VLAN 99)
-- Maintained strong network segmentation across security zones
-- Improved network documentation and change management
-
-This project demonstrates practical application of networking concepts including VLANs, inter-VLAN routing, network security, and access control—all fundamental skills for network engineering and cybersecurity.
+The malware VLAN having zero access to anything is the part I'm most satisfied with. Fully isolated, no route out, firewall drops everything. That one was deliberate from the start.
 
 ---
 
