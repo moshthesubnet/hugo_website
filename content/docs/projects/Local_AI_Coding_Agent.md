@@ -15,8 +15,8 @@ weight: 4
 ## Project Overview
 This project documents the design, deployment, and configuration of a fully localized AI coding assistant using Ollama as the inference engine and Aider as the command-line interface (CLI) agent, hosted on a dedicated Ubuntu Virtual Machine within the homelab environment.
 
-## Executive Summary
-Successfully migrated from cloud-dependent AI coding assistants (e.g., GitHub Copilot, OpenAI API) to a private, self-hosted LLM architecture. By provisioning an Ubuntu VM running Ollama and connecting it to Aider, this implementation achieves zero-cost inference, absolute code privacy, and a seamless terminal-based AI pair programming experience. 
+## Summary
+Moved off GitHub Copilot and external APIs onto a self-hosted Ollama instance on a dedicated Ubuntu VM. Code stays local, inference is free, and Aider handles the Git integration from the terminal.
 
 ---
 
@@ -104,7 +104,7 @@ Running LLMs is highly resource-intensive. Isolating this workload on a dedicate
 
 #### 2. Ollama as the Backend Engine
 
-Ollama abstracts away the complexity of compiling llama.cpp and managing model weights manually. It provides a clean, OpenAI-compatible REST API out of the box, which is a requirement for most downstream AI tools.
+Ollama abstracts away the complexity of compiling llama.cpp and managing model weights manually. It provides an OpenAI-compatible REST API out of the box, which most downstream AI tools require.
 
 #### 3. Aider as the Developer Interface
 

@@ -3,13 +3,13 @@ title: Proxmox
 weight: 2
 ---
 
-# 🛡️ Proxmox Virtualization Environment
+# Proxmox
 
-This is the "brain" of my homelab. I use Proxmox VE to host everything from core network services to experimental security labs and development environments.
+I use Proxmox VE to host everything from the OPNsense firewall to malware analysis VMs.
 
 ---
 
-## 🖥️ The Hardware
+## Hardware
 
 I run a **2-node Proxmox setup** (non-clustered). Each node serves a specific purpose to optimize resource allocation and minimize single points of failure.
 
@@ -37,9 +37,9 @@ I run a **2-node Proxmox setup** (non-clustered). Each node serves a specific pu
 
 ---
 
-## 🌐 Network Integration
+## Network integration
 
-Both Proxmox nodes are **trunked to the UniFi switch**, allowing VMs and containers to be assigned to specific VLANs for proper segmentation and security isolation.
+Both nodes trunk to the UniFi switch, so VMs and containers slot into whichever VLAN they belong to.
 
 ### VLAN Assignment Strategy
 
@@ -56,9 +56,7 @@ Both Proxmox nodes are **trunked to the UniFi switch**, allowing VMs and contain
 
 ---
 
-## 🐳 Docker Infrastructure
-
-I recently optimized my container strategy for efficiency and simplified management.
+## Docker
 
 ### The Migration
 
@@ -83,9 +81,9 @@ I recently optimized my container strategy for efficiency and simplified managem
 
 ---
 
-## 🔒 Security & Isolation
+## Security
 
-Proxmox VMs are strategically isolated based on their risk profile:
+VMs are isolated by risk:
 
 * **Malware Lab (VLAN 20):** Completely air-gapped from other networks. Used for testing Kali Linux tools, analyzing suspicious files, and learning offensive security techniques.
 * **Production Services (VLAN 40):** Firewalled access from Home VLAN, monitored for anomalies.
@@ -93,7 +91,7 @@ Proxmox VMs are strategically isolated based on their risk profile:
 
 ---
 
-## 📦 Backup Strategy
+## Backups
 
 **Proxmox Native Backups:**
 * Daily Automated Snapshots stored on NFS share (Synology NAS)
@@ -108,7 +106,7 @@ Proxmox VMs are strategically isolated based on their risk profile:
 
 ---
 
-## 🛠️ Current Projects & Roadmap
+## In progress
 
 ### In Progress
 
@@ -125,7 +123,7 @@ Proxmox VMs are strategically isolated based on their risk profile:
 
 ---
 
-## 💡 Lessons Learned
+## Lessons learned
 
 **What Works:**
 * Separating network services (firewall) from lab workloads across two nodes provides better stability
@@ -138,7 +136,7 @@ Proxmox VMs are strategically isolated based on their risk profile:
 
 ---
 
-## 📊 Resource Utilization
+## Resource utilization
 
 *Current allocation across both nodes:*
 
@@ -158,4 +156,3 @@ Proxmox VMs are strategically isolated based on their risk profile:
 
 ---
 
-> **Note:** Documentation is a living, breathing thing. As I scale and optimize, I update these specs to reflect the current state of "The Subnet."

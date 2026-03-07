@@ -3,25 +3,23 @@ title: Overview
 weight: 1
 ---
 
-# 🗺️ Lab Overview
+# Lab overview
 
-Welcome to the heart of **The Subnet**. My homelab is a hybrid environment designed for high-availability services, network experimentation, and professional development.
+Two Proxmox nodes, an OPNsense firewall, and a UniFi switch stack. 7 VLANs, automated where possible, documented here.
 
-The primary goal of this lab is to mirror enterprise-grade networking and virtualization in a residential setting, providing a safe "sandbox" to test configurations before they ever reach a production environment.
-
----
-
-## 🏗️ High-Level Architecture
-
-My lab is built on three core pillars:
-
-1. **Virtualization:** A 2-node Proxmox VE setup managing compute resources for VMs and containers.
-2. **Infrastructure:** An OPNsense and UniFi-powered backbone with secure VLAN segmentation following Cisco best practices.
-3. **Automation:** A "self-healing" mindset using n8n, Python, and Bash to handle repetitive tasks.
+The goal is to run real infrastructure at home — configurations get tested here before they touch anything that matters.
 
 ---
 
-## 📌 Hardware Inventory
+## Architecture
+
+- Proxmox VE on two nodes, hosting VMs and containers
+- OPNsense + UniFi for routing, switching, and VLAN enforcement
+- Automation via n8n, Python, and Bash for repetitive tasks
+
+---
+
+## Hardware
 
 | Component | Device | Role |
 | :--- | :--- | :--- |
@@ -34,9 +32,7 @@ My lab is built on three core pillars:
 
 ---
 
-## 🔡 Network Architecture
-
-My network follows enterprise segmentation principles with dedicated VLANs for security and performance optimization.
+## Network
 
 ### Topology
 
@@ -58,20 +54,18 @@ An interactive diagram of the full lab network — physical hierarchy, VLAN segm
 
 [Read the full VLAN Segmentation project documentation →](../projects/vlan_segmentation/)
 
-### Networking Philosophy
+### Networking philosophy
 
 I treat my home network like a mini-enterprise:
 
-* **Security by Segmentation:** IoT and Lab devices are isolated from trusted personal data to reduce attack surface.
-* **Static Infrastructure:** Core services (Servers, Switches, APs) use static IPs outside DHCP pools for reliability.
-* **Defense in Depth:** Multiple layers of security including VLAN isolation, firewall rules, and access control lists.
-* **Documentation First:** If it isn't documented here, it doesn't exist.
+* IoT and lab devices are isolated from trusted personal data
+* Core services (servers, switches, APs) use static IPs outside DHCP pools
+* Multiple layers: VLAN isolation, firewall rules, and ACLs
+* If it isn't documented here, it doesn't exist
 
 ---
 
-## 🛠️ Current Tech Stack
-
-*Technologies I'm actively working with:*
+## Tech stack
 
 **Virtualization & Containers:**
 * Proxmox VE, Docker, LXC, Podman
@@ -87,16 +81,16 @@ I treat my home network like a mini-enterprise:
 
 ---
 
-## 📈 Recent Updates
+## Recent updates
 
 * **Feb 2026:** Deployed Ollama on Ubuntu VM and integrated multiple local LLMs with Aider to create a self-hosted AI coding agent environment.
-* **Feb 2026:** Completed VLAN segmentation security hardening project—eliminated VLAN 1, implemented native VLAN 999, and created dedicated management VLAN 99.
+* **Feb 2026:** Completed VLAN segmentation security hardening project: eliminated VLAN 1, implemented native VLAN 999, and created dedicated management VLAN 99.
 * **Jan 2026:** Deployed LXC container running MkDocs for local documentation testing and continuous deployment.
 * **Jan 2026:** Migrated and consolidated Docker infrastructure from 3 hosts to 2 for better resource management.
 
 ---
 
-## 🔥 Active Projects
+## Active projects
 
 Currently working on:
 
@@ -108,4 +102,3 @@ Currently working on:
 
 ---
 
-> "The lab is never finished. It only evolves."
