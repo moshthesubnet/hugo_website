@@ -9,7 +9,7 @@ weight: 2
 
 I came from a non-technical background and retrained into networking from scratch. Two years, six certifications, an IT internship, and a homelab that started simple and didn't stay that way.
 
-Currently, I am pursuing a **B.S. in Cloud and Network Engineering (Cisco)** at **Western Governors University**.
+I'm finishing a B.S. in Cloud and Network Engineering at WGU.
 
 ---
 
@@ -19,11 +19,11 @@ Currently, I am pursuing a **B.S. in Cloud and Network Engineering (Cisco)** at 
 
 ### Production Environment
 
-* **Critical Infrastructure Rescue:** Diagnosed and resolved a critical IPsec VPN tunnel failure affecting a production licensing server. This intervention restored connectivity, preventing 3+ hours of downtime and saving estimated operational costs of ~$15k.
+* **Critical Infrastructure Rescue:** Diagnosed and resolved a critical IPsec VPN tunnel failure affecting a production licensing server. Restored connectivity, saved an estimated $15k in downtime.
 
 * **Enterprise Network Segmentation:** Configured and implemented five secure VLANs to segment a flat Layer 2 network. This reduced broadcast traffic and security risks for 150+ devices while improving overall network performance by 30%.
 
-* **Rapid Deployment:** Deployed full IT infrastructure for a newly acquired office—provisioning network connectivity, video conferencing systems, and 25 workstations to achieve full operational readiness within 48 hours.
+* **Rapid Deployment:** Deployed full IT infrastructure for a newly acquired office: network, conferencing, and 25 workstations up and running in 48 hours.
 
 ### Homelab Projects
 
@@ -36,8 +36,6 @@ Currently, I am pursuing a **B.S. in Cloud and Network Engineering (Cisco)** at 
 ---
 
 ## 📜 Certifications
-
-I actively validate my skills through industry-recognized certifications.
 
 | Certification | Issuing Organization | Date Earned |
 | :--- | :--- | :--- |
@@ -82,4 +80,4 @@ I actively validate my skills through industry-recognized certifications.
 
 ## 🔗 Technical Projects
 
-Interested in my hands-on work? Check out my [Projects page](../projects/projects/) for detailed documentation of my homelab implementations, including network architecture, security hardening, and automation workflows.
+The [Projects page](../projects/projects/) has full documentation of my homelab work.
