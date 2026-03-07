@@ -81,11 +81,9 @@ The diagram covers:
 
 Built an automated documentation pipeline that treats live network state as the source of truth — polling OPNsense weekly, diffing against saved state, and triggering Claude Code via SSH to regenerate topology docs on every change.
 
-**Key Achievements:**
-
-- Eliminated documentation drift by pulling live state from four OPNsense REST API endpoints on a weekly schedule
+- Stopped documentation from going stale by pulling live state from four OPNsense REST API endpoints on a weekly schedule
 - Designed a 20-node n8n workflow with parallel API collection, state diffing, and conditional SSH execution
-- Integrated Claude Code over SSH to generate both NetBox-compatible YAML and Obsidian Markdown automatically
+- Triggered Claude Code over SSH to generate both NetBox-compatible YAML and Obsidian Markdown automatically
 - Enabled `fs` in n8n Code nodes to write directly to NFS-mounted TrueNAS storage, synced everywhere via Syncthing
 
 [View Full Documentation →](/docs/projects/n8n-homelab-docs-pipeline/)
@@ -95,8 +93,6 @@ Built an automated documentation pipeline that treats live network state as the 
 ### VLAN Segmentation & Security Hardening
 
 Redesigned my homelab network from an insecure flat configuration to a properly segmented architecture following industry best practices.
-
-**Key Achievements:**
 
 - Eliminated VLAN 1 security vulnerabilities
 - Implemented secure native VLAN (999) to prevent VLAN hopping attacks
@@ -111,12 +107,10 @@ Redesigned my homelab network from an insecure flat configuration to a properly 
 
 Deployed a fully localized, privacy-first AI coding assistant using Ollama and Aider to eliminate external API dependencies and subscription costs.
 
-**Key Achievements:**
-
-- Achieved 100% code privacy with an air-gapped, zero-cost LLM inference engine
+- Kept all code local with no external API calls or costs
 - Provisioned a dedicated Ubuntu VM for resource-isolated AI workloads
-- Integrated Aider CLI for seamless, terminal-based AI pair programming and automated Git commits
-- Established secure API access controls across isolated network VLANs
+- Integrated Aider CLI for terminal-based AI pair programming and automated Git commits
+- Set up API access controls across isolated network VLANs
 
 [View Full Documentation →](/docs/projects/local_ai_coding_agent/)
 
