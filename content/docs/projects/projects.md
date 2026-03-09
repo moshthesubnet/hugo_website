@@ -7,6 +7,12 @@ weight: 1
 
 ---
 
+### [Cross-VLAN Network Monitor](./cross_vlan_network_monitor/) — March 2026
+
+FastAPI app that queries OPNsense, Proxmox, and Docker APIs directly to produce a unified cross-VLAN device inventory — no raw sockets, no root required.
+
+---
+
 ### [n8n Homelab Docs Pipeline](./n8n-homelab-docs-pipeline/) — March 2026
 
 n8n polls OPNsense weekly, diffs against saved state, and SSHs into a Claude Code VM to rewrite topology docs automatically.
