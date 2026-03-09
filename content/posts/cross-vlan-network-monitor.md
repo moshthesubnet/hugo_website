@@ -133,7 +133,9 @@ Stopped VMs are still tracked. Their ARP entries disappear when the lease expire
 
 Docker's engine API (`GET /containers/json`) returns running containers with their network configurations. The tricky part is host-networked containers — ones running with `--network host`. Those containers share the host's MAC address and IP, so they don't have their own ARP entry. If you create a device record for each one, you end up with phantom IPs that duplicate the host.
 
-The fix: check whether a container's network mode is `host`, and if so, attribute it back to the physical host's existing ARP entry rather than creating a new device. The container shows up as a label on the host record, not as a separate row.
+The fix: check whether a container's network mode is `host`, and if so, collect it for later rather than upserting immediately. After the main merge loop, `merge_host_containers()` injects those containers into the host's metadata JSON without touching `device_type`, `vendor`, or any other column. The Docker host keeps its `bare-metal` type. Its detail panel gets a "Host-Network Containers" block listing each container by name, image, and status.
+
+There's also a host attribution feature for bridge-networked containers. Every container now carries a `docker_host` field — the IP extracted from the TCP socket URL (`tcp://10.30.40.2:2375`). In the dashboard, the container's detail panel shows a **Host** row that resolves `docker_host` against the device list. If the Docker host has an alias set, it shows `"DockerHost1 (10.30.40.2)"`. If not, it shows the raw IP. Setting an alias on the host retroactively improves the label for every container on it without a re-scan.
 
 Multiple Docker hosts are queried in parallel. TCP sockets (`tcp://host:2375`) are the practical option for remote daemons — unauthenticated, but restricted at the firewall to the scanner's IP only.
 
@@ -148,6 +150,17 @@ There's a UDP syslog receiver running alongside the API on port 514. OPNsense ca
 ```
 
 Logs are stored per source IP and linked to the device that generated them. Some appliances send syslog from a different interface than their management IP — there's a per-device secondary syslog IP field to handle that case without creating a separate device entry.
+
+Container logs can be streamed in the same way using Logspout — one container per Docker host, mounted on the Docker socket, forwarding all container stdout/stderr as UDP syslog datagrams to the receiver:
+
+```bash
+sudo docker run -d --name logspout --restart=always \
+  -e SYSLOG_HOSTNAME=$(hostname) \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  gliderlabs/logspout syslog+udp://MONITOR_IP:514
+```
+
+Messages arrive from the Docker host's IP, so logs land on the host's device row. The container name is embedded in the message body — no parser changes needed.
 
 Disappearance tracking works by incrementing a `disappearance_count` for any device not seen in the current scan cycle. When that counter hits `ALERT_DISAPPEARANCE_THRESHOLD` (default: 3 consecutive missed scans), a `device_gone` webhook fires. New MACs trigger `device_discovered`. Both events POST a structured JSON payload — MAC, IP, alias, vendor, type, last-seen — to any HTTP endpoint.
 
@@ -243,7 +256,7 @@ Microsoft's 2024 Digital Defense Report found over 90% of ransomware attacks inv
 
 ---
 
-*Running Python 3.12, FastAPI 0.115, on an Ubuntu VM in the HOMELAB VLAN. Scan interval is five minutes. The syslog receiver has been up continuously since February. The only outage was when I accidentally dropped a firewall rule that let the scanner reach the OPNsense management IP — which, fittingly, the scanner itself noticed first.*
+*Python 3.12, FastAPI 0.115, Ubuntu VM, HOMELAB VLAN. The only outage was a dropped firewall rule blocking the scanner from the OPNsense management IP — which the scanner noticed before I did.*
 
 <script type="application/ld+json">
 {

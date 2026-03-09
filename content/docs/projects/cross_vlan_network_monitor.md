@@ -154,7 +154,7 @@ Each scan cycle fetches active DHCP leases from OPNsense's dnsmasq API and uses 
 
 - OPNsense provides the global ARP table (IPv4) and NDP neighbour table (IPv6) in a single API call, covering every VLAN it routes. Devices that only appear in NDP — IPv6-only endpoints with no ARP entry — get their own row with a null IPv4 field.
 - Proxmox nodes are polled concurrently with per-node API tokens. The QEMU Guest Agent provides a live IP for running VMs before ARP resolves; offline VMs stay in the inventory with their last-known IP and a `stopped` badge rather than dropping off when the lease expires.
-- Multiple Docker hosts are queried in parallel. Host-networked containers (`--network host`) are attributed back to the physical host's ARP entry rather than stored as separate rows with duplicate IPs.
+- Multiple Docker hosts are queried in parallel. Host-networked containers (`--network host`) are attributed back to the physical host's ARP entry rather than stored as separate rows with duplicate IPs. The detail panel for each container shows a **Host** row that resolves to the host device's alias when one is set. Logspout can be deployed per Docker host to stream container stdout/stderr into the syslog receiver, with logs attributed to the host's device row.
 - nmap and SNMP are optional supplemental sources — useful for subnets OPNsense doesn't route or managed switches with ARP caches worth walking. OPNsense takes priority on any IP conflict.
 - The syslog receiver parses RFC 3164, RFC 5424, and OPNsense `filterlog` CSV. All three land in the same device-linked log view. Appliances that send syslog from a management interface different from their data IP can have a secondary syslog IP set per-device.
 - Disappearance tracking increments a counter each scan a device isn't seen. At `ALERT_DISAPPEARANCE_THRESHOLD` missed cycles (default: 3), a `device_gone` webhook fires. New MACs trigger `device_discovered`. Both POST a JSON payload with MAC, IP, alias, vendor, type, and last-seen timestamp.
@@ -237,6 +237,33 @@ Idempotent `_migrate_add_columns()` added `ipv6`, `custom_type`, `disappearance_
 
 ### P3/P4 — Enriched Discovery & Dashboard Overhaul
 Added nmap (`-sn -oX -`, XML parse, 120s timeout) and SNMP (`ipNetToMediaPhysAddress` MIB walk via `snmpwalk` subprocess). New API endpoints for notes, type overrides, secondary syslog IP, global log search, inventory export, and source health. Frontend rebuilt with per-type count chips, per-source health indicator dots, bulk checkbox actions, and a slide-in detail panel with inline editors for alias, type, notes, and syslog IP — plus a colour-coded syslog viewer per device.
+
+### P5 — Host-Network Container Fix & Docker Host Attribution
+
+#### Problem: Host-Network Containers Overwriting Docker Host Identity
+Containers running with `--network host` share the daemon host's MAC address and IP — no independent network identity. The previous merge logic upserted these containers directly onto the host device record, overwriting its `device_type` with `docker-container` and `vendor` with `"Docker"`. If multiple host-network containers ran on the same host (e.g. rustdesk alongside logspout), the last container processed each scan cycle would clobber all prior metadata.
+
+#### Fix: Accumulate Without Overwriting
+- Host-network containers are collected into `_host_net_containers: dict[str, list[dict]]`, keyed by resolved host MAC, instead of being immediately upserted.
+- After the main merge loop, `merge_host_containers(mac, containers)` is called once per host — reads the existing `metadata` JSON, injects `host_network_containers` as a list, and writes it back **without touching `device_type`, `vendor`, or any other column**.
+- The Docker host keeps its `bare-metal` type and vendor identity. Its metadata now carries a `host_network_containers` array listing every `--network host` container currently running on it.
+
+#### Docker Host Attribution
+- `docker_host: str = ""` field added to `DockerInfo` dataclass, populated for every container: IP extracted from the TCP socket URL (`tcp://10.30.40.2:2375` → `"10.30.40.2"`), or `"localhost"` for Unix socket.
+- Stored in each container's `metadata` JSON blob.
+- Frontend: the Docker Container Details panel shows a **Host** row. At render time `allDevices` is searched for a device whose IP matches `metadata.docker_host`. If found and aliased, displays `"DockerHost1 (10.30.40.2)"`; falls back to the raw IP. Setting an alias on the Docker host retroactively improves the label for all containers on that host without a re-scan.
+
+#### Logspout Syslog Forwarding
+To stream container stdout/stderr into the syslog receiver, deploy one Logspout container per Docker host:
+
+```bash
+sudo docker run -d --name logspout --restart=always \
+  -e SYSLOG_HOSTNAME=$(hostname) \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  gliderlabs/logspout syslog+udp://MONITOR_IP:514
+```
+
+Logspout mounts the Docker socket, tails all container logs, and forwards them as UDP syslog datagrams. Messages arrive from the Docker host's IP so logs are attributed to the correct host device row. The container name is embedded in the syslog message body. The syslog receiver handles these without modification.
 
 ---
 
