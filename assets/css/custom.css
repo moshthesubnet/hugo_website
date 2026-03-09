@@ -69,17 +69,29 @@ article, main {
    --------------------------------------------------------- */
 a {
   color: #00D4FF;
-  text-decoration: none;
+  text-decoration: none !important;
   background-image: linear-gradient(currentColor, currentColor);
   background-size: 0 2px;
   background-position: left bottom;
   background-repeat: no-repeat;
-  transition: color 0.15s, background-size 0.3s ease-in-out;
 }
 
-a:hover {
-  color: #C084FC !important;
+/* Suppress any prose/Tailwind text-decoration that overrides the global a rule */
+.prose a,
+article a,
+main a {
+  text-decoration: none !important;
+}
+
+/* Override Congo's compiled `body a` transition which excludes background-size */
+body a {
+  transition: color 0.15s ease, background-size 0.3s ease-in-out !important;
+}
+
+a:hover,
+a:focus {
   text-shadow: none;
+  text-decoration: none !important;
   background-size: 100% 2px;
 }
 
@@ -87,9 +99,8 @@ a:visited {
   color: #00AACC;
 }
 
-/* Exclude image and logo links */
-a:has(img),
-a:has(svg) {
+/* Exclude only logo/image links — SVG icon links (social) still get the underline */
+a:has(img) {
   background-image: none;
 }
 
@@ -150,12 +161,31 @@ body > header li {
   text-shadow: none;
 }
 
+/* Suppress Congo's group-hover:underline Tailwind class on nav span elements */
+body > header a span,
+body > header button span,
+body > header nav li:hover a span,
+body > header nav li:hover button span {
+  text-decoration: none !important;
+}
+
 body > header a:hover,
 body > header a:hover span,
 body > header button:hover,
 body > header button:hover span {
   color: #00D4FF !important;
   text-decoration: none;
+}
+
+/* Nav links — underline only, no color change on hover */
+body > header nav a:hover,
+body > header nav a:hover span {
+  color: #FFFFFF !important;
+}
+
+/* Header links — force Electric Blue underline instead of currentColor (white) */
+body > header a {
+  background-image: linear-gradient(#00D4FF, #00D4FF);
 }
 
 /* ---------------------------------------------------------
@@ -202,7 +232,7 @@ body > div > footer a {
 
 body > div > footer a:hover {
   color: #00D4FF !important;
-  text-decoration: underline;
+  text-decoration: none !important;
 }
 
 /* ---------------------------------------------------------
@@ -382,13 +412,12 @@ main table td {
 
 .toc a {
   color: #A0A0A0;
-  text-decoration: none;
-  transition: color 0.15s;
+  text-decoration: none !important;
 }
 
 .toc a:hover {
   color: #00D4FF !important;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 /* ---------------------------------------------------------
@@ -468,7 +497,27 @@ article .not-prose[class*="warning"] {
 .hover-underline {
   position: relative;
   display: inline-block;
-  text-decoration: none;
+  text-decoration: none !important;
+  background-image: none !important;
+}
+
+/* Suppress the background-image underline on any child anchor tags (e.g. Congo heading anchors) */
+.hover-underline a,
+.hover-underline a:hover {
+  background-image: none !important;
+  background-size: 0 0 !important;
+  text-decoration: none !important;
+}
+
+/* h2 already has border-bottom globally — remove it when hover-underline is used */
+article .prose h2.hover-underline,
+main .prose h2.hover-underline {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.hover-underline:hover {
+  text-decoration: none !important;
 }
 
 .hover-underline::after {
