@@ -1,5 +1,5 @@
 /* =========================================================
-   Custom brand styles — Light Editorial
+   Custom brand styles — Dark Editorial
    Cyber Violet (#7B2D8E) · Electric Blue (#00D4FF)
    Bebas Neue (headings) · Fira Code (code) · Inter (body)
    ========================================================= */
@@ -24,12 +24,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ---------------------------------------------------------
-   BASE — body size, light background
+   BASE
    --------------------------------------------------------- */
 body {
   font-size: 1.0625rem;
-  background-color: #FAFAFA;
-  color: #1A1A1A;
+  color: #D4D4D4;
 }
 
 /* ---------------------------------------------------------
@@ -45,47 +44,47 @@ article, main {
 }
 
 /* ---------------------------------------------------------
-   PROSE VARIABLE OVERRIDES
-   Congo sets these on .prose {} — custom.css loads after
-   so the same specificity wins by source order.
+   PROSE INVERT VARIABLE OVERRIDES
+   Congo dark mode activates prose-invert which reads
+   --tw-prose-invert-* variables defined on .prose.
+   Custom.css loads after Congo, so same selector wins.
    --------------------------------------------------------- */
 .prose {
-  --tw-prose-body:          #1A1A1A;
-  --tw-prose-headings:      #7B2D8E;   /* Cyber Violet */
-  --tw-prose-links:         #007EA8;   /* Electric Blue, accessible on white */
-  --tw-prose-bold:          #111111;
-  --tw-prose-code:          #7B2D8E;   /* inline code — Cyber Violet */
-  --tw-prose-pre-bg:        #1E1E2E;   /* dark code block */
-  --tw-prose-pre-code:      #CDD6F4;   /* light syntax text on dark bg */
-  --tw-prose-hr:            #E5E5E5;
-  --tw-prose-quote-borders: #7B2D8E;
-  --tw-prose-quotes:        #525252;
-  --tw-prose-counters:      #525252;
-  --tw-prose-bullets:       #7B2D8E;
+  --tw-prose-invert-body:          #D4D4D4;
+  --tw-prose-invert-headings:      #C084FC;  /* light violet — readable on #121212 */
+  --tw-prose-invert-links:         #00D4FF;  /* Electric Blue */
+  --tw-prose-invert-bold:          #F0F0F0;
+  --tw-prose-invert-code:          #C084FC;
+  --tw-prose-invert-pre-code:      #CDD6F4;
+  --tw-prose-invert-pre-bg:        #1A1A2E;  /* dark blue-violet code block */
+  --tw-prose-invert-hr:            #2A2A2A;
+  --tw-prose-invert-quote-borders: #7B2D8E;
+  --tw-prose-invert-quotes:        #A0A0A0;
+  --tw-prose-invert-counters:      #A0A0A0;
+  --tw-prose-invert-bullets:       #C084FC;
 }
 
 /* ---------------------------------------------------------
    LINKS
    --------------------------------------------------------- */
 a {
-  color: #007EA8;
+  color: #00D4FF;
   text-decoration: none;
   transition: color 0.15s;
 }
 
 a:hover {
-  color: #7B2D8E !important;
+  color: #C084FC !important;
   text-shadow: none;
   text-decoration: underline;
 }
 
 a:visited {
-  color: #006080;
+  color: #00AACC;
 }
 
 /* ---------------------------------------------------------
    HEADER — Cyber Violet, full-bleed, sticky
-   Negates body's responsive padding (px-6 sm:px-14 md:px-24 lg:px-32)
    --------------------------------------------------------- */
 body > header {
   background-color: #7B2D8E;
@@ -94,7 +93,7 @@ body > header {
   top: 0;
   z-index: 50;
   border-bottom: 2px solid #00D4FF;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
   margin-left:  -1.5rem;
   margin-right: -1.5rem;
   padding-left:  1.5rem;
@@ -128,7 +127,6 @@ body > header {
   }
 }
 
-/* All nav text: white on Cyber Violet */
 body > header,
 body > header nav,
 body > header a,
@@ -149,11 +147,11 @@ body > header button:hover span {
 }
 
 /* ---------------------------------------------------------
-   FOOTER — dark violet-black, full-bleed, light text
-   Footer lives inside body > div, so selector is body > div > footer
+   FOOTER — dark, full-bleed
+   Lives inside body > div so selector is body > div > footer
    --------------------------------------------------------- */
 body > div > footer {
-  background-color: #1A0A22;
+  background-color: #0D0719;
   color: #D0D0D0;
   border-top: 3px solid #7B2D8E;
   margin-left:  -1.5rem;
@@ -192,7 +190,7 @@ body > div > footer {
 body > div > footer p,
 body > div > footer span,
 body > div > footer a {
-  color: #B0B0B0 !important;
+  color: #A0A0A0 !important;
 }
 
 body > div > footer a:hover {
@@ -201,11 +199,12 @@ body > div > footer a:hover {
 }
 
 /* ---------------------------------------------------------
-   H2 / H3 — Cyber Violet, generous spacing, h2 underline
+   H2 / H3 — light violet, generous spacing, h2 underline
+   #C084FC has good contrast on #121212 (~5:1 for large text)
    --------------------------------------------------------- */
 article .prose h2,
 main .prose h2 {
-  color: #7B2D8E !important;
+  color: #C084FC !important;
   margin-top: 2.75rem !important;
   margin-bottom: 0.9rem !important;
   padding-bottom: 0.4rem;
@@ -214,7 +213,7 @@ main .prose h2 {
 
 article .prose h3,
 main .prose h3 {
-  color: #7B2D8E !important;
+  color: #C084FC !important;
   margin-top: 2rem !important;
   margin-bottom: 0.65rem !important;
 }
@@ -226,34 +225,36 @@ article .prose p,
 main .prose p {
   line-height: 1.78;
   margin-bottom: 1.35rem;
+  color: #D4D4D4;
 }
 
 article .prose li,
 main .prose li {
   line-height: 1.75;
   margin-bottom: 0.4rem;
+  color: #D4D4D4;
 }
 
 /* ---------------------------------------------------------
-   HORIZONTAL RULES — subtle, generous vertical margin
+   HORIZONTAL RULES
    --------------------------------------------------------- */
 article .prose hr,
 main .prose hr,
 hr {
   border: none;
-  border-top: 1px solid #E5E5E5;
+  border-top: 1px solid #2A2A2A;
   margin: 3rem 0;
 }
 
 /* ---------------------------------------------------------
-   BLOCKQUOTES — Cyber Violet left border, tinted bg
+   BLOCKQUOTES — Cyber Violet border, dark tinted bg
    --------------------------------------------------------- */
 article .prose blockquote,
 main .prose blockquote {
   border-left: 4px solid #7B2D8E !important;
-  background: rgba(123, 45, 142, 0.04);
+  background: rgba(192, 132, 252, 0.07);
   padding: 0.75rem 1.25rem;
-  color: #525252;
+  color: #A0A0A0;
   font-style: italic;
   border-radius: 0 4px 4px 0;
 }
@@ -261,14 +262,15 @@ main .prose blockquote {
 article .prose blockquote p,
 main .prose blockquote p {
   margin-bottom: 0;
+  color: #A0A0A0;
 }
 
 /* ---------------------------------------------------------
-   CODE BLOCKS — dark-themed on the light page
+   CODE BLOCKS — dark blue-violet bg, contrasts with #121212
    --------------------------------------------------------- */
 article pre,
 main pre {
-  background-color: #1E1E2E !important;
+  background-color: #1A1A2E !important;
   border-left: 3px solid #00D4FF;
   border-radius: 4px;
 }
@@ -279,18 +281,18 @@ main pre code {
   font-family: 'Fira Code', monospace;
 }
 
-/* Inline code — light bg, Cyber Violet text */
+/* Inline code — dark violet bg, light violet text */
 article code:not(pre code),
 main code:not(pre code) {
-  color: #7B2D8E;
-  background-color: #F3E8FF;
+  color: #C084FC;
+  background-color: rgba(192, 132, 252, 0.12);
   padding: 0.15em 0.35em;
   border-radius: 3px;
   font-family: 'Fira Code', monospace;
 }
 
 /* ---------------------------------------------------------
-   TABLES — Violet header, light alternating rows,
+   TABLES — Violet header, dark alternating rows,
    Electric Blue left border, horizontal scroll on mobile
    --------------------------------------------------------- */
 article table,
@@ -334,44 +336,45 @@ main table th {
 
 article table tbody tr:nth-child(even),
 main table tbody tr:nth-child(even) {
-  background-color: #F5F5F5;
+  background-color: rgba(255, 255, 255, 0.04);
 }
 
 article table tbody tr:nth-child(odd),
 main table tbody tr:nth-child(odd) {
-  background-color: #FFFFFF;
+  background-color: transparent;
 }
 
 article table td,
 main table td {
-  border-bottom: 1px solid #E9E9E9;
+  border-bottom: 1px solid #2A2A2A;
+  color: #D4D4D4;
 }
 
 /* ---------------------------------------------------------
-   TABLE OF CONTENTS — white card, Cyber Violet left border
+   TABLE OF CONTENTS — dark card, Cyber Violet left border
    --------------------------------------------------------- */
 .toc {
-  background: #FFFFFF;
-  border: 1px solid #E5E5E5;
+  background: #1C1C1C;
+  border: 1px solid #2A2A2A;
   border-left: 4px solid #7B2D8E;
   border-radius: 0 4px 4px 0;
   padding: 0.75rem 0.75rem 0.75rem 0;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
 }
 
 .toc .border-s {
-  border-color: #E5E5E5 !important;
+  border-color: #2A2A2A !important;
 }
 
 .toc summary {
   font-family: 'Bebas Neue', sans-serif !important;
   letter-spacing: 2px;
   font-size: 1rem;
-  color: #1A1A1A;
+  color: #E0E0E0;
 }
 
 .toc a {
-  color: #525252;
+  color: #A0A0A0;
   text-decoration: none;
   transition: color 0.15s;
 }
@@ -382,19 +385,18 @@ main table td {
 }
 
 /* ---------------------------------------------------------
-   AUTHOR BIO CARD — white card, Cyber Violet top border
+   AUTHOR BIO CARD — dark card, Cyber Violet top border
    --------------------------------------------------------- */
 .author-card {
-  background: #FFFFFF;
-  border: 1px solid #E5E5E5;
+  background: #1C1C1C;
+  border: 1px solid #2A2A2A;
   border-top: 4px solid #7B2D8E;
   border-radius: 6px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
   padding: 1.75rem;
   margin-top: 1.5rem;
 }
 
-/* Author profile image — Cyber Violet ring */
 .author-card img {
   border: 3px solid #7B2D8E;
   border-radius: 50%;
@@ -406,21 +408,19 @@ main table td {
 article header .prose img,
 article header .prose picture > img {
   border-radius: 5px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12), 0 0 0 1px #E5E5E5;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
   width: 100%;
   height: auto;
   display: block;
 }
 
-/* Inline article images */
 article .prose img {
   border-radius: 5px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  border: 1px solid #E5E5E5;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
 }
 
 /* ---------------------------------------------------------
-   ALERT BOXES — Congo .not-prose divs, light mode
+   ALERT BOXES — Congo .not-prose divs, dark mode
    --------------------------------------------------------- */
 article .not-prose {
   border-left-width: 0.375rem;
@@ -430,29 +430,29 @@ article .not-prose {
 /* Info / default — Electric Blue */
 article .not-prose:not([class*="danger"]):not([class*="warning"]) {
   border-color: #00D4FF;
-  background: rgba(0, 212, 255, 0.06);
+  background: rgba(0, 212, 255, 0.08);
 }
 
 /* Danger — Red */
 article .not-prose[class*="danger"] {
-  border-color: #DC2626;
-  background: rgba(220, 38, 38, 0.05);
+  border-color: #F87171;
+  background: rgba(248, 113, 113, 0.08);
 }
 
 /* Warning — Amber */
 article .not-prose[class*="warning"] {
-  border-color: #D97706;
-  background: rgba(217, 119, 6, 0.05);
+  border-color: #FBBF24;
+  background: rgba(251, 191, 36, 0.08);
 }
 
 /* ---------------------------------------------------------
-   SCROLLBAR — light theme, Cyber Violet thumb
+   SCROLLBAR — Cyber Violet thumb on dark track
    --------------------------------------------------------- */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #F5F5F5; }
+::-webkit-scrollbar-track { background: #1C1C1C; }
 ::-webkit-scrollbar-thumb { background: #7B2D8E; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #00D4FF; }
-* { scrollbar-width: thin; scrollbar-color: #7B2D8E #F5F5F5; }
+* { scrollbar-width: thin; scrollbar-color: #7B2D8E #1C1C1C; }
 
 /* ---------------------------------------------------------
    GENERAL LAYOUT — desktop horizontal padding

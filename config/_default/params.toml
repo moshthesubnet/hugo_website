@@ -1,5 +1,5 @@
 colorScheme = "cyberviolet"
-defaultAppearance = "light"
+defaultAppearance = "dark"
 autoSwitchAppearance = false
 enableSearch = true
 enableCodeCopy = true
