@@ -332,3 +332,9 @@ requirements.txt    Python dependencies
 **Project Date:** February 2026
 **Last Updated:** March 2026
 **Status:** Production
+
+---
+
+## Related
+
+- [Blog post: My Router Already Knew. I Just Wasn't Asking.](/posts/cross-vlan-network-monitor/) — the full writeup with reasoning and lessons learned
