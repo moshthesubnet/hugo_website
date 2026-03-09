@@ -58,7 +58,8 @@ OPNsense ARP/NDP API  ─┐
 OPNsense DHCP API     ─┤
 Proxmox VE API (×N)   ─┼──► async merge ──► SQLite ──► dashboard + webhooks
 Docker Engine API (×N) ─┤
-nmap (optional)        ─┘
+nmap (optional)        ─┤
+SNMP (optional)        ─┘
 ```
 
 All discovery sources run concurrently via `asyncio`. The Proxmox and Docker SDKs have blocking calls, so those get offloaded to a thread pool via `run_in_executor`. The whole cycle takes a few seconds for a typical homelab.
@@ -120,11 +121,15 @@ There's a UDP syslog receiver running alongside the API on port 514. OPNsense ca
 [BLOCK] IN on igb0 | tcp 203.0.113.1:443 → 10.X.X.X:8080
 ```
 
-Logs are stored per source IP and linked to the device that generated them, so you can pull up a device in the dashboard and see its recent firewall hits.
+Logs are stored per source IP and linked to the device that generated them. Some appliances send syslog from a different interface than their management IP — there's a per-device secondary syslog IP field to handle that case without creating a separate device entry.
 
-Disappearance tracking works by incrementing a counter for any device not seen in the current scan cycle. When that counter crosses a configurable threshold, a `device_gone` webhook fires. New devices trigger `device_discovered`. Both events POST structured JSON to any HTTP endpoint — Home Assistant, ntfy, Slack, whatever.
+Disappearance tracking works by incrementing a `disappearance_count` for any device not seen in the current scan cycle. When that counter hits `ALERT_DISAPPEARANCE_THRESHOLD` (default: 3 consecutive missed scans), a `device_gone` webhook fires. New MACs trigger `device_discovered`. Both events POST a structured JSON payload — MAC, IP, alias, vendor, type, last-seen — to any HTTP endpoint.
 
-The dashboard is vanilla JavaScript and Tailwind CSS served as a static file by FastAPI. No build step, no framework. It loads the device list from the API and renders a table with alias, type, MAC, IPs, Proxmox context, and last-seen timestamp.
+The dashboard is vanilla JavaScript and Tailwind CSS, no build step. At the top: per-type count chips (Total, Bare-metal, VM, LXC, Docker) and per-source health indicator dots (OPNsense ARP, DHCP, Proxmox, Docker, NDP, nmap, SNMP) that go amber/red when a source hasn't returned results in two scan intervals. The device table has a client-side filter that searches across IP, MAC, vendor, and alias in real time.
+
+Clicking a row opens a slide-in detail panel with everything about that device: IPv4, IPv6 (if the NDP table has it), MAC, vendor, first-seen timestamp, Proxmox metadata (node, VMID, power state) or Docker metadata (image, container ID, networks) depending on type. Inline editors for alias, type override, and notes. A syslog viewer that colour-codes entries by severity. Bulk checkbox selection enables mass retype or export of a filtered subset.
+
+The `/api/health` endpoint is the thing I check first when something looks off. It tells you the last-success timestamp and result count for each of the seven sources. If Proxmox shows `stale` but everything else is `ok`, you know where to look.
 
 ## Environment Configuration
 
@@ -142,6 +147,7 @@ DOCKER_HOSTS=tcp://10.X.X.X:2375,tcp://10.X.X.X:2375
 SCAN_INTERVAL_SECONDS=300
 SYSLOG_PORT=514
 ALERT_WEBHOOK_URL=http://10.X.X.X:8123/api/webhook/network-events
+ALERT_DISAPPEARANCE_THRESHOLD=3
 DB_PATH=./network_monitor.db
 ```
 
@@ -152,11 +158,14 @@ The `.env` is loaded via `python-dotenv`. The Proxmox token only needs read perm
 Before this, I had no cross-VLAN inventory. After a scan cycle:
 
 - Every device on every VLAN shows up with its MAC, IP, hostname (from DHCP), and which VLAN interface OPNsense learned it from
-- VMs have a "Proxmox" column showing the node and VMID — you can tell at a glance that `10.X.X.X` is `ubuntu-dev` on `pveX` (VMID XXX) and it's running
-- Containers show up with the host they're attributed to
-- Stopped VMs sit in the list with a grey state badge instead of disappearing
+- VMs have a "Proxmox" column in the detail panel showing the node, VMID, and power state — `ubuntu-dev` on `pveX` (VMID XXX), running
+- Containers show up attributed to the host they're running on, not as phantom IPs
+- Stopped VMs stay in the list with a grey badge instead of disappearing when their ARP entry expires
+- Devices with IPv6 addresses from the NDP table show both addresses — handy for confirming SLAAC is working on a segment
 
-The syslog view is the part I actually keep open. Seeing firewall events linked to named devices rather than raw IPs makes it significantly easier to figure out what's talking to what.
+The syslog view is the part I actually keep open. Severity is colour-coded — emergency and alert in red, warning in amber, info in blue, debug in grey. Seeing `[BLOCK]` entries linked to a named device rather than a raw IP makes it much faster to trace what's hitting the firewall.
+
+The health dot row at the top is the other one I check regularly. Seven coloured dots, one per discovery source. All green is a good morning. An amber Proxmox dot means a node didn't respond in the last two scan cycles — usually a VM that's rebooting, occasionally a token that expired.
 
 ## What Didn't Work the First Time
 
@@ -165,6 +174,18 @@ The first implementation used `scapy` for ARP scanning as a fallback for non-OPN
 Switched to nmap subprocess calls for the optional supplemental scanning path. `nmap -sn` doesn't need raw socket access for ping sweeps — it falls back to ICMP echo, which works without root in most environments. Not perfect, but sufficient for the subnets OPNsense doesn't cover.
 
 Host-networked Docker containers also caused duplicate entries on the first pass. Every `--network host` container was getting its own device row with the same IP as the host. The attribution logic — checking `container['HostConfig']['NetworkMode'] == 'host'` and merging rather than inserting — fixed it. The dashboard went from looking wrong to looking correct.
+
+## How It Got Here
+
+The first commit was a scapy ARP scanner with a MAC OUI lookup and a CLI flag. It was fine for a single subnet. The moment I added a second VLAN it became useless, which is when the API approach clicked.
+
+Docker and Proxmox discovery came next — the MAC extraction for Proxmox is regex against their net config strings, which encode adapter types like `virtio=AA:BB:CC:DD:EE:FF,bridge=vmbr0`. There are six adapter type prefixes to handle. Getting that right took longer than the OPNsense integration did.
+
+Then persistence, then the syslog receiver. The syslog RFC parsing is annoying because OPNsense sends RFC 3164 but the timestamp format has a year-rollover edge case in December that I didn't discover until January. The rsyslog relay case — where UDP source is `127.0.0.1` because syslog is being forwarded — was another one that only showed up in production.
+
+The biggest single change was removing scapy from the main discovery loop entirely. That happened after the P1 audit when it became obvious that OPNsense ARP was strictly better in every way: no privileges required, covers all VLANs, returns the same data. Scapy is still in the repo for CLI use but hasn't run in months.
+
+The database schema has migrated idempotently through each phase — `_migrate_add_columns()` checks for column existence before adding, so old databases pick up `ipv6`, `custom_type`, `disappearance_count`, `notes`, `scan_count`, and `syslog_ip` on next startup without losing anything.
 
 ## Frequently Asked Questions
 
