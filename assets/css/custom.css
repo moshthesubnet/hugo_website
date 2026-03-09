@@ -70,17 +70,27 @@ article, main {
 a {
   color: #00D4FF;
   text-decoration: none;
-  transition: color 0.15s;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0 2px;
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  transition: color 0.15s, background-size 0.3s ease-in-out;
 }
 
 a:hover {
   color: #C084FC !important;
   text-shadow: none;
-  text-decoration: underline;
+  background-size: 100% 2px;
 }
 
 a:visited {
   color: #00AACC;
+}
+
+/* Exclude image and logo links */
+a:has(img),
+a:has(svg) {
+  background-image: none;
 }
 
 /* ---------------------------------------------------------
