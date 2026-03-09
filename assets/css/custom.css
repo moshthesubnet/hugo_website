@@ -153,6 +153,46 @@ article .not-prose[class*="warning"] {
 }
 
 /* ---------------------------------------------------------
+   HEADER — solid black, full-bleed
+   Negates body's responsive padding (px-6 sm:px-14 md:px-24 lg:px-32)
+   so the background extends edge-to-edge at every breakpoint.
+   --------------------------------------------------------- */
+body > header {
+  background-color: #000000;
+  margin-left:  -1.5rem;
+  margin-right: -1.5rem;
+  padding-left:  1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  body > header {
+    margin-left:  -3.5rem;
+    margin-right: -3.5rem;
+    padding-left:  3.5rem;
+    padding-right: 3.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  body > header {
+    margin-left:  -6rem;
+    margin-right: -6rem;
+    padding-left:  6rem;
+    padding-right: 6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  body > header {
+    margin-left:  -8rem;
+    margin-right: -8rem;
+    padding-left:  8rem;
+    padding-right: 8rem;
+  }
+}
+
+/* ---------------------------------------------------------
    TABLE OF CONTENTS — boxed card, Cyber Violet accent
    --------------------------------------------------------- */
 .toc {
