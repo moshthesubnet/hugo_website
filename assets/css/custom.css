@@ -51,7 +51,7 @@ article, main {
    --------------------------------------------------------- */
 .prose {
   --tw-prose-invert-body:          #D4D4D4;
-  --tw-prose-invert-headings:      #C084FC;  /* light violet — readable on #121212 */
+  --tw-prose-invert-headings:      #A855F7;  /* violet-500 — darker, still readable on #121212 */
   --tw-prose-invert-links:         #00D4FF;  /* Electric Blue */
   --tw-prose-invert-bold:          #F0F0F0;
   --tw-prose-invert-code:          #C084FC;
@@ -95,7 +95,7 @@ html {
 }
 
 body > header {
-  background-color: #7B2D8E;
+  background-color: #4A1760;
   color: #FFFFFF;
   position: sticky;
   top: 0;
@@ -201,7 +201,7 @@ body > div > footer a:hover {
    --------------------------------------------------------- */
 article .prose h2,
 main .prose h2 {
-  color: #C084FC !important;
+  color: #A855F7 !important;
   margin-top: 2.75rem !important;
   margin-bottom: 0.9rem !important;
   padding-bottom: 0.4rem;
@@ -210,7 +210,7 @@ main .prose h2 {
 
 article .prose h3,
 main .prose h3 {
-  color: #C084FC !important;
+  color: #A855F7 !important;
   margin-top: 2rem !important;
   margin-bottom: 0.65rem !important;
 }
