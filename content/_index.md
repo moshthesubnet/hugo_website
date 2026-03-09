@@ -90,6 +90,19 @@ Built an automated documentation pipeline that treats live network state as the 
 
 ---
 
+### Cross-VLAN Network Monitor
+
+Built a FastAPI app that bypasses ARP's layer-2 blind spots entirely — querying OPNsense, Proxmox, and Docker APIs directly to produce a unified, cross-VLAN device inventory with no raw sockets and no root required.
+
+- Pulled the global ARP and NDP tables from OPNsense's REST API in a single authenticated call, covering every VLAN the router handles
+- Correlated Proxmox VM and LXC inventory — name, node, VMID, and power state — against live ARP entries across multiple nodes concurrently
+- Attributed host-networked Docker containers back to their physical host without creating phantom IP entries, using a metadata merge that preserves host identity
+- Integrated an async UDP syslog receiver parsing RFC 3164, RFC 5424, and OPNsense filterlog CSV, with per-device log views and disappearance-triggered webhook alerts
+
+[View Full Documentation →](/docs/projects/cross_vlan_network_monitor/)
+
+---
+
 ### VLAN Segmentation & Security Hardening
 
 Redesigned my homelab network from an insecure flat configuration to a properly segmented architecture following industry best practices.
@@ -100,19 +113,6 @@ Redesigned my homelab network from an insecure flat configuration to a properly 
 - Deployed 7-VLAN architecture isolating home, malware analysis, homelab, servers, IoT, and management traffic
 
 [View Full Documentation →](/docs/projects/vlan_segmentation/)
-
----
-
-### Local AI Coding Agent (Ollama + Aider)
-
-Deployed a fully localized, privacy-first AI coding assistant using Ollama and Aider to eliminate external API dependencies and subscription costs.
-
-- Kept all code local with no external API calls or costs
-- Provisioned a dedicated Ubuntu VM for resource-isolated AI workloads
-- Integrated Aider CLI for terminal-based AI pair programming and automated Git commits
-- Set up API access controls across isolated network VLANs
-
-[View Full Documentation →](/docs/projects/local_ai_coding_agent/)
 
 ---
 
