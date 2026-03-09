@@ -18,6 +18,7 @@ mainSections = ["docs"]
   showDateUpdated = true
   showReadingTime = false
   showTableOfContents = true
+  showAuthor = true
   mermaid = true
 
 [list]
