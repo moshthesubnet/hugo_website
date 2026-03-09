@@ -152,12 +152,14 @@ Each scan cycle fetches active DHCP leases from OPNsense's dnsmasq API and uses 
 
 ## Key Features
 
-- **Cross-VLAN discovery via OPNsense** — pulls the global ARP and NDP tables in a single API call, covering every VLAN the router is aware of
-- **Multi-node Proxmox inventory** — polls multiple Proxmox hosts concurrently, uses the QEMU Guest Agent for live IPs when ARP hasn't resolved yet
-- **Distributed Docker mapping** — enumerates containers across multiple Docker hosts, handles host-networked containers correctly
-- **Integrated syslog receiver** — async UDP server parses OPNsense `filterlog` CSV into human-readable firewall summaries and links logs to the device that sent them
-- **Disappearance tracking and webhooks** — increments a counter each scan cycle a device is absent; fires `device_gone` and `device_discovered` events to any HTTP endpoint (Home Assistant, ntfy, Slack)
-- **Device management UI** — aliases, type overrides, and free-text notes all survive subsequent scans; full inventory export as CSV or JSON
+- **Cross-VLAN discovery via OPNsense** — pulls the global ARP table (IPv4) and NDP neighbour table (IPv6) in a single API call, covering every VLAN the router is aware of. NDP-only devices (IPv6 with no ARP entry) are stored as their own rows with a null IPv4 field.
+- **Multi-node Proxmox inventory** — polls multiple Proxmox hosts concurrently, uses the QEMU Guest Agent for live IPs when ARP hasn't resolved yet. Offline VMs are retained in the inventory with their last-known IP and a `stopped` state badge.
+- **Distributed Docker mapping** — enumerates containers across multiple Docker hosts, handles host-networked containers correctly by attributing them to the physical host's ARP entry rather than creating phantom IPs.
+- **Optional supplemental scanning (nmap + SNMP)** — nmap ping sweeps cover subnets not managed by OPNsense; SNMP ARP-cache walks pull device tables from managed switches. Both sources are folded in with OPNsense data taking priority on conflict.
+- **Integrated syslog receiver** — async UDP server parses OPNsense `filterlog` CSV into human-readable firewall summaries. A secondary syslog IP can be configured per device for appliances that send from a different interface than their management IP.
+- **Disappearance tracking and webhooks** — increments a `disappearance_count` each scan cycle a device is absent; fires `device_gone` when the count reaches `ALERT_DISAPPEARANCE_THRESHOLD` (default: 3). New devices trigger `device_discovered`. Webhook payload includes MAC, IP, alias, vendor, type, and last-seen timestamp.
+- **Source health monitoring** — `/api/health` reports `ok` / `stale` / `unknown` status, last-success timestamp, and result count for each of the seven discovery sources. Staleness is computed against `SCAN_INTERVAL * 2`.
+- **Device management UI** — aliases, custom type overrides, free-text notes, and secondary syslog IPs all survive subsequent scans. Bulk retype and bulk export (JSON) via checkbox selection. Full inventory export as CSV or JSON.
 
 ---
 
@@ -176,10 +178,11 @@ DOCKER_HOSTS          # Comma-separated: tcp://10.X.X.X:2375,tcp://10.X.X.X:2375
 NMAP_SUBNETS          # Optional CIDRs: 10.X.X.0/24,10.X.X.0/24
 SNMP_HOSTS            # Optional JSON array: [{"host":"…","community":"public","port":161}]
 
-SCAN_INTERVAL_SECONDS # Discovery cycle frequency (default: 300)
-SYSLOG_PORT           # UDP port for syslog receiver (default: 514, requires root)
-ALERT_WEBHOOK_URL     # HTTP endpoint for device events
-DB_PATH               # SQLite file path (default: ./network_monitor.db)
+SCAN_INTERVAL_SECONDS          # Discovery cycle frequency (default: 300)
+SYSLOG_PORT                    # UDP port for syslog receiver (default: 514, requires root)
+ALERT_WEBHOOK_URL              # HTTP endpoint for device events
+ALERT_DISAPPEARANCE_THRESHOLD  # Missed scans before firing device_gone (default: 3)
+DB_PATH                        # SQLite file path (default: ./network_monitor.db)
 ```
 
 ---
@@ -197,13 +200,82 @@ The syslog receiver on UDP 514 requires root to bind (or `CAP_NET_BIND_SERVICE`)
 | Test | Expected Result | Actual Result |
 |---|---|---|
 | OPNsense ARP pull | All cross-VLAN devices returned | ✅ Pass |
+| OPNsense NDP pull | IPv6 addresses stored, link-local filtered | ✅ Pass |
 | Proxmox VM inventory | All nodes polled, stopped VMs included | ✅ Pass |
 | Docker container mapping | Containers on both Docker hosts enumerated | ✅ Pass |
 | Host-networked container | Attributed to host, no phantom IP | ✅ Pass |
 | DHCP hostname population | New device gets hostname from lease | ✅ Pass |
 | Device alias persistence | Alias survives next scan cycle | ✅ Pass |
+| Type override persistence | Custom type survives next scan cycle | ✅ Pass |
 | Syslog `filterlog` parsing | OPNsense firewall log readable in UI | ✅ Pass |
+| Secondary syslog IP | Logs fetched from override IP, not primary | ✅ Pass |
 | `device_gone` webhook | Fires after configured disappearance threshold | ✅ Pass |
+| `device_discovered` webhook | Fires on first observation of new MAC | ✅ Pass |
+| `/api/health` staleness | Source marked stale after 2× scan interval | ✅ Pass |
+| DB schema migration | New columns added to existing DB without data loss | ✅ Pass |
+
+---
+
+## Development History
+
+The project went through four main phases before reaching its current state, each addressing a specific limitation of the previous approach.
+
+### Phase 1 — ARP Prototype
+Started with `scapy.srp()` wrapped in `run_in_executor`, a MAC OUI vendor lookup, and a CLI entrypoint. Saw exactly one VLAN. Required root. No persistence, no UI.
+
+### Phase 2 — Docker & Proxmox Enrichment
+Added `DockerInfo` and `ProxmoxInfo` dataclasses. Docker queried over TCP sockets with Unix socket fallback. Proxmox authenticated via `proxmoxer` API tokens — regex patterns extract MACs from Proxmox net config strings (`virtio`, `e1000`, `hwaddr=`). All nodes and hosts queried concurrently via `asyncio.gather` + `run_in_executor`.
+
+### Phase 3 — Service, Persistence & Syslog
+The project became a running service: SQLite schema with `upsert_device()` (alias excluded from upsert so manual labels survive), FastAPI background scan loop via `lifespan`, and the async UDP syslog receiver. RFC 3164, RFC 5424, and OPNsense `filterlog` CSV all handled. rsyslog relay support: when UDP source is `127.0.0.1`, the HOSTNAME field from the message is used as the real source IP.
+
+### P1 Audit — Schema Migrations & OPNsense Module
+Idempotent `_migrate_add_columns()` added `ipv6`, `custom_type`, `disappearance_count`, `notes`, `scan_count`, and `syslog_ip` to existing databases without breaking them. OPNsense queries extracted into `src/opnsense.py`. Both ARP and NDP response envelope formats handled (`list` or `{"arp": [...]}`). Multicast, broadcast, and incomplete entries filtered. NDP link-local (`fe80:`) addresses skipped.
+
+### P2 Audit — Scapy Removed, 7-Source Merge
+The most significant change: `scapy.srp()` removed from the main discovery loop entirely, replaced by `query_opnsense()`. Seven sources now run concurrently. Merge priority: OPNsense ARP → nmap/SNMP (MACs not in ARP only) → Proxmox enrichment (or offline upsert) → NDP-only rows → Docker upserts independent.
+
+### P3/P4 — Enriched Discovery & Dashboard Overhaul
+Added nmap (`-sn -oX -`, XML parse, 120s timeout) and SNMP (`ipNetToMediaPhysAddress` MIB walk via `snmpwalk` subprocess). New API endpoints for notes, type overrides, secondary syslog IP, global log search, inventory export, and source health. Frontend rebuilt with per-type count chips, per-source health indicator dots, bulk checkbox actions, and a slide-in detail panel with inline editors for alias, type, notes, and syslog IP — plus a colour-coded syslog viewer per device.
+
+---
+
+## File Structure
+
+```
+src/
+  main.py           FastAPI app, lifespan, scan loop, all API endpoints
+  database.py       SQLite schema, migrations, async CRUD (devices + syslogs)
+  opnsense.py       OPNsense ARP, NDP, and DHCP REST API clients
+  identifiers.py    Docker (multi-host) and Proxmox (multi-node) discovery
+  nmap_scanner.py   Optional nmap subprocess ping sweep
+  snmp_scanner.py   Optional SNMP ARP-cache MIB walk
+  syslog_server.py  Async UDP syslog receiver (RFC 3164, RFC 5424, filterlog)
+  scanner.py        Legacy scapy ARP scanner (CLI use only)
+
+frontend/
+  index.html        Single-page dark-mode dashboard (vanilla JS + Tailwind CDN)
+
+scan.py             CLI entrypoint for manual ARP scans
+requirements.txt    Python dependencies
+```
+
+---
+
+## API Reference
+
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/` | Serve the dashboard HTML |
+| `GET` | `/api/devices` | List all devices (filterable: `device_type`, `search`, `since`; paginated: `limit`, `offset`) |
+| `GET` | `/api/devices/export` | Download inventory as CSV or JSON (`?format=csv\|json`) |
+| `GET` | `/api/logs/{ip}` | Last 50 syslogs for a device IP |
+| `GET` | `/api/logs` | Global syslog search (`?q=term&limit=N`) |
+| `PUT` | `/api/devices/{mac}/alias` | Set human-readable alias |
+| `PUT` | `/api/devices/{mac}/type` | Override device type (null to clear) |
+| `PUT` | `/api/devices/{mac}/notes` | Set/clear operator notes |
+| `PUT` | `/api/devices/{mac}/syslog-ip` | Set/clear secondary syslog IP |
+| `GET` | `/api/health` | Per-source discovery health status |
 
 ---
 
