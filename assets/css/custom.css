@@ -84,8 +84,16 @@ a:visited {
 }
 
 /* ---------------------------------------------------------
-   HEADER — Cyber Violet, full-bleed, sticky
+   HEADER — Cyber Violet, true viewport-width, sticky
+   width: 100vw pushes to viewport edges regardless of body
+   max-width. margin-left calc shifts it to the left viewport
+   edge. padding-left calc keeps nav content body-aligned.
+   overflow-x: clip on html prevents 100vw from adding scrollbar.
    --------------------------------------------------------- */
+html {
+  overflow-x: clip;
+}
+
 body > header {
   background-color: #7B2D8E;
   color: #FFFFFF;
@@ -94,36 +102,30 @@ body > header {
   z-index: 50;
   border-bottom: 2px solid #00D4FF;
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
-  margin-left:  -1.5rem;
-  margin-right: -1.5rem;
-  padding-left:  1.5rem;
-  padding-right: 1.5rem;
+  width: 100vw;
+  margin-left: calc((100% - 100vw) / 2);
+  padding-left:  calc((100vw - 100%) / 2 + 1.5rem);
+  padding-right: calc((100vw - 100%) / 2 + 1.5rem);
 }
 
 @media (min-width: 640px) {
   body > header {
-    margin-left:  -3.5rem;
-    margin-right: -3.5rem;
-    padding-left:  3.5rem;
-    padding-right: 3.5rem;
+    padding-left:  calc((100vw - 100%) / 2 + 3.5rem);
+    padding-right: calc((100vw - 100%) / 2 + 3.5rem);
   }
 }
 
 @media (min-width: 768px) {
   body > header {
-    margin-left:  -6rem;
-    margin-right: -6rem;
-    padding-left:  6rem;
-    padding-right: 6rem;
+    padding-left:  calc((100vw - 100%) / 2 + 6rem);
+    padding-right: calc((100vw - 100%) / 2 + 6rem);
   }
 }
 
 @media (min-width: 1024px) {
   body > header {
-    margin-left:  -8rem;
-    margin-right: -8rem;
-    padding-left:  8rem;
-    padding-right: 8rem;
+    padding-left:  calc((100vw - 100%) / 2 + 8rem);
+    padding-right: calc((100vw - 100%) / 2 + 8rem);
   }
 }
 
@@ -147,43 +149,38 @@ body > header button:hover span {
 }
 
 /* ---------------------------------------------------------
-   FOOTER — dark, full-bleed
-   Lives inside body > div so selector is body > div > footer
+   FOOTER — dark, true viewport-width
+   Same calc approach as header. Footer lives inside
+   body > div so 100% resolves to that div's width (= body width).
    --------------------------------------------------------- */
 body > div > footer {
   background-color: #0D0719;
   color: #D0D0D0;
   border-top: 3px solid #7B2D8E;
-  margin-left:  -1.5rem;
-  margin-right: -1.5rem;
-  padding-left:  1.5rem;
-  padding-right: 1.5rem;
+  width: 100vw;
+  margin-left: calc((100% - 100vw) / 2);
+  padding-left:  calc((100vw - 100%) / 2 + 1.5rem);
+  padding-right: calc((100vw - 100%) / 2 + 1.5rem);
 }
 
 @media (min-width: 640px) {
   body > div > footer {
-    margin-left:  -3.5rem;
-    margin-right: -3.5rem;
-    padding-left:  3.5rem;
-    padding-right: 3.5rem;
+    padding-left:  calc((100vw - 100%) / 2 + 3.5rem);
+    padding-right: calc((100vw - 100%) / 2 + 3.5rem);
   }
 }
 
 @media (min-width: 768px) {
   body > div > footer {
-    margin-left:  -6rem;
-    margin-right: -6rem;
-    padding-left:  6rem;
-    padding-right: 6rem;
+    padding-left:  calc((100vw - 100%) / 2 + 6rem);
+    padding-right: calc((100vw - 100%) / 2 + 6rem);
   }
 }
 
 @media (min-width: 1024px) {
   body > div > footer {
-    margin-left:  -8rem;
-    margin-right: -8rem;
-    padding-left:  8rem;
-    padding-right: 8rem;
+    padding-left:  calc((100vw - 100%) / 2 + 8rem);
+    padding-right: calc((100vw - 100%) / 2 + 8rem);
   }
 }
 
