@@ -1,8 +1,9 @@
 ---
 title: "My Router Already Knew. I Just Wasn't Asking."
 date: 2026-03-09
+lastmod: 2026-03-09
 draft: false
-description: "Standard ARP scanners are blind across VLAN boundaries. I built a FastAPI app that skips the scanning entirely and queries OPNsense, Proxmox, and Docker directly for a cross-VLAN device inventory."
+description: "ARP can't cross VLANs. I built a FastAPI app that queries OPNsense, Proxmox, and Docker APIs for a complete homelab device inventory — no raw sockets, no root required."
 summary: "ARP broadcast → hits one VLAN → sees nothing else. OPNsense REST API → global ARP table for every VLAN → Proxmox API → VM name, node, power state → Docker API → containers with correct host attribution. All merged into SQLite. No raw sockets. No root."
 cover: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=630&fit=crop&q=80"
 coverAlt: "Close-up of a green circuit board with rows of electronic components under cool blue lighting."
@@ -26,28 +27,53 @@ I wanted a dashboard that showed every device on my homelab network. Not just th
 The naive approach is to run a scanner. I tried that. It saw exactly one VLAN.
 
 {{< alert >}}
-**TL;DR:** ARP broadcasts don't cross VLAN boundaries. Instead of fighting that, I built a FastAPI app that queries OPNsense's global ARP table, Proxmox's VM and LXC inventory, and Docker Engine's container API — all concurrently, every five minutes. The results land in SQLite and render on a dark-mode dashboard. No raw sockets. No root. No per-VLAN probes.
+**TL;DR:** 38% of organizations can't identify all devices accessing their networks ([Ivanti, 2025](https://www.ivanti.com/blog/state-of-cybersecurity-report)). ARP broadcasts don't cross VLAN boundaries, so a segmented homelab is structurally worse. I built a FastAPI app that queries OPNsense's global ARP table, Proxmox's VM inventory, and Docker Engine directly — no raw sockets, no root. Everything lands in SQLite and renders on a dark-mode dashboard.
 {{< /alert >}}
 
 ## The ARP Problem
 
+38% of organizations can't identify all devices accessing their networks, according to Ivanti's 2025 State of Cybersecurity report — and that's in environments with dedicated security tooling. Add VLAN segmentation and the number gets worse. 71% of security teams say visibility gaps actively delay threat detection ([AlgoSec, 2025](https://algosec.com/state-of-network-security/)), and the root cause is usually the same: scanners that can only see one layer-2 segment at a time.
+
+<figure>
+<svg role="img" aria-label="Horizontal bar chart titled Network Visibility Gap showing three statistics: 38% of organizations cannot identify all devices (Ivanti 2025), 71% of security teams say visibility gaps delay detection (AlgoSec 2025), and over 90% of ransomware attacks involved unmanaged devices (Microsoft MDDR 2024)." xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 210" style="max-width:620px;width:100%;background:transparent;">
+  <title>Network Visibility Gap — Key Statistics</title>
+  <rect x="0" y="0" width="620" height="210" fill="#0f172a" rx="8"/>
+  <text x="310" y="26" text-anchor="middle" fill="#e2e8f0" font-family="system-ui,sans-serif" font-size="13" font-weight="600">Network Visibility Gap</text>
+  <!-- Bar 1: 38% -->
+  <text x="215" y="62" text-anchor="end" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="11">Can't identify all devices</text>
+  <rect x="222" y="50" width="144" height="18" rx="3" fill="#6d28d9"/>
+  <text x="372" y="63" fill="#c4b5fd" font-family="system-ui,sans-serif" font-size="12" font-weight="600">38%</text>
+  <!-- Bar 2: 71% -->
+  <text x="215" y="102" text-anchor="end" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="11">Visibility gaps delay detection</text>
+  <rect x="222" y="90" width="269" height="18" rx="3" fill="#2563eb"/>
+  <text x="497" y="103" fill="#93c5fd" font-family="system-ui,sans-serif" font-size="12" font-weight="600">71%</text>
+  <!-- Bar 3: 90%+ -->
+  <text x="215" y="142" text-anchor="end" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="11">Ransomware via unmanaged devices</text>
+  <rect x="222" y="130" width="342" height="18" rx="3" fill="#0e7490"/>
+  <text x="570" y="143" fill="#67e8f9" font-family="system-ui,sans-serif" font-size="12" font-weight="600">90%+</text>
+  <!-- Scale labels -->
+  <text x="222" y="168" fill="#475569" font-family="system-ui,sans-serif" font-size="10">0%</text>
+  <text x="317" y="168" fill="#475569" font-family="system-ui,sans-serif" font-size="10">25%</text>
+  <text x="412" y="168" fill="#475569" font-family="system-ui,sans-serif" font-size="10">50%</text>
+  <text x="507" y="168" fill="#475569" font-family="system-ui,sans-serif" font-size="10">75%</text>
+  <text x="310" y="193" text-anchor="middle" fill="#475569" font-family="system-ui,sans-serif" font-size="10">Sources: Ivanti 2025 · AlgoSec 2025 · Microsoft MDDR 2024</text>
+</svg>
+<figcaption>The visibility problem isn't unique to homelabs — it's a structural issue in any segmented network.</figcaption>
+</figure>
+
 ARP is a layer-2 protocol. When you run a scanner on VLAN 30, it sends broadcast frames. Broadcasts stop at router boundaries. VLAN 30 can't see VLAN 10, VLAN 99, or anything else that a router sits between.
 
-The standard workarounds are all bad in different ways:
-
-- **Run a scanner per VLAN** — requires a probe on every segment, doesn't scale, still gives you raw IPs with no VM context
-- **Promiscuous-mode capture** — needs `CAP_NET_RAW` or root, limited to whatever traffic is flowing on that segment
-- **SPAN port mirroring** — hardware requirement, more config, same blind spots
+The standard workarounds are all bad in different ways. Running one scanner per VLAN requires a probe on every segment and still gives you raw IPs with no VM context. Promiscuous-mode capture needs `CAP_NET_RAW` or root and is limited to whatever traffic happens to be flowing. SPAN port mirroring is a hardware requirement, more config, same blind spots.
 
 None of them answer the question I actually cared about: *Is that IP a VM or a container? Which Proxmox node is it on? Is it stopped or running?* Layer-2 scanning doesn't have access to that context. The hypervisor does.
 
-## The Shift: Ask the Sources That Already Know
+## The shift
 
-My router, OPNsense, routes every VLAN. That means it maintains the global ARP table for every subnet it's responsible for. A single authenticated API call to `GET /api/diagnostics/interface/getArp` returns IP-MAC pairs for every device on every VLAN, regardless of which segment the scanner is running on.
+OPNsense routes every VLAN, which means it maintains the global ARP table for every subnet it handles. One authenticated API call to `GET /api/diagnostics/interface/getArp` returns IP-MAC pairs for every device on every VLAN, regardless of which segment the scanner is on.
 
 That's the whole insight. The router already knows. I just hadn't asked it.
 
-Same logic applies to Proxmox. The hypervisor knows the name, node assignment, VMID, and power state of every guest before a single packet hits the wire. Docker knows its own containers. These are the authoritative sources — querying them directly is more accurate than inferring device identity from broadcast traffic.
+Proxmox has the same property — the hypervisor knows the name, node, VMID, and power state of every guest before a single packet hits the wire. Docker knows its own containers. Querying them directly is just more accurate than guessing from broadcast traffic.
 
 ## How It Works
 
@@ -62,7 +88,7 @@ nmap (optional)        ─┤
 SNMP (optional)        ─┘
 ```
 
-All discovery sources run concurrently via `asyncio`. The Proxmox and Docker SDKs have blocking calls, so those get offloaded to a thread pool via `run_in_executor`. The whole cycle takes a few seconds for a typical homelab.
+All sources run concurrently via `asyncio`. The Proxmox and Docker SDKs have blocking calls, so those get offloaded via `run_in_executor`. Full cycle takes a few seconds.
 
 Devices are keyed by MAC address. That matters — a VM that picks up a new IP after a lease renewal is still the same device in the database. Aliases, notes, and type overrides survive across scans because they're stored on the MAC record, not the IP.
 
@@ -75,7 +101,7 @@ GET /api/diagnostics/interface/getArp   # IPv4
 GET /api/diagnostics/interface/getNdp   # IPv6
 ```
 
-Auth is HTTP Basic with an API key and secret — same model as the config backup API. The response is a flat list of IP/MAC/interface tuples. Crucially, the interface field tells you which VLAN that device belongs to.
+Auth is HTTP Basic with an API key and secret — same model as [the OPNsense config backup API](/posts/opnsense-backup-incident/). The response is a flat list of IP/MAC/interface tuples. The interface field tells you which VLAN that device belongs to.
 
 A separate call pulls DHCP leases:
 
@@ -89,29 +115,29 @@ Each scan cycle, active leases are used to populate hostnames on newly discovere
 If you're on OPNsense 26.1+, the DHCP lease endpoint changed from `dhcp/leases/search_lease` to `dnsmasq/leases/search` when the default DHCP backend switched to Dnsmasq. If you're getting empty results with no error, that's probably it.
 {{< /alert >}}
 
-## Proxmox: VM Context for Free
+OPNsense maintains the global ARP table for every VLAN it routes, exposing it through an authenticated REST API. A single call to `GET /api/diagnostics/interface/getArp` returns IP-MAC-interface tuples covering every device on every routed subnet — without raw socket access or elevated privileges on the scanning host. Ivanti's 2025 research found 38% of organizations lack full device visibility ([Ivanti](https://www.ivanti.com/blog/state-of-cybersecurity-report), 2025); the OPNsense API approach closes that gap in one query.
+
+## Proxmox: the name behind the IP
 
 OPNsense gives me IP and MAC. Proxmox gives me the name.
 
-The app polls one or more Proxmox nodes concurrently using per-node API tokens. For every QEMU VM and LXC container, it captures:
+The app polls one or more nodes concurrently with per-node API tokens. For each QEMU VM and LXC container it grabs: name, node, VMID, power state, and an IP if one is available.
 
-- VM/container name
-- Node it's running on
-- VMID
-- Power state (running/stopped)
-- IP address, if available
+For running QEMU VMs, the QEMU Guest Agent endpoint (`qemu/{id}/agent/network-get-interfaces`) returns a live IP — useful when ARP hasn't resolved yet, like right after a VM boots. LXC containers use `/lxc/{id}/interfaces` for the same reason. Both are best-effort: if the agent isn't installed or the call fails, the ARP-sourced IP is the fallback.
 
-For running QEMU VMs, the QEMU Guest Agent endpoint (`qemu/{id}/agent/network-get-interfaces`) returns a live IP — useful when ARP hasn't resolved yet, like right after a VM boots. LXC containers use `/lxc/{id}/interfaces` for the same reason. Both are treated as best-effort: if the agent isn't installed or the call fails, the ARP-sourced IP is used as fallback.
-
-Stopped VMs are still tracked. Their ARP entries disappear after the lease expires, but the Proxmox record keeps them in the inventory with a `stopped` state. The dashboard shows powered-off guests rather than silently dropping them from the list.
+Stopped VMs are still tracked. Their ARP entries disappear when the lease expires, but the Proxmox record keeps them in the inventory with a `stopped` badge. They don't vanish just because they're off.
 
 ## Docker: Containers Without Phantom IPs
+
+71.1% of developers globally use Docker ([Docker, 2025](https://www.docker.com/resources/sonatype-developer-survey/)), with a median of 11.5 containers per host in orchestrated environments ([Datadog, 2023](https://www.datadoghq.com/container-report/)). At that density, a scanner that only resolves layer-3 addresses gives you one row where there could be a dozen services — and no indication which host is actually responsible for them.
 
 Docker's engine API (`GET /containers/json`) returns running containers with their network configurations. The tricky part is host-networked containers — ones running with `--network host`. Those containers share the host's MAC address and IP, so they don't have their own ARP entry. If you create a device record for each one, you end up with phantom IPs that duplicate the host.
 
 The fix: check whether a container's network mode is `host`, and if so, attribute it back to the physical host's existing ARP entry rather than creating a new device. The container shows up as a label on the host record, not as a separate row.
 
 Multiple Docker hosts are queried in parallel. TCP sockets (`tcp://host:2375`) are the practical option for remote daemons — unauthenticated, but restricted at the firewall to the scanner's IP only.
+
+Docker containers using `--network host` share the daemon host's MAC and IP, creating duplicate device rows in any inventory that doesn't account for this. With 71.1% of developers now running Docker ([Docker](https://www.docker.com/resources/sonatype-developer-survey/), 2025) and 11.5 containers per host as a realistic baseline ([Datadog](https://www.datadoghq.com/container-report/), 2023), container-aware attribution is a practical requirement, not an edge case.
 
 ## Syslog, Webhooks, and the UI
 
@@ -151,7 +177,7 @@ ALERT_DISAPPEARANCE_THRESHOLD=3
 DB_PATH=./network_monitor.db
 ```
 
-The `.env` is loaded via `python-dotenv`. The Proxmox token only needs read permissions — no console access, no VM management. Same principle as the OPNsense API user: minimum scope for the job.
+Loaded via `python-dotenv`. The Proxmox token only needs read permissions — no console access, no VM management. OPNsense API user is the same: minimum scope.
 
 ## What It Actually Looks Like
 
@@ -169,6 +195,7 @@ The health dot row at the top is the other one I check regularly. Seven coloured
 
 ## What Didn't Work the First Time
 
+<!-- [PERSONAL EXPERIENCE] -->
 The first implementation used `scapy` for ARP scanning as a fallback for non-OPNsense subnets. Scapy needs `CAP_NET_RAW`. The moment I tried running it as a non-root user in a container, it failed silently — no error, no results, no indication of why. Spent more time than I want to admit on that before checking the capability requirements.
 
 Switched to nmap subprocess calls for the optional supplemental scanning path. `nmap -sn` doesn't need raw socket access for ping sweeps — it falls back to ICMP echo, which works without root in most environments. Not perfect, but sufficient for the subnets OPNsense doesn't cover.
@@ -177,6 +204,7 @@ Host-networked Docker containers also caused duplicate entries on the first pass
 
 ## How It Got Here
 
+<!-- [PERSONAL EXPERIENCE] -->
 The first commit was a scapy ARP scanner with a MAC OUI lookup and a CLI flag. It was fine for a single subnet. The moment I added a second VLAN it became useless, which is when the API approach clicked.
 
 Docker and Proxmox discovery came next — the MAC extraction for Proxmox is regex against their net config strings, which encode adapter types like `virtio=AA:BB:CC:DD:EE:FF,bridge=vmbr0`. There are six adapter type prefixes to handle. Getting that right took longer than the OPNsense integration did.
@@ -208,6 +236,10 @@ They show up as a single ARP entry. There's no way to distinguish them at the la
 **Can this run in Docker itself?**
 
 Yes. The only complication is the syslog receiver on UDP 514 — binding a port below 1024 requires either running as root in the container, using `--cap-add NET_BIND_SERVICE`, or remapping the port to something above 1024 at the Docker layer and reconfiguring OPNsense to send there. Everything else runs fine unprivileged.
+
+**What's the security case for tracking every device by MAC?**
+
+Microsoft's 2024 Digital Defense Report found over 90% of ransomware attacks involved unmanaged or unmonitored devices as the initial access point. Most of those devices aren't intentionally hidden — they're just outside whatever scanner is in use. Keying inventory on MAC address means devices that rotate IPs or go offline temporarily don't vanish from the record. A device that appears on the network gets a row. That row persists until explicitly removed.
 
 ---
 
@@ -309,6 +341,14 @@ Yes. The only complication is the syslog receiver on UDP 514 — binding a port 
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Containers using --network host share the daemon host's MAC and IP. The app detects this and attributes them back to the physical host's ARP entry rather than creating duplicate device records with phantom IPs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the security case for tracking every network device by MAC address?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Microsoft's 2024 Digital Defense Report found over 90% of ransomware attacks involved unmanaged or unmonitored devices as the initial access point. Keying inventory on MAC address means devices that rotate IPs or go temporarily offline don't escape the record — a device that appears on the network gets a row that persists until explicitly removed."
           }
         }
       ]

@@ -14,17 +14,17 @@ weight: 6
 
 # API-Driven Cross-VLAN Network Monitor
 
-*A unified inventory of every device across every VLAN — no raw sockets, no per-segment probes, no root required.*
+*Cross-VLAN device inventory via authenticated APIs — the router and hypervisor already know everything, so just ask them.*
 
 ---
 
 ## Project Overview
 
-This project is a FastAPI application that builds a real-time, cross-VLAN device inventory by querying the authoritative sources that already have complete network visibility: OPNsense (the edge router), Proxmox (the hypervisor), and Docker Engine. It stores everything in SQLite, presents it on a dark-mode dashboard, and fires webhooks when devices appear or disappear.
+A FastAPI app that builds a cross-VLAN device inventory by querying OPNsense, Proxmox, and Docker directly. Everything lands in SQLite, renders on a dark-mode dashboard, and fires webhooks when devices appear or disappear.
 
 ## Summary
 
-Standard ARP scanners are blind across VLAN boundaries. Instead of working around that with per-VLAN probes or raw socket captures, this app queries OPNsense's global ARP/NDP tables, Proxmox's VM/LXC inventory, and Docker's container API — all concurrently — and merges the results into a single device registry with full-stack context for every endpoint.
+Standard ARP scanners are blind across VLAN boundaries. This app skips the scanning entirely — it queries OPNsense's global ARP/NDP tables, Proxmox's VM/LXC inventory, and Docker's container API concurrently and merges the results into a single device registry.
 
 ---
 
@@ -119,7 +119,7 @@ Devices are keyed by MAC address in SQLite. This means a VM that gets a new IP a
 
 #### 3. Host-Networked Container Attribution
 
-Docker containers using `--network host` share the daemon host's MAC and IP. Rather than creating phantom device entries for every host-networked container, the app attributes them back to the physical host's existing ARP entry. This keeps the inventory clean.
+Docker containers using `--network host` share the daemon host's MAC and IP. The app attributes them back to the physical host's existing ARP entry rather than creating phantom device entries for each one.
 
 #### 4. OPNsense DHCP for Automatic Naming
 
@@ -152,20 +152,20 @@ Each scan cycle fetches active DHCP leases from OPNsense's dnsmasq API and uses 
 
 ## Key Features
 
-- **Cross-VLAN discovery via OPNsense** — pulls the global ARP table (IPv4) and NDP neighbour table (IPv6) in a single API call, covering every VLAN the router is aware of. NDP-only devices (IPv6 with no ARP entry) are stored as their own rows with a null IPv4 field.
-- **Multi-node Proxmox inventory** — polls multiple Proxmox hosts concurrently, uses the QEMU Guest Agent for live IPs when ARP hasn't resolved yet. Offline VMs are retained in the inventory with their last-known IP and a `stopped` state badge.
-- **Distributed Docker mapping** — enumerates containers across multiple Docker hosts, handles host-networked containers correctly by attributing them to the physical host's ARP entry rather than creating phantom IPs.
-- **Optional supplemental scanning (nmap + SNMP)** — nmap ping sweeps cover subnets not managed by OPNsense; SNMP ARP-cache walks pull device tables from managed switches. Both sources are folded in with OPNsense data taking priority on conflict.
-- **Integrated syslog receiver** — async UDP server parses OPNsense `filterlog` CSV into human-readable firewall summaries. A secondary syslog IP can be configured per device for appliances that send from a different interface than their management IP.
-- **Disappearance tracking and webhooks** — increments a `disappearance_count` each scan cycle a device is absent; fires `device_gone` when the count reaches `ALERT_DISAPPEARANCE_THRESHOLD` (default: 3). New devices trigger `device_discovered`. Webhook payload includes MAC, IP, alias, vendor, type, and last-seen timestamp.
-- **Source health monitoring** — `/api/health` reports `ok` / `stale` / `unknown` status, last-success timestamp, and result count for each of the seven discovery sources. Staleness is computed against `SCAN_INTERVAL * 2`.
-- **Device management UI** — aliases, custom type overrides, free-text notes, and secondary syslog IPs all survive subsequent scans. Bulk retype and bulk export (JSON) via checkbox selection. Full inventory export as CSV or JSON.
+- OPNsense provides the global ARP table (IPv4) and NDP neighbour table (IPv6) in a single API call, covering every VLAN it routes. Devices that only appear in NDP — IPv6-only endpoints with no ARP entry — get their own row with a null IPv4 field.
+- Proxmox nodes are polled concurrently with per-node API tokens. The QEMU Guest Agent provides a live IP for running VMs before ARP resolves; offline VMs stay in the inventory with their last-known IP and a `stopped` badge rather than dropping off when the lease expires.
+- Multiple Docker hosts are queried in parallel. Host-networked containers (`--network host`) are attributed back to the physical host's ARP entry rather than stored as separate rows with duplicate IPs.
+- nmap and SNMP are optional supplemental sources — useful for subnets OPNsense doesn't route or managed switches with ARP caches worth walking. OPNsense takes priority on any IP conflict.
+- The syslog receiver parses RFC 3164, RFC 5424, and OPNsense `filterlog` CSV. All three land in the same device-linked log view. Appliances that send syslog from a management interface different from their data IP can have a secondary syslog IP set per-device.
+- Disappearance tracking increments a counter each scan a device isn't seen. At `ALERT_DISAPPEARANCE_THRESHOLD` missed cycles (default: 3), a `device_gone` webhook fires. New MACs trigger `device_discovered`. Both POST a JSON payload with MAC, IP, alias, vendor, type, and last-seen timestamp.
+- `/api/health` reports `ok` / `stale` / `unknown` for each of the seven discovery sources, with the last-success timestamp and result count. Staleness threshold is `SCAN_INTERVAL * 2`.
+- The device table supports inline alias editing, type override, free-text notes, and secondary syslog IP — all persist across scan cycles. Bulk checkbox selection enables mass retype or JSON export of a filtered subset. Full inventory export as CSV or JSON is also available.
 
 ---
 
 ## Environment Configuration
 
-All credentials are supplied via environment variables (`.env` supported via `python-dotenv`):
+Credentials and endpoints via environment variables (`.env` supported via `python-dotenv`):
 
 ```
 OPNSENSE_URL          # https://10.X.X.1
@@ -189,7 +189,7 @@ DB_PATH                        # SQLite file path (default: ./network_monitor.db
 
 ## Security Considerations
 
-The Docker Engine TCP sockets are unauthenticated — this is intentional for the LAN-internal use case, but access is controlled at the firewall. OPNsense rules restrict connections to port 2375 on each Docker host to the scanner's IP only. Same principle applies to the Proxmox API: tokens have read-only scope and are scoped per-node.
+The Docker Engine TCP sockets are unauthenticated — intentional for LAN-internal use, with OPNsense rules restricting port 2375 on each Docker host to the scanner's IP only. Proxmox API tokens are read-only and scoped per-node.
 
 The syslog receiver on UDP 514 requires root to bind (or `CAP_NET_BIND_SERVICE`). The rest of the app runs without elevated privileges.
 
@@ -218,7 +218,7 @@ The syslog receiver on UDP 514 requires root to bind (or `CAP_NET_BIND_SERVICE`)
 
 ## Development History
 
-The project went through four main phases before reaching its current state, each addressing a specific limitation of the previous approach.
+Six development phases, each triggered by a specific limitation hitting production.
 
 ### Phase 1 — ARP Prototype
 Started with `scapy.srp()` wrapped in `run_in_executor`, a MAC OUI vendor lookup, and a CLI entrypoint. Saw exactly one VLAN. Required root. No persistence, no UI.
@@ -233,7 +233,7 @@ The project became a running service: SQLite schema with `upsert_device()` (alia
 Idempotent `_migrate_add_columns()` added `ipv6`, `custom_type`, `disappearance_count`, `notes`, `scan_count`, and `syslog_ip` to existing databases without breaking them. OPNsense queries extracted into `src/opnsense.py`. Both ARP and NDP response envelope formats handled (`list` or `{"arp": [...]}`). Multicast, broadcast, and incomplete entries filtered. NDP link-local (`fe80:`) addresses skipped.
 
 ### P2 Audit — Scapy Removed, 7-Source Merge
-The most significant change: `scapy.srp()` removed from the main discovery loop entirely, replaced by `query_opnsense()`. Seven sources now run concurrently. Merge priority: OPNsense ARP → nmap/SNMP (MACs not in ARP only) → Proxmox enrichment (or offline upsert) → NDP-only rows → Docker upserts independent.
+`scapy.srp()` was pulled from the main discovery loop and replaced by `query_opnsense()`. Seven sources now run concurrently. Merge priority: OPNsense ARP → nmap/SNMP (MACs not in ARP only) → Proxmox enrichment (or offline upsert) → NDP-only rows → Docker upserts independent.
 
 ### P3/P4 — Enriched Discovery & Dashboard Overhaul
 Added nmap (`-sn -oX -`, XML parse, 120s timeout) and SNMP (`ipNetToMediaPhysAddress` MIB walk via `snmpwalk` subprocess). New API endpoints for notes, type overrides, secondary syslog IP, global log search, inventory export, and source health. Frontend rebuilt with per-type count chips, per-source health indicator dots, bulk checkbox actions, and a slide-in detail panel with inline editors for alias, type, notes, and syslog IP — plus a colour-coded syslog viewer per device.
@@ -281,10 +281,10 @@ requirements.txt    Python dependencies
 
 ## Future Enhancements
 
-- **TLS for Docker sockets** — replace unauthenticated TCP with mutual TLS for the Docker Engine connections
-- **LLDP/CDP ingestion** — pull neighbor tables from managed switches via SNMP to map physical port topology
-- **Historical graphing** — track device online/offline history over time with a simple time-series view in the dashboard
-- **Containerized deployment** — package as a Docker Compose stack with a health check and automatic restart policy
+- TLS for Docker sockets: the TCP connections currently rely on firewall rules for access control. Mutual TLS would be a cleaner boundary.
+- LLDP/CDP ingestion from managed switches via SNMP to map physical port topology alongside the IP inventory.
+- Historical device presence graphing — `disappearance_count` tracks absence but doesn't record when a device came back. A time-series table would close that gap.
+- Docker Compose packaging with a health check and restart policy.
 
 ---
 
