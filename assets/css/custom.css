@@ -1,9 +1,11 @@
 /* =========================================================
-   Custom brand styles — Cyberpunk/Brutalist identity
+   Custom brand styles — Light Editorial
+   Cyber Violet (#7B2D8E) · Electric Blue (#00D4FF)
+   Bebas Neue (headings) · Fira Code (code) · Inter (body)
    ========================================================= */
 
 /* ---------------------------------------------------------
-   Fonts
+   FONTS
    --------------------------------------------------------- */
 body, p, li, td, th {
   font-family: 'Inter', system-ui, sans-serif;
@@ -22,143 +24,77 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ---------------------------------------------------------
-   Kill all rounded corners globally
+   BASE — body size, light background
    --------------------------------------------------------- */
-*, *::before, *::after {
-  border-radius: 0 !important;
-}
-
-/* Exception: profile photo stays circular */
-.profile-photo {
-  border-radius: 50% !important;
+body {
+  font-size: 1.0625rem;
+  background-color: #FAFAFA;
+  color: #1A1A1A;
 }
 
 /* ---------------------------------------------------------
-   Hard-offset card shadows with Electric Blue tint
+   PAGE LOAD ANIMATION
    --------------------------------------------------------- */
-[class*="shadow"] {
-  box-shadow: 3px 3px 0 rgba(0, 229, 255, 0.25) !important;
-}
-
-/* ---------------------------------------------------------
-   Page load animation
-   --------------------------------------------------------- */
-article,
-main {
-  animation: fadeInPage 0.8s ease-in-out;
+article, main {
+  animation: fadeInPage 0.5s ease-out;
 }
 
 @keyframes fadeInPage {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ---------------------------------------------------------
-   Tables — horizontal scroll, fixed cell sizing
+   PROSE VARIABLE OVERRIDES
+   Congo sets these on .prose {} — custom.css loads after
+   so the same specificity wins by source order.
    --------------------------------------------------------- */
-article table,
-main table {
-  display: block;
-  overflow-x: auto;
-  white-space: normal;
-}
-
-.certifications-table table {
-  white-space: normal;
-}
-
-/* Prevent AOS from animating inside table cells */
-article table td,
-article table th,
-article table tr,
-main table td,
-main table th,
-main table tr {
-  min-width: 120px;
-  padding: 8px 12px;
-  animation: none !important;
-  opacity: 1 !important;
-  transform: none !important;
+.prose {
+  --tw-prose-body:          #1A1A1A;
+  --tw-prose-headings:      #7B2D8E;   /* Cyber Violet */
+  --tw-prose-links:         #007EA8;   /* Electric Blue, accessible on white */
+  --tw-prose-bold:          #111111;
+  --tw-prose-code:          #7B2D8E;   /* inline code — Cyber Violet */
+  --tw-prose-pre-bg:        #1E1E2E;   /* dark code block */
+  --tw-prose-pre-code:      #CDD6F4;   /* light syntax text on dark bg */
+  --tw-prose-hr:            #E5E5E5;
+  --tw-prose-quote-borders: #7B2D8E;
+  --tw-prose-quotes:        #525252;
+  --tw-prose-counters:      #525252;
+  --tw-prose-bullets:       #7B2D8E;
 }
 
 /* ---------------------------------------------------------
-   Code blocks
+   LINKS
    --------------------------------------------------------- */
-article pre,
-main pre {
-  background-color: #130022 !important;
-  border: 1px solid rgba(0, 229, 255, 0.15);
-  border-left: 3px solid #00E5FF;
+a {
+  color: #007EA8;
+  text-decoration: none;
+  transition: color 0.15s;
 }
 
-article pre code,
-main pre code {
-  color: #a8f0ff;
-}
-
-article code:not(pre code),
-main code:not(pre code) {
-  color: #00E5FF;
-  background-color: rgba(0, 229, 255, 0.08);
-  padding: 0.15em 0.35em;
-}
-
-/* ---------------------------------------------------------
-   Link hover glow
-   --------------------------------------------------------- */
 a:hover {
-  color: #00E5FF !important;
-  text-shadow: 0 0 8px rgba(0, 229, 255, 0.7);
+  color: #7B2D8E !important;
+  text-shadow: none;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #006080;
 }
 
 /* ---------------------------------------------------------
-   Neon scrollbar
-   --------------------------------------------------------- */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: #06000C; }
-::-webkit-scrollbar-thumb { background: #00E5FF; }
-::-webkit-scrollbar-thumb:hover { background: rgba(0, 229, 255, 0.7); }
-* { scrollbar-width: thin; scrollbar-color: #00E5FF #06000C; }
-
-/* ---------------------------------------------------------
-   Alert box glows — Congo renders alerts as .not-prose divs
-   --------------------------------------------------------- */
-article .not-prose {
-  border-left-width: 0.4rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 15px rgba(63, 81, 181, 0.2);
-}
-
-/* Info / default alert — Electric Blue */
-article .not-prose:not([class*="danger"]):not([class*="warning"]) {
-  border-color: #00E5FF;
-  box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
-}
-
-/* Danger alert — Neon Pink/Red */
-article .not-prose[class*="danger"] {
-  border-color: #FF0055;
-  box-shadow: 0 0 12px rgba(255, 0, 85, 0.4);
-}
-
-/* Warning alert — Toxic Green */
-article .not-prose[class*="warning"] {
-  border-color: #39FF14;
-  box-shadow: 0 0 12px rgba(57, 255, 20, 0.4);
-}
-
-/* ---------------------------------------------------------
-   HEADER — solid black, full-bleed
+   HEADER — Cyber Violet, full-bleed, sticky
    Negates body's responsive padding (px-6 sm:px-14 md:px-24 lg:px-32)
-   so the background extends edge-to-edge at every breakpoint.
    --------------------------------------------------------- */
 body > header {
-  background-color: #000000;
+  background-color: #7B2D8E;
+  color: #FFFFFF;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 2px solid #00D4FF;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
   margin-left:  -1.5rem;
   margin-right: -1.5rem;
   padding-left:  1.5rem;
@@ -192,135 +128,334 @@ body > header {
   }
 }
 
+/* All nav text: white on Cyber Violet */
+body > header,
+body > header nav,
+body > header a,
+body > header a span,
+body > header button,
+body > header button span,
+body > header li {
+  color: #FFFFFF !important;
+  text-shadow: none;
+}
+
+body > header a:hover,
+body > header a:hover span,
+body > header button:hover,
+body > header button:hover span {
+  color: #00D4FF !important;
+  text-decoration: none;
+}
+
 /* ---------------------------------------------------------
-   TABLE OF CONTENTS — boxed card, Cyber Violet accent
+   FOOTER — dark violet-black, full-bleed, light text
+   Footer lives inside body > div, so selector is body > div > footer
+   --------------------------------------------------------- */
+body > div > footer {
+  background-color: #1A0A22;
+  color: #D0D0D0;
+  border-top: 3px solid #7B2D8E;
+  margin-left:  -1.5rem;
+  margin-right: -1.5rem;
+  padding-left:  1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  body > div > footer {
+    margin-left:  -3.5rem;
+    margin-right: -3.5rem;
+    padding-left:  3.5rem;
+    padding-right: 3.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  body > div > footer {
+    margin-left:  -6rem;
+    margin-right: -6rem;
+    padding-left:  6rem;
+    padding-right: 6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  body > div > footer {
+    margin-left:  -8rem;
+    margin-right: -8rem;
+    padding-left:  8rem;
+    padding-right: 8rem;
+  }
+}
+
+body > div > footer p,
+body > div > footer span,
+body > div > footer a {
+  color: #B0B0B0 !important;
+}
+
+body > div > footer a:hover {
+  color: #00D4FF !important;
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------
+   H2 / H3 — Cyber Violet, generous spacing, h2 underline
+   --------------------------------------------------------- */
+article .prose h2,
+main .prose h2 {
+  color: #7B2D8E !important;
+  margin-top: 2.75rem !important;
+  margin-bottom: 0.9rem !important;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid #00D4FF;
+}
+
+article .prose h3,
+main .prose h3 {
+  color: #7B2D8E !important;
+  margin-top: 2rem !important;
+  margin-bottom: 0.65rem !important;
+}
+
+/* ---------------------------------------------------------
+   BODY TEXT / PROSE SPACING
+   --------------------------------------------------------- */
+article .prose p,
+main .prose p {
+  line-height: 1.78;
+  margin-bottom: 1.35rem;
+}
+
+article .prose li,
+main .prose li {
+  line-height: 1.75;
+  margin-bottom: 0.4rem;
+}
+
+/* ---------------------------------------------------------
+   HORIZONTAL RULES — subtle, generous vertical margin
+   --------------------------------------------------------- */
+article .prose hr,
+main .prose hr,
+hr {
+  border: none;
+  border-top: 1px solid #E5E5E5;
+  margin: 3rem 0;
+}
+
+/* ---------------------------------------------------------
+   BLOCKQUOTES — Cyber Violet left border, tinted bg
+   --------------------------------------------------------- */
+article .prose blockquote,
+main .prose blockquote {
+  border-left: 4px solid #7B2D8E !important;
+  background: rgba(123, 45, 142, 0.04);
+  padding: 0.75rem 1.25rem;
+  color: #525252;
+  font-style: italic;
+  border-radius: 0 4px 4px 0;
+}
+
+article .prose blockquote p,
+main .prose blockquote p {
+  margin-bottom: 0;
+}
+
+/* ---------------------------------------------------------
+   CODE BLOCKS — dark-themed on the light page
+   --------------------------------------------------------- */
+article pre,
+main pre {
+  background-color: #1E1E2E !important;
+  border-left: 3px solid #00D4FF;
+  border-radius: 4px;
+}
+
+article pre code,
+main pre code {
+  color: #CDD6F4;
+  font-family: 'Fira Code', monospace;
+}
+
+/* Inline code — light bg, Cyber Violet text */
+article code:not(pre code),
+main code:not(pre code) {
+  color: #7B2D8E;
+  background-color: #F3E8FF;
+  padding: 0.15em 0.35em;
+  border-radius: 3px;
+  font-family: 'Fira Code', monospace;
+}
+
+/* ---------------------------------------------------------
+   TABLES — Violet header, light alternating rows,
+   Electric Blue left border, horizontal scroll on mobile
+   --------------------------------------------------------- */
+article table,
+main table {
+  display: block;
+  overflow-x: auto;
+  white-space: normal;
+  border-left: 3px solid #00D4FF;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.certifications-table table {
+  white-space: normal;
+}
+
+/* Prevent AOS animation inside table cells */
+article table td,
+article table th,
+article table tr,
+main table td,
+main table th,
+main table tr {
+  min-width: 120px;
+  padding: 8px 14px;
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+article table th,
+main table th {
+  background-color: #7B2D8E !important;
+  color: #FFFFFF !important;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 1px;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  border-bottom: 2px solid #5F1570;
+}
+
+article table tbody tr:nth-child(even),
+main table tbody tr:nth-child(even) {
+  background-color: #F5F5F5;
+}
+
+article table tbody tr:nth-child(odd),
+main table tbody tr:nth-child(odd) {
+  background-color: #FFFFFF;
+}
+
+article table td,
+main table td {
+  border-bottom: 1px solid #E9E9E9;
+}
+
+/* ---------------------------------------------------------
+   TABLE OF CONTENTS — white card, Cyber Violet left border
    --------------------------------------------------------- */
 .toc {
-  background: rgba(100, 20, 200, 0.07);
-  border: 1px solid rgba(100, 20, 200, 0.3);
-  border-left: 3px solid #6414C8;
+  background: #FFFFFF;
+  border: 1px solid #E5E5E5;
+  border-left: 4px solid #7B2D8E;
+  border-radius: 0 4px 4px 0;
   padding: 0.75rem 0.75rem 0.75rem 0;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
 }
 
-/* Swap Congo's dotted inner border to a faint violet */
 .toc .border-s {
-  border-color: rgba(100, 20, 200, 0.2) !important;
+  border-color: #E5E5E5 !important;
 }
 
-/* Mobile summary toggle */
 .toc summary {
   font-family: 'Bebas Neue', sans-serif !important;
   letter-spacing: 2px;
   font-size: 1rem;
+  color: #1A1A1A;
 }
 
-/* TOC links */
 .toc a {
+  color: #525252;
   text-decoration: none;
   transition: color 0.15s;
 }
 
 .toc a:hover {
-  color: #00E5FF !important;
-  text-shadow: none;
+  color: #00D4FF !important;
+  text-decoration: none;
 }
 
 /* ---------------------------------------------------------
-   FEATURED IMAGES — rounded corners + drop shadow
-   Exception to the global border-radius: 0 kill
+   AUTHOR BIO CARD — white card, Cyber Violet top border
+   --------------------------------------------------------- */
+.author-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E5E5;
+  border-top: 4px solid #7B2D8E;
+  border-radius: 6px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  padding: 1.75rem;
+  margin-top: 1.5rem;
+}
+
+/* Author profile image — Cyber Violet ring */
+.author-card img {
+  border: 3px solid #7B2D8E;
+  border-radius: 50%;
+}
+
+/* ---------------------------------------------------------
+   FEATURED / POST IMAGES
    --------------------------------------------------------- */
 article header .prose img,
 article header .prose picture > img {
-  border-radius: 5px !important;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(100, 20, 200, 0.25) !important;
+  border-radius: 5px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12), 0 0 0 1px #E5E5E5;
   width: 100%;
   height: auto;
   display: block;
 }
 
+/* Inline article images */
+article .prose img {
+  border-radius: 5px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #E5E5E5;
+}
+
 /* ---------------------------------------------------------
-   TABLES — Cyber Violet header, alternating rows,
-   Electric Blue left border accent
-   (extends existing display:block / overflow-x:auto rules)
+   ALERT BOXES — Congo .not-prose divs, light mode
    --------------------------------------------------------- */
-article table,
-main table {
-  border-left: 3px solid #00E5FF;
+article .not-prose {
+  border-left-width: 0.375rem;
+  border-radius: 0 4px 4px 0;
 }
 
-article table th,
-main table th {
-  background-color: rgba(100, 20, 200, 0.55) !important;
-  color: #f0e8ff !important;
-  font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 1px;
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  border-bottom: 1px solid rgba(100, 20, 200, 0.5);
+/* Info / default — Electric Blue */
+article .not-prose:not([class*="danger"]):not([class*="warning"]) {
+  border-color: #00D4FF;
+  background: rgba(0, 212, 255, 0.06);
 }
 
-article table tbody tr:nth-child(even),
-main table tbody tr:nth-child(even) {
-  background-color: rgba(100, 20, 200, 0.07);
+/* Danger — Red */
+article .not-prose[class*="danger"] {
+  border-color: #DC2626;
+  background: rgba(220, 38, 38, 0.05);
 }
 
-article table tbody tr:nth-child(odd),
-main table tbody tr:nth-child(odd) {
-  background-color: rgba(24, 4, 42, 0.35);
-}
-
-article table td,
-main table td {
-  border-bottom: 1px solid rgba(100, 20, 200, 0.1);
+/* Warning — Amber */
+article .not-prose[class*="warning"] {
+  border-color: #D97706;
+  background: rgba(217, 119, 6, 0.05);
 }
 
 /* ---------------------------------------------------------
-   AUTHOR BIO — card with Electric Blue top border
+   SCROLLBAR — light theme, Cyber Violet thumb
    --------------------------------------------------------- */
-.author-card {
-  background: rgba(0, 229, 255, 0.04);
-  border-top: 3px solid #00E5FF;
-  border-left: 1px solid rgba(0, 229, 255, 0.1);
-  padding: 1.5rem;
-  margin-top: 1rem;
-}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #F5F5F5; }
+::-webkit-scrollbar-thumb { background: #7B2D8E; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #00D4FF; }
+* { scrollbar-width: thin; scrollbar-color: #7B2D8E #F5F5F5; }
 
 /* ---------------------------------------------------------
-   TYPOGRAPHY — line-height, heading margins, paragraphs
-   --------------------------------------------------------- */
-article .prose p,
-article .prose li {
-  line-height: 1.78;
-  margin-bottom: 1.1em;
-}
-
-article .prose h2 {
-  margin-top: 2rem !important;
-  margin-bottom: 0.75rem !important;
-}
-
-article .prose h3 {
-  margin-top: 1.5rem !important;
-  margin-bottom: 0.5rem !important;
-}
-
-/* ---------------------------------------------------------
-   BLOCKQUOTES — Cyber Violet left border + tinted bg
-   --------------------------------------------------------- */
-article .prose blockquote {
-  border-left: 4px solid #6414C8 !important;
-  background: rgba(100, 20, 200, 0.06);
-  padding: 0.75rem 1.25rem;
-  color: rgba(195, 170, 230, 0.9);
-  font-style: italic;
-}
-
-article .prose blockquote p {
-  margin-bottom: 0;
-}
-
-/* ---------------------------------------------------------
-   GENERAL LAYOUT — extra horizontal breathing room on desktop
+   GENERAL LAYOUT — desktop horizontal padding
    --------------------------------------------------------- */
 @media (min-width: 1024px) {
   article {
