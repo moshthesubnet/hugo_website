@@ -452,6 +452,31 @@ article .not-prose[class*="warning"] {
 * { scrollbar-width: thin; scrollbar-color: #7B2D8E #1C1C1C; }
 
 /* ---------------------------------------------------------
+   HOVER UNDERLINE — animated purple underline on hover
+   Usage in markdown: ## My Heading { .hover-underline }
+   --------------------------------------------------------- */
+.hover-underline {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.hover-underline::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 3px;
+  bottom: -2px;
+  left: 0;
+  background-color: #9333ea;
+  transition: width 0.3s ease-in-out;
+}
+
+.hover-underline:hover::after {
+  width: 100%;
+}
+
+/* ---------------------------------------------------------
    GENERAL LAYOUT — desktop horizontal padding
    --------------------------------------------------------- */
 @media (min-width: 1024px) {
