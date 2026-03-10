@@ -432,21 +432,93 @@ main table td {
 }
 
 /* ---------------------------------------------------------
-   AUTHOR BIO CARD — dark card, Cyber Violet top border
+   AUTHOR BIO CARD — flex card, Cyber Violet accent border
    --------------------------------------------------------- */
 .author-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.75rem;
   background: #1C1C1C;
   border: 1px solid #2A2A2A;
   border-top: 4px solid #7B2D8E;
   border-radius: 6px;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
   padding: 1.75rem;
-  margin-top: 1.5rem;
+  margin-top: 2.5rem;
 }
 
-.author-card img {
-  border: 3px solid #7B2D8E;
-  border-radius: 50%;
+.author-card-photo {
+  flex-shrink: 0;
+}
+
+.author-card-img {
+  width: 120px !important;
+  height: 120px !important;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 3px solid #7B2D8E !important;
+  box-shadow: 0 0 16px rgba(123, 45, 142, 0.5);
+  display: block;
+}
+
+.author-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.author-card-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #7B2D8E;
+  margin-bottom: 0.35rem;
+}
+
+.author-card-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  color: #00D4FF;
+  line-height: 1.1;
+  margin-bottom: 0.2rem;
+}
+
+.author-card-headline {
+  font-size: 0.8rem;
+  color: #7B2D8E;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.75rem;
+}
+
+.author-card-bio {
+  font-size: 0.9375rem;
+  color: #C0C0C0;
+  line-height: 1.65;
+  margin-bottom: 1rem;
+}
+
+.author-card-bio p {
+  margin: 0;
+}
+
+.author-card-links a {
+  background-image: none !important;
+}
+
+/* Responsive: stack on mobile */
+@media (max-width: 480px) {
+  .author-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .author-card-links {
+    justify-content: center;
+    display: flex;
+  }
 }
 
 /* ---------------------------------------------------------
