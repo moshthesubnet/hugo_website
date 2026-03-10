@@ -7,7 +7,7 @@ mainSections = ["docs"]
 
 [header]
   layout = "basic"
-  logo = "img/logo.png"
+  logo = "img/logo transparent.png"
   showTitle = false
 
 [homepage]
