@@ -132,7 +132,7 @@ Each scan cycle fetches active DHCP leases from OPNsense's dnsmasq API and uses 
 | OPNsense ARP | `GET /api/diagnostics/interface/getArp` | API key + secret (HTTP Basic) |
 | OPNsense NDP | `GET /api/diagnostics/interface/getNdp` | API key + secret (HTTP Basic) |
 | OPNsense DHCP | `GET /api/dnsmasq/leases/search` | API key + secret (HTTP Basic) |
-| Proxmox VE | `proxmoxer` REST client | Per-node API tokens (`user@pam!token`) |
+| Proxmox VE | `proxmoxer` REST client | Per-node API tokens (`user@realm!tokenname`) |
 | Proxmox Guest IPs | `qemu/{id}/agent/network-get-interfaces` | Same token, best-effort |
 | Docker Engine | Docker SDK over TCP or Unix socket | Unauthenticated (LAN-internal) |
 | nmap (optional) | Subprocess ping sweep | None (`nmap` binary required) |
@@ -172,7 +172,8 @@ OPNSENSE_URL          # https://10.X.X.1
 OPNSENSE_KEY          # API key (Basic Auth username)
 OPNSENSE_SECRET       # API secret (Basic Auth password)
 
-PROXMOX_NODES         # JSON array: [{"host":"…","user":"root@pam","token_id":"…","token_secret":"…"}]
+PROXMOX_NODES         # JSON array: [{"host":"…","user":"monitor@pve","token_id":"monitor@pve!scanner","token_secret":"…"}]
+                      # token_id format: user@realm!tokenname (full string, not just the token name)
 
 DOCKER_HOSTS          # Comma-separated: tcp://10.X.X.X:2375,tcp://10.X.X.X:2375
 NMAP_SUBNETS          # Optional CIDRs: 10.X.X.0/24,10.X.X.0/24
@@ -192,6 +193,10 @@ DB_PATH                        # SQLite file path (default: ./network_monitor.db
 The Docker Engine TCP sockets are unauthenticated — intentional for LAN-internal use, with OPNsense rules restricting port 2375 on each Docker host to the scanner's IP only. Proxmox API tokens are read-only and scoped per-node.
 
 The syslog receiver on UDP 514 requires root to bind (or `CAP_NET_BIND_SERVICE`). The rest of the app runs without elevated privileges.
+
+### Docker Deployment
+
+The included `docker-compose.yml` uses `network_mode: host`, which is the recommended option — it binds directly to the host network stack and avoids port mapping complexity for the UDP syslog receiver. If host networking isn't available, either add `--cap-add NET_BIND_SERVICE` or remap the syslog port above 1024 (`SYSLOG_PORT=5140`) and update OPNsense's remote logging target to match. For bare-metal deployments, `start.sh` wraps the uvicorn invocation with configurable `HOST_IP`, `PORT`, and `SYSLOG_PORT`.
 
 ---
 
@@ -285,6 +290,10 @@ frontend/
 
 scan.py             CLI entrypoint for manual ARP scans
 requirements.txt    Python dependencies
+Dockerfile          Python 3.12-slim image with nmap and snmp binaries
+docker-compose.yml  Service definition (network_mode: host for syslog)
+start.sh            Bare-metal startup wrapper (configures HOST_IP, PORT, SYSLOG_PORT)
+.env.example        Configuration template with all available variables
 ```
 
 ---
