@@ -141,6 +141,17 @@ Multiple Docker hosts are queried in parallel. TCP sockets (`tcp://host:2375`) a
 
 Docker containers using `--network host` share the daemon host's MAC and IP, creating duplicate device rows in any inventory that doesn't account for this. With 71.1% of developers now running Docker ([Docker](https://www.docker.com/resources/sonatype-developer-survey/), 2025) and 11.5 containers per host as a realistic baseline ([Datadog](https://www.datadoghq.com/container-report/), 2023), container-aware attribution is a practical requirement, not an edge case.
 
+## SNMP: ARP Caches from Anything Else
+
+There's a fourth optional source that covers non-OPNsense devices. The SNMP integration walks `ipNetToMediaPhysAddress` (OID `1.3.6.1.2.1.4.22.1.2`) on any SNMP-capable device — managed switches, other routers, anything that maintains an ARP cache and speaks SNMPv2c. The result is the same IP-MAC pairs OPNsense already provides, but sourced from gear that doesn't have a REST API.
+
+In my lab I don't use it — OPNsense routes everything so there's no coverage gap. But if your topology has a segment that isn't behind OPNsense, or you're running a second router, SNMP is how you close that gap without touching the discovery architecture. Results show up in the health dot row the same way every other source does.
+
+```bash
+# JSON array of SNMP targets
+SNMP_HOSTS='[{"host":"10.0.99.1","community":"public"}]'
+```
+
 ## Syslog, Webhooks, and the UI
 
 There's a UDP syslog receiver running alongside the API on port 514. OPNsense can be configured to ship `filterlog` messages there. The app parses those CSV payloads into readable firewall log summaries:
@@ -170,6 +181,8 @@ Clicking a row opens a slide-in detail panel with everything about that device: 
 
 The `/api/health` endpoint is the thing I check first when something looks off. It tells you the last-success timestamp and result count for each of the seven sources. If Proxmox shows `stale` but everything else is `ok`, you know where to look.
 
+`/api/devices/export` dumps the full device list as CSV or JSON — useful for feeding into other tools or just taking a snapshot before a planned maintenance window. `/api/logs` is a global syslog full-text search across all devices, separate from the per-device log view in the detail panel.
+
 ## Environment Configuration
 
 ```bash
@@ -178,10 +191,17 @@ OPNSENSE_KEY=your-api-key
 OPNSENSE_SECRET=your-api-secret
 
 # JSON array of Proxmox nodes
-PROXMOX_NODES='[{"host":"10.X.X.X","user":"root@pam","token_id":"monitor","token_secret":"..."}]'
+# token_id format is user@realm!tokenname (e.g. monitor@pve!scanner)
+PROXMOX_NODES='[{"host":"10.X.X.X","user":"monitor@pve","token_id":"monitor@pve!scanner","token_secret":"..."}]'
 
 # Comma-separated Docker TCP sockets
 DOCKER_HOSTS=tcp://10.X.X.X:2375,tcp://10.X.X.X:2375
+
+# Optional: comma-separated CIDR blocks for nmap supplemental sweeps
+NMAP_SUBNETS=10.30.40.0/24,10.30.50.0/24
+
+# Optional: JSON array of SNMP targets for ARP-cache walks
+SNMP_HOSTS='[{"host":"10.X.X.X","community":"public"}]'
 
 SCAN_INTERVAL_SECONDS=300
 SYSLOG_PORT=514
@@ -190,7 +210,7 @@ ALERT_DISAPPEARANCE_THRESHOLD=3
 DB_PATH=./network_monitor.db
 ```
 
-Loaded via `python-dotenv`. The Proxmox token only needs read permissions — no console access, no VM management. OPNsense API user is the same: minimum scope.
+Loaded via `python-dotenv`. The Proxmox token only needs read permissions — no console access, no VM management. The `token_id` field expects the full `user@realm!tokenname` string, not just the token name. OPNsense API user is the same: minimum scope.
 
 ## What It Actually Looks Like
 
@@ -248,7 +268,7 @@ They show up as a single ARP entry. There's no way to distinguish them at the la
 
 **Can this run in Docker itself?**
 
-Yes. The only complication is the syslog receiver on UDP 514 — binding a port below 1024 requires either running as root in the container, using `--cap-add NET_BIND_SERVICE`, or remapping the port to something above 1024 at the Docker layer and reconfiguring OPNsense to send there. Everything else runs fine unprivileged.
+Yes. The included `docker-compose.yml` uses `network_mode: host`, which is the practical option — it binds directly to the host's network stack and avoids the port mapping complexity for UDP 514. If you can't use host networking, binding port 514 requires either root in the container or `--cap-add NET_BIND_SERVICE`. The easier workaround is remapping to a high port (`SYSLOG_PORT=5140`) at the Docker layer and reconfiguring OPNsense to send there instead. Everything except the syslog receiver runs fine unprivileged.
 
 **What's the security case for tracking every device by MAC?**
 
