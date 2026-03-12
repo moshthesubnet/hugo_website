@@ -10,8 +10,6 @@ title: Local AI Coding Agent (Ollama + Aider)
 weight: 4
 ---
 
-# Local AI Coding Agent Project (Ollama + Aider)
-
 ## Project Overview
 This project documents the design, deployment, and configuration of a fully localized AI coding assistant using Ollama as the inference engine and Aider as the command-line interface (CLI) agent, hosted on a dedicated Ubuntu Virtual Machine within the homelab environment.
 

@@ -3,8 +3,6 @@ title: VLAN Segmentation
 weight: 2
 ---
 
-# VLAN Segmentation Project
-
 ## Project Overview
 
 This project documents the redesign and implementation of network segmentation using VLANs to improve security, management, and network isolation in my homelab environment.

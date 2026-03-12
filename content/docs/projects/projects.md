@@ -3,10 +3,6 @@ title: Overview
 weight: 1
 ---
 
-# Projects
-
----
-
 ### [Cross-VLAN Network Monitor](./cross_vlan_network_monitor/) — March 2026
 
 FastAPI app that queries OPNsense, Proxmox, and Docker APIs directly to produce a unified cross-VLAN device inventory — no raw sockets, no root required.

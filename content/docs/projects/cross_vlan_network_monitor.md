@@ -12,8 +12,6 @@ tags:
 weight: 6
 ---
 
-# API-Driven Cross-VLAN Network Monitor
-
 *Cross-VLAN device inventory via authenticated APIs — the router and hypervisor already know everything, so just ask them.*
 
 ---
