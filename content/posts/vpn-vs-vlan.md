@@ -29,7 +29,7 @@ images: ["https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630
 
 The VPN vs VLAN confusion is in the names. Both start with "Virtual." Both end with "Network." That's where the similarity stops. A VLAN and a VPN operate at different layers of the network stack and protect against completely different threats. You can't substitute one for the other — and in a well-designed network, you're running both.
 
-This post is the long-form version of [a reel I made](https://www.instagram.com/moshthesubnet/) on exactly this question. I'm CCNA certified and run a homelab with 7 VLANs and WireGuard in daily use — this isn't theoretical. If you're here from the reel, this is the depth behind the 45 seconds.
+This post is the long-form version of [a reel I made](https://www.instagram.com/p/DVzS9a6Rtwv/) on exactly this question. I'm CCNA certified and run a homelab with 7 VLANs and WireGuard in daily use — this isn't theoretical. If you're here from the reel, this is the depth behind the 45 seconds.
 
 ---
 
@@ -103,7 +103,7 @@ VLAN 999 as the native VLAN means untagged frames land there, which has no IP ad
 Here's how isolation levels break down across my VLANs — higher scores mean more restricted access:
 
 <figure>
-<svg viewBox="0 0 560 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Horizontal bar chart showing isolation level by VLAN, with VLAN 20 (Malware) and VLAN 50 (IoT) having the highest isolation scores" style="width:100%;max-width:560px;background:transparent">
+<svg viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Horizontal bar chart showing isolation level by VLAN, with VLAN 20 (Malware) and VLAN 50 (IoT) having the highest isolation scores" style="width:100%;max-width:560px;background:transparent">
   <title>VLAN Isolation Level by Segment</title>
   <style>
     .label { font: 13px 'Fira Code', monospace; fill: #a0aec0; }
@@ -118,19 +118,19 @@ Here's how isolation levels break down across my VLANs — higher scores mean mo
     .grid   { stroke: #2d3748; stroke-width: 1; }
   </style>
   <!-- Grid lines -->
-  <line x1="140" y1="20" x2="140" y2="230" class="grid"/>
-  <line x1="220" y1="20" x2="220" y2="230" class="grid"/>
-  <line x1="300" y1="20" x2="300" y2="230" class="grid"/>
-  <line x1="380" y1="20" x2="380" y2="230" class="grid"/>
-  <line x1="460" y1="20" x2="460" y2="230" class="grid"/>
-  <line x1="540" y1="20" x2="540" y2="230" class="grid"/>
+  <line x1="140" y1="20" x2="140" y2="270" class="grid"/>
+  <line x1="220" y1="20" x2="220" y2="270" class="grid"/>
+  <line x1="300" y1="20" x2="300" y2="270" class="grid"/>
+  <line x1="380" y1="20" x2="380" y2="270" class="grid"/>
+  <line x1="460" y1="20" x2="460" y2="270" class="grid"/>
+  <line x1="540" y1="20" x2="540" y2="270" class="grid"/>
   <!-- Axis labels -->
-  <text x="140" y="245" text-anchor="middle" class="axis">0</text>
-  <text x="220" y="245" text-anchor="middle" class="axis">2</text>
-  <text x="300" y="245" text-anchor="middle" class="axis">4</text>
-  <text x="380" y="245" text-anchor="middle" class="axis">6</text>
-  <text x="460" y="245" text-anchor="middle" class="axis">8</text>
-  <text x="540" y="245" text-anchor="middle" class="axis">10</text>
+  <text x="140" y="285" text-anchor="middle" class="axis">0</text>
+  <text x="220" y="285" text-anchor="middle" class="axis">2</text>
+  <text x="300" y="285" text-anchor="middle" class="axis">4</text>
+  <text x="380" y="285" text-anchor="middle" class="axis">6</text>
+  <text x="460" y="285" text-anchor="middle" class="axis">8</text>
+  <text x="540" y="285" text-anchor="middle" class="axis">10</text>
   <!-- VLAN 20 -->
   <text x="130" y="47" text-anchor="end" class="label">VLAN 20 / Malware</text>
   <rect x="140" y="33" width="400" height="20" class="bar-20" rx="2"/>
@@ -151,6 +151,10 @@ Here's how isolation levels break down across my VLANs — higher scores mean mo
   <text x="130" y="207" text-anchor="end" class="label">VLAN 30 / Homelab</text>
   <rect x="140" y="193" width="160" height="20" class="bar-30" rx="2"/>
   <text x="308" y="207" class="value">4</text>
+  <!-- VLAN 10 -->
+  <text x="130" y="247" text-anchor="end" class="label">VLAN 10 / Home</text>
+  <rect x="140" y="233" width="80" height="20" class="bar-10" rx="2"/>
+  <text x="228" y="247" class="value">2</text>
 </svg>
 <figcaption style="font-size:0.8em;color:#718096;margin-top:4px">Isolation score by segment (0 = open, 10 = fully isolated). Original data from the lab's OPNsense firewall policy.</figcaption>
 </figure>
