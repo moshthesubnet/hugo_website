@@ -3,8 +3,6 @@ title: 2-Area OSPF Lab
 weight: 5
 ---
 
-# Building a 2-Area OSPF Lab in Cisco Modeling Labs (CML)
-
 *A hands-on walkthrough of configuring multi-area OSPF, DHCP, and end-to-end connectivity using Cisco IOL routers and Alpine Linux.*
 
 ---

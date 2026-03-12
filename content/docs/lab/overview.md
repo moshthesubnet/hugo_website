@@ -3,8 +3,6 @@ title: Overview
 weight: 1
 ---
 
-# Lab overview
-
 Two Proxmox nodes, an OPNsense firewall, and a UniFi switch stack. 7 VLANs, automated where possible, documented here.
 
 The goal is to run real infrastructure at home — configurations get tested here before they touch anything that matters.

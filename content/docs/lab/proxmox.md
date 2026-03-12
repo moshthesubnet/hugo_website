@@ -3,8 +3,6 @@ title: Proxmox
 weight: 2
 ---
 
-# Proxmox
-
 I use Proxmox VE to host everything from the OPNsense firewall to malware analysis VMs.
 
 ---

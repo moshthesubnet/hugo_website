@@ -6,14 +6,11 @@ lastUpdated: "2026-03-12"
 tags: ["about", "networking", "career"]
 ---
 
-# About & Accomplishments
-
 <!-- [PERSONAL EXPERIENCE] Career change narrative — first-hand account -->
 
 > **TL;DR:** Career changer who retrained into networking from scratch — six certifications in two years, a CCNA, a homelab running 17 VMs across 7 VLANs, and real production experience that includes saving an estimated $15k in downtime by diagnosing a failed IPsec VPN tunnel. Currently finishing a B.S. in Cloud and Network Engineering at WGU.
 
 ---
-
 ## Who I Am
 
 I didn't come up through a CS degree. My background was entirely non-technical — I have a B.S. from Utah State (2017) in a health science field (kinesiology), and I spent a few years doing work that had nothing to do with networking.
@@ -27,7 +24,6 @@ What I didn't anticipate was the homelab getting out of hand. It started as a st
 I like emo and punk rock. This and the networking career aren't as unrelated as they seem — both are about doing things intentionally, even when the easier path is right there.
 
 ---
-
 ## Professional Accomplishments
 
 *From my recent work as an IT Intern:*
@@ -53,7 +49,6 @@ I like emo and punk rock. This and the networking career aren't as unrelated as 
 [View full documentation →](../projects/n8n-homelab-docs-pipeline/)
 
 ---
-
 ## Certifications
 
 Six certifications, earned in sequence, each one building on the last.
@@ -68,7 +63,6 @@ Six certifications, earned in sequence, each one building on the last.
 | **CompTIA A+** | CompTIA | Mar 2024 |
 
 ---
-
 ## Core Competencies
 
 ### Networking & Security
@@ -84,14 +78,12 @@ Six certifications, earned in sequence, each one building on the last.
 - **Automation:** Python, Ansible, n8n, Terraform
 
 ---
-
 ## Education
 
 - **B.S. Network Engineering and Security** — Western Governors University *(Currently Enrolled)*
 - **B.S.** — Utah State University (2017)
 
 ---
-
 ## FAQ
 
 **What kind of roles are you targeting?**
@@ -115,7 +107,6 @@ Two Proxmox nodes running 17 VMs and LXCs, OPNsense as the firewall, Unifi for s
 Finishing the WGU degree, continuing Ansible automation work, and getting more reps with cloud networking — specifically AWS and Azure network architecture. Also keeping the homelab documentation pipeline running, which forces me to think about network state in a structured way.
 
 ---
-
 ## Projects
 
 Full documentation of my homelab work lives in the [Projects section](../projects/projects/).
