@@ -626,3 +626,733 @@ main .prose h2.hover-underline {
     padding: 0 0.5rem;
   }
 }
+
+/* =========================================================
+   HOMEPAGE — Custom layout
+   Cyber Violet (#7B2D8E) · Electric Blue (#00D4FF)
+   ========================================================= */
+
+/* Reset prose/article wrappers on the homepage */
+.home-page {
+  margin: 0;
+  padding: 0;
+}
+
+/* Suppress Congo's default prose article padding on home */
+body:has(.home-page) article,
+body:has(.home-page) main {
+  padding: 0 !important;
+  animation: none;
+}
+
+/* ── HERO ─────────────────────────────────────────────── */
+.home-hero {
+  position: relative;
+  background: #0D0719;
+  overflow: hidden;
+  padding: 5.5rem 2rem 4.5rem;
+  min-height: 72vh;
+  display: flex;
+  align-items: center;
+  /* Full-bleed breakout */
+  width: 100vw;
+  margin-left: calc((100% - 100vw) / 2);
+}
+
+.home-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 212, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  z-index: 0;
+}
+
+/* Subtle scan-line overlay */
+.home-hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.10) 3px,
+    rgba(0, 0, 0, 0.10) 4px
+  );
+  pointer-events: none;
+}
+
+/* Radial glow centered on photo side */
+.home-hero::after {
+  content: '';
+  position: absolute;
+  right: 15%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.home-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 5rem;
+}
+
+.home-hero-text {
+  flex: 1;
+  min-width: 0;
+}
+
+
+.home-hero-title {
+  font-family: 'Bebas Neue', sans-serif !important;
+  font-size: clamp(2.4rem, 5vw, 4.2rem) !important;
+  line-height: 1.05 !important;
+  color: #FFFFFF !important;
+  letter-spacing: 3px !important;
+  text-transform: uppercase;
+  margin: 0 0 1.5rem !important;
+  border-bottom: none !important;
+  padding: 0 !important;
+  text-shadow: 0 0 80px rgba(0, 212, 255, 0.12);
+}
+
+.home-hero-sub {
+  font-size: 0.975rem;
+  color: #909090;
+  line-height: 1.75;
+  max-width: 510px;
+  margin-bottom: 2.25rem;
+}
+
+.home-hero-sub strong {
+  color: #00D4FF;
+  font-weight: 600;
+}
+
+.home-hero-cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ── Buttons ── */
+.home-btn {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 2px;
+  font-size: 1rem;
+  padding: 0.65rem 1.875rem;
+  text-decoration: none !important;
+  background-image: none !important;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.home-btn:hover {
+  background-size: 0 !important;
+}
+
+.home-btn-primary {
+  background-color: #00D4FF;
+  color: #0D0719 !important;
+  border: 2px solid #00D4FF;
+}
+
+.home-btn-primary:hover {
+  background-color: transparent;
+  color: #00D4FF !important;
+  box-shadow: 0 0 24px rgba(0, 212, 255, 0.25);
+}
+
+.home-btn-secondary {
+  background-color: transparent;
+  color: #707070 !important;
+  border: 2px solid #2A2A2A;
+}
+
+.home-btn-secondary:hover {
+  border-color: #7B2D8E;
+  color: #C084FC !important;
+}
+
+/* ── Photo frame ── */
+.home-hero-photo-wrap {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.home-hero-photo-frame {
+  position: relative;
+  display: inline-block;
+}
+
+.home-hero-photo {
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  box-shadow:
+    0 0 0 1px rgba(0, 212, 255, 0.08),
+    0 0 50px rgba(0, 212, 255, 0.18),
+    0 24px 48px rgba(0, 0, 0, 0.5);
+  filter: grayscale(15%) contrast(1.05);
+}
+
+/* Corner bracket accents */
+.home-hero-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+}
+
+.home-hero-corner-tl { top: -4px; left: -4px; border-top: 3px solid #00D4FF; border-left: 3px solid #00D4FF; }
+.home-hero-corner-tr { top: -4px; right: -4px; border-top: 3px solid #00D4FF; border-right: 3px solid #00D4FF; }
+.home-hero-corner-bl { bottom: -4px; left: -4px; border-bottom: 3px solid #00D4FF; border-left: 3px solid #00D4FF; }
+.home-hero-corner-br { bottom: -4px; right: -4px; border-bottom: 3px solid #00D4FF; border-right: 3px solid #00D4FF; }
+
+
+/* ── STATUS STRIP ──────────────────────────────────────── */
+.home-status-strip {
+  background: #141414;
+  border-top: 1px solid #222;
+  border-bottom: 1px solid #222;
+  padding: 0.8rem 2rem;
+  width: 100vw;
+  margin-left: calc((100% - 100vw) / 2);
+}
+
+.home-status-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.home-status-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.home-status-key {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.68rem;
+  color: #7B2D8E;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.home-status-val {
+  font-size: 0.8rem;
+  color: #707070;
+}
+
+.home-status-sep {
+  color: #2A2A2A;
+  user-select: none;
+}
+
+/* ── SECTIONS ─────────────────────────────────────────── */
+.home-section {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Alternate-row sections get a full-bleed tinted bg */
+.home-section-alt {
+  width: 100vw;
+  margin-left: calc((100% - 100vw) / 2);
+  background: rgba(255, 255, 255, 0.015);
+  border-top: 1px solid #1E1E1E;
+  border-bottom: 1px solid #1E1E1E;
+  padding: 4rem 2rem;
+  max-width: 100vw;
+}
+
+.home-section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-section-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.home-section-title {
+  font-family: 'Bebas Neue', sans-serif !important;
+  font-size: 1.45rem !important;
+  letter-spacing: 5px !important;
+  color: #A855F7 !important;
+  white-space: nowrap;
+  border-bottom: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+
+.home-section-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, #2A2A2A 30%, transparent);
+}
+
+.home-section-sub {
+  font-size: 0.85rem;
+  color: #555;
+  font-style: italic;
+  margin: 0.5rem 0 1.75rem;
+}
+
+/* ── WINS GRID ────────────────────────────────────────── */
+.home-wins-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+
+.home-win-card {
+  background: #161616;
+  border: 1px solid #242424;
+  border-top: 3px solid #00D4FF;
+  padding: 1.75rem 1.75rem 1.5rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.home-win-card:hover {
+  box-shadow: 0 4px 32px rgba(0, 212, 255, 0.08);
+}
+
+.home-win-metric {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3.75rem;
+  letter-spacing: 3px;
+  line-height: 1;
+  color: #00D4FF;
+  text-shadow: 0 0 40px rgba(0, 212, 255, 0.45);
+  margin-bottom: 0.85rem;
+}
+
+.home-win-title {
+  font-family: 'Bebas Neue', sans-serif !important;
+  font-size: 1.05rem !important;
+  letter-spacing: 2px !important;
+  color: #E0E0E0 !important;
+  margin: 0 0 0.75rem !important;
+  border-bottom: none !important;
+  padding: 0 !important;
+  line-height: 1.2 !important;
+}
+
+.home-win-desc {
+  font-size: 0.85rem;
+  color: #6A6A6A;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── CERTIFICATIONS ───────────────────────────────────── */
+.home-certs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.625rem;
+  margin-top: 1.5rem;
+}
+
+.home-cert-card {
+  background: #161616;
+  border: 1px solid #242424;
+  padding: 0.9rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.home-cert-card:hover {
+  border-color: #7B2D8E;
+}
+
+.home-cert-badge {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  padding: 0.3rem 0.65rem;
+  flex-shrink: 0;
+  min-width: 64px;
+  text-align: center;
+}
+
+.home-cert-blue {
+  background: rgba(0, 212, 255, 0.1);
+  color: #00D4FF;
+  border: 1px solid rgba(0, 212, 255, 0.25);
+}
+
+.home-cert-violet {
+  background: rgba(123, 45, 142, 0.18);
+  color: #C084FC;
+  border: 1px solid rgba(123, 45, 142, 0.35);
+}
+
+.home-cert-green {
+  background: rgba(52, 211, 153, 0.1);
+  color: #34D399;
+  border: 1px solid rgba(52, 211, 153, 0.25);
+}
+
+.home-cert-info { min-width: 0; }
+
+.home-cert-name {
+  font-size: 0.84rem;
+  color: #C8C8C8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.home-cert-date {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.68rem;
+  color: #484848;
+  margin-top: 0.2rem;
+}
+
+/* ── TECH STACK ───────────────────────────────────────── */
+.home-stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 1.75rem;
+}
+
+.home-stack-group-label {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.63rem;
+  letter-spacing: 3px;
+  color: #7B2D8E;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #222;
+}
+
+.home-stack-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.home-tag {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.7rem;
+  color: #606060;
+  border: 1px solid #252525;
+  padding: 0.25rem 0.65rem;
+  background: rgba(255, 255, 255, 0.02);
+  letter-spacing: 0.25px;
+  transition: border-color 0.2s ease, color 0.2s ease;
+  cursor: default;
+}
+
+.home-tag:hover {
+  border-color: rgba(123, 45, 142, 0.5);
+  color: #C084FC;
+}
+
+/* ── PROJECTS ─────────────────────────────────────────── */
+.home-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+
+.home-project-card {
+  background: #161616;
+  border: 1px solid #242424;
+  border-top: 3px solid #7B2D8E;
+  padding: 1.75rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: border-top-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.home-project-card:hover {
+  border-top-color: #00D4FF;
+  box-shadow: 0 8px 32px rgba(0, 212, 255, 0.08);
+}
+
+.home-project-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3.25rem;
+  line-height: 1;
+  letter-spacing: 2px;
+  color: rgba(123, 45, 142, 0.22);
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  user-select: none;
+  transition: color 0.25s ease;
+}
+
+.home-project-card:hover .home-project-num {
+  color: rgba(0, 212, 255, 0.18);
+}
+
+.home-project-title {
+  font-family: 'Bebas Neue', sans-serif !important;
+  font-size: 1.2rem !important;
+  letter-spacing: 2px !important;
+  color: #E8E8E8 !important;
+  margin: 0 0 0.9rem !important;
+  border-bottom: none !important;
+  padding: 0 !important;
+  padding-right: 3.5rem !important;
+  line-height: 1.2 !important;
+}
+
+.home-project-desc {
+  font-size: 0.855rem;
+  color: #686868;
+  line-height: 1.68;
+  margin: 0 0 1rem !important;
+  flex: 1;
+}
+
+.home-project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.home-project-link {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.76rem;
+  color: #00D4FF !important;
+  letter-spacing: 0.25px;
+  text-decoration: none !important;
+  background-image: none !important;
+  transition: color 0.15s ease;
+  align-self: flex-start;
+}
+
+.home-project-link:hover {
+  color: #A855F7 !important;
+  background-image: none !important;
+  background-size: 0 0 !important;
+}
+
+/* ── LAB TOPOLOGY CTA ─────────────────────────────────── */
+.home-topology-cta {
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 2rem;
+  background: #0A0A14;
+  border-top: 1px solid #1E1E1E;
+  border-bottom: 1px solid #1E1E1E;
+  width: 100vw;
+  margin-left: calc((100% - 100vw) / 2);
+}
+
+.home-topology-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(123, 45, 142, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(123, 45, 142, 0.07) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.home-topology-inner {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.home-topology-eyebrow {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 3px;
+  color: #7B2D8E;
+  margin-bottom: 0.5rem;
+}
+
+.home-topology-title {
+  font-family: 'Bebas Neue', sans-serif !important;
+  font-size: 2.1rem !important;
+  letter-spacing: 4px !important;
+  color: #FFFFFF !important;
+  margin: 0 0 0.6rem !important;
+  border-bottom: none !important;
+  padding: 0 !important;
+  line-height: 1.1 !important;
+}
+
+.home-topology-desc {
+  font-size: 0.875rem;
+  color: #555;
+  max-width: 460px;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.home-topology-btn {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 2.5px;
+  font-size: 1rem;
+  padding: 0.8rem 2.25rem;
+  border: 2px solid #7B2D8E;
+  color: #C084FC !important;
+  text-decoration: none !important;
+  background-image: none !important;
+  background-color: transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.home-topology-btn:hover {
+  background-color: #7B2D8E;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 28px rgba(123, 45, 142, 0.4);
+  background-size: 0 !important;
+}
+
+/* ── CONNECT ──────────────────────────────────────────── */
+.home-connect {
+  padding: 1.75rem 2rem 3rem;
+  border-top: 1px solid #181818;
+}
+
+.home-connect-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.home-connect-label {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.73rem;
+  letter-spacing: 2px;
+  color: #7B2D8E;
+  white-space: nowrap;
+}
+
+.home-connect-links {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.home-connect-link {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.75rem;
+  color: #484848 !important;
+  text-decoration: none !important;
+  background-image: none !important;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  letter-spacing: 0.25px;
+}
+
+.home-connect-link:hover {
+  color: #00D4FF !important;
+  border-color: rgba(0, 212, 255, 0.2);
+  background-image: none !important;
+  background-size: 0 0 !important;
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────── */
+@media (max-width: 767px) {
+  .home-hero {
+    padding: 3.5rem 1.5rem 3rem;
+    min-height: auto;
+  }
+
+  .home-hero-inner {
+    flex-direction: column-reverse;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .home-hero-photo {
+    width: 180px;
+    height: 180px;
+  }
+
+  .home-hero-cta {
+    justify-content: center;
+  }
+
+  .home-hero-sub {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .home-status-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .home-status-sep { display: none; }
+
+  .home-section { padding: 3rem 1.5rem; }
+
+  .home-section-alt { padding: 3rem 1.5rem; }
+
+  .home-topology-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .home-connect-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .home-hero-photo {
+    width: 210px;
+    height: 210px;
+  }
+
+  .home-hero { padding: 4.5rem 3rem 4rem; }
+}
