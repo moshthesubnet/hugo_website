@@ -1,0 +1,289 @@
+{{ define "main" }}
+<div class="home-page">
+
+  {{/* ═══════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════════ */}}
+  <section class="home-hero">
+    <div class="home-hero-bg"></div>
+    <div class="home-hero-inner">
+
+      <div class="home-hero-text">
+        <h1 class="home-hero-title">
+          MY CAREER PATH HAS MORE HOPS THAN MY TRACEROUTE
+        </h1>
+        <p class="home-hero-sub">
+          I'm <strong>Skyler King</strong> — a Cloud/Network Engineering student,
+          homelab enthusiast, and emo/punk rock fan. I document everything from
+          breaking OSPF in the lab to fixing critical infrastructure in production.
+        </p>
+        <div class="home-hero-cta">
+          <a href="/docs/projects/projects/" class="home-btn home-btn-primary">View Projects</a>
+          <a href="/docs/bio/" class="home-btn home-btn-secondary">My Story →</a>
+        </div>
+      </div>
+
+      <div class="home-hero-photo-wrap">
+        <div class="home-hero-photo-frame">
+          <img src="/assets/github_profile.png" alt="Skyler King" class="home-hero-photo">
+          <div class="home-hero-corner home-hero-corner-tl"></div>
+          <div class="home-hero-corner home-hero-corner-tr"></div>
+          <div class="home-hero-corner home-hero-corner-bl"></div>
+          <div class="home-hero-corner home-hero-corner-br"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  {{/* ═══════════════════════════════════════════
+       STATUS STRIP
+  ══════════════════════════════════════════════ */}}
+  <div class="home-status-strip">
+    <div class="home-status-inner">
+      <div class="home-status-item">
+        <span class="home-status-key">ROLE</span>
+        <span class="home-status-val">Pursuing Entry-Level Networking</span>
+      </div>
+      <span class="home-status-sep" aria-hidden="true">|</span>
+      <div class="home-status-item">
+        <span class="home-status-key">FOCUS</span>
+        <span class="home-status-val">Cisco Enterprise · Automation · Security</span>
+      </div>
+      <span class="home-status-sep" aria-hidden="true">|</span>
+      <div class="home-status-item">
+        <span class="home-status-key">SCHOOL</span>
+        <span class="home-status-val">WGU B.S. Cloud &amp; Network Engineering</span>
+      </div>
+    </div>
+  </div>
+
+  {{/* ═══════════════════════════════════════════
+       RECENT WINS
+  ══════════════════════════════════════════════ */}}
+  <section class="home-section">
+    <div class="home-section-header">
+      <h2 class="home-section-title">RECENT.WINS</h2>
+      <div class="home-section-line"></div>
+    </div>
+    <div class="home-wins-grid">
+
+      <div class="home-win-card">
+        <div class="home-win-metric">$15K</div>
+        <h3 class="home-win-title">Critical Infrastructure Rescue</h3>
+        <p class="home-win-desc">Diagnosed and fixed a production IPsec VPN tunnel failure that had downed a licensing server, saving ~$15k in operational delays.</p>
+      </div>
+
+      <div class="home-win-card">
+        <div class="home-win-metric">+30%</div>
+        <h3 class="home-win-title">Enterprise Network Segmentation</h3>
+        <p class="home-win-desc">Improved network performance and eliminated VLAN 1 vulnerabilities by migrating to a secure 7-VLAN architecture with dedicated management VLAN.</p>
+      </div>
+
+      <div class="home-win-card">
+        <div class="home-win-metric">48H</div>
+        <h3 class="home-win-title">Rapid Site Deployment</h3>
+        <p class="home-win-desc">Built complete IT infrastructure for a newly acquired office — 25 workstations plus conferencing, from zero to full operation.</p>
+      </div>
+
+    </div>
+  </section>
+
+  {{/* ═══════════════════════════════════════════
+       CERTIFICATIONS
+  ══════════════════════════════════════════════ */}}
+  <section class="home-section home-section-alt">
+    <div class="home-section-inner">
+      <div class="home-section-header">
+        <h2 class="home-section-title">CERTS.VERIFIED</h2>
+        <div class="home-section-line"></div>
+      </div>
+      <p class="home-section-sub">Validated skills. No paper tigers here.</p>
+      <div class="home-certs-grid">
+
+        <div class="home-cert-card">
+          <div class="home-cert-badge home-cert-blue">CLOUD+</div>
+          <div class="home-cert-info">
+            <div class="home-cert-name">CompTIA Cloud+</div>
+            <div class="home-cert-date">Dec 2025</div>
+          </div>
+        </div>
+
+        <div class="home-cert-card">
+          <div class="home-cert-badge home-cert-violet">CBROPS</div>
+          <div class="home-cert-info">
+            <div class="home-cert-name">CCNA Cybersecurity</div>
+            <div class="home-cert-date">Jun 2025</div>
+          </div>
+        </div>
+
+        <div class="home-cert-card">
+          <div class="home-cert-badge home-cert-violet">CCNA</div>
+          <div class="home-cert-info">
+            <div class="home-cert-name">Cisco Certified Network Associate</div>
+            <div class="home-cert-date">Feb 2025</div>
+          </div>
+        </div>
+
+        <div class="home-cert-card">
+          <div class="home-cert-badge home-cert-blue">ITIL 4</div>
+          <div class="home-cert-info">
+            <div class="home-cert-name">ITIL Foundation</div>
+            <div class="home-cert-date">Jun 2024</div>
+          </div>
+        </div>
+
+        <div class="home-cert-card">
+          <div class="home-cert-badge home-cert-green">LPI</div>
+          <div class="home-cert-info">
+            <div class="home-cert-name">Linux Essentials</div>
+            <div class="home-cert-date">May 2024</div>
+          </div>
+        </div>
+
+        <div class="home-cert-card">
+          <div class="home-cert-badge home-cert-blue">A+</div>
+          <div class="home-cert-info">
+            <div class="home-cert-name">CompTIA A+</div>
+            <div class="home-cert-date">Mar 2024</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  {{/* ═══════════════════════════════════════════
+       TECH STACK
+  ══════════════════════════════════════════════ */}}
+  <section class="home-section">
+    <div class="home-section-header">
+      <h2 class="home-section-title">STACK.CONF</h2>
+      <div class="home-section-line"></div>
+    </div>
+    <div class="home-stack-grid">
+
+      <div class="home-stack-group">
+        <div class="home-stack-group-label">HARDWARE</div>
+        <div class="home-stack-tags">
+          <span class="home-tag">Cisco Routers/Switches</span>
+          <span class="home-tag">Ubiquiti Unifi</span>
+          <span class="home-tag">Proxmox</span>
+        </div>
+      </div>
+
+      <div class="home-stack-group">
+        <div class="home-stack-group-label">SOFTWARE</div>
+        <div class="home-stack-tags">
+          <span class="home-tag">OPNsense</span>
+          <span class="home-tag">Docker</span>
+          <span class="home-tag">Splunk</span>
+          <span class="home-tag">Wireshark</span>
+        </div>
+      </div>
+
+      <div class="home-stack-group">
+        <div class="home-stack-group-label">AUTOMATION</div>
+        <div class="home-stack-tags">
+          <span class="home-tag">Python</span>
+          <span class="home-tag">Ansible</span>
+          <span class="home-tag">Terraform</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  {{/* ═══════════════════════════════════════════
+       FEATURED PROJECTS
+  ══════════════════════════════════════════════ */}}
+  <section class="home-section home-section-alt">
+    <div class="home-section-inner">
+      <div class="home-section-header">
+        <h2 class="home-section-title">FEATURED.PROJECTS</h2>
+        <div class="home-section-line"></div>
+      </div>
+      <div class="home-projects-grid">
+
+        <article class="home-project-card">
+          <div class="home-project-num" aria-hidden="true">01</div>
+          <h3 class="home-project-title">n8n Homelab Docs Pipeline</h3>
+          <p class="home-project-desc">Automated documentation pipeline treating live network state as source of truth — polling OPNsense weekly, diffing against saved state, and triggering Claude Code via SSH to regenerate topology docs on every change.</p>
+          <div class="home-project-tags">
+            <span class="home-tag">n8n</span>
+            <span class="home-tag">OPNsense API</span>
+            <span class="home-tag">Claude Code</span>
+            <span class="home-tag">TrueNAS</span>
+            <span class="home-tag">Syncthing</span>
+          </div>
+          <a href="/docs/projects/n8n-homelab-docs-pipeline/" class="home-project-link">View Documentation →</a>
+        </article>
+
+        <article class="home-project-card">
+          <div class="home-project-num" aria-hidden="true">02</div>
+          <h3 class="home-project-title">Cross-VLAN Network Monitor</h3>
+          <p class="home-project-desc">FastAPI app that bypasses ARP's layer-2 blind spots — querying OPNsense, Proxmox, and Docker APIs directly for a unified cross-VLAN device inventory. No raw sockets, no root required.</p>
+          <div class="home-project-tags">
+            <span class="home-tag">FastAPI</span>
+            <span class="home-tag">OPNsense</span>
+            <span class="home-tag">Proxmox</span>
+            <span class="home-tag">Docker</span>
+          </div>
+          <a href="/docs/projects/cross_vlan_network_monitor/" class="home-project-link">View Documentation →</a>
+        </article>
+
+        <article class="home-project-card">
+          <div class="home-project-num" aria-hidden="true">03</div>
+          <h3 class="home-project-title">VLAN Segmentation &amp; Hardening</h3>
+          <p class="home-project-desc">Redesigned homelab from a flat network to a properly segmented 7-VLAN architecture — eliminating VLAN 1 vulnerabilities and isolating home, malware analysis, IoT, servers, and management traffic.</p>
+          <div class="home-project-tags">
+            <span class="home-tag">OPNsense</span>
+            <span class="home-tag">VLAN Design</span>
+            <span class="home-tag">Security</span>
+            <span class="home-tag">Unifi</span>
+          </div>
+          <a href="/docs/projects/vlan_segmentation/" class="home-project-link">View Documentation →</a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  {{/* ═══════════════════════════════════════════
+       LAB TOPOLOGY CTA
+  ══════════════════════════════════════════════ */}}
+  <div class="home-topology-cta">
+    <div class="home-topology-bg"></div>
+    <div class="home-topology-inner">
+      <div class="home-topology-text">
+        <div class="home-topology-eyebrow">// INTERACTIVE MAP</div>
+        <h2 class="home-topology-title">LAB NETWORK TOPOLOGY</h2>
+        <p class="home-topology-desc">
+          Physical topology, VLAN map, and Proxmox inventory — from the OPNsense
+          firewall through the Unifi distribution core to 17 VMs and LXCs across
+          7 VLANs.
+        </p>
+      </div>
+      <a href="/projects/homelab-topology.html" class="home-topology-btn">Explore the Diagram →</a>
+    </div>
+  </div>
+
+  {{/* ═══════════════════════════════════════════
+       CONNECT
+  ══════════════════════════════════════════════ */}}
+  <div class="home-connect">
+    <div class="home-connect-inner">
+      <span class="home-connect-label">CONNECT://</span>
+      <nav class="home-connect-links" aria-label="Social and site links">
+        <a href="https://instagram.com/moshthesubnet" target="_blank" rel="noopener noreferrer" class="home-connect-link">Instagram</a>
+        <a href="https://www.linkedin.com/in/skylerkingnetwork" target="_blank" rel="noopener noreferrer" class="home-connect-link">LinkedIn</a>
+        <a href="https://github.com/moshthesubnet" target="_blank" rel="noopener noreferrer" class="home-connect-link">GitHub</a>
+        <a href="/docs/bio/" class="home-connect-link">Full Story</a>
+        <a href="/docs/lab/overview/" class="home-connect-link">The Lab</a>
+        <a href="/posts/" class="home-connect-link">Blog</a>
+      </nav>
+    </div>
+  </div>
+
+</div>
+{{ end }}
