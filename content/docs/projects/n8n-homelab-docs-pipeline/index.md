@@ -14,7 +14,7 @@ tags:
   - infrastructure-as-code
 draft: false
 mermaid: true
-weight: 6
+weight: 3
 ---
 
 ## What It Does
