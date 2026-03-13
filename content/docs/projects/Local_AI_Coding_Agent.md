@@ -1,12 +1,16 @@
 ---
-description: Deployment and configuration of a fully localized AI coding assistant
-  using Ollama and Aider on Proxmox.
-tags:
-- AI
-- Homelab
-- Ubuntu
-- Proxmox
 title: Local AI Coding Agent (Ollama + Aider)
+date: 2025-12-01
+description: "Deployment and configuration of a fully localized AI coding assistant using Ollama and Aider on Proxmox."
+summary: "Ollama running Qwen2.5-Coder inside a Proxmox Ubuntu VM, fronted by Aider as the CLI agent — a fully air-gappable coding assistant with no API keys and no data leaving the lab."
+tags:
+  - ai
+  - homelab
+  - ubuntu
+  - proxmox
+  - ollama
+  - self-hosted
+draft: false
 weight: 4
 ---
 
