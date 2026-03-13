@@ -12,7 +12,7 @@ tags:
   - proxmox
   - docker
 draft: false
-weight: 6
+weight: 2
 ---
 
 *Cross-VLAN device inventory via authenticated APIs — the router and hypervisor already know everything, so just ask them.*
