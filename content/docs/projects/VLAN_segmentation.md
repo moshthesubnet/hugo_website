@@ -1,5 +1,16 @@
 ---
 title: VLAN Segmentation
+date: 2025-10-01
+description: "Redesigned a flat single-VLAN homelab into a 7-VLAN segmented network with OPNsense as the inter-VLAN router and firewall enforcement point."
+summary: "Moved from VLAN 1 carrying all traffic to a 7-VLAN layout — IoT, Servers, MGMT, Malware, and more — with a native VLAN 999 anti-hopping config and deny-by-default firewall policy."
+tags:
+  - networking
+  - vlan
+  - opnsense
+  - homelab
+  - security
+  - infrastructure
+draft: false
 weight: 2
 ---
 

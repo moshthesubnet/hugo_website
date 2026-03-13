@@ -1,14 +1,17 @@
 ---
 title: Cross-VLAN Network Monitor
-description: A unified "God View" of every device on the homelab — bare metal, VMs, LXCs, and containers — discovered via authenticated APIs instead of raw sockets.
+date: 2026-03-09
+description: "A unified 'God View' of every device on the homelab — bare metal, VMs, LXCs, and containers — discovered via authenticated APIs instead of raw sockets."
+summary: "ARP broadcast hits one VLAN and sees nothing else. OPNsense REST API gives the full ARP table across every VLAN. Proxmox and Docker APIs layer in VM names and container state. One FastAPI app, no root required."
 tags:
-- Python
-- FastAPI
-- Homelab
-- Networking
-- OPNsense
-- Proxmox
-- Docker
+  - python
+  - fastapi
+  - homelab
+  - networking
+  - opnsense
+  - proxmox
+  - docker
+draft: false
 weight: 6
 ---
 

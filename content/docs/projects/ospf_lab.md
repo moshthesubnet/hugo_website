@@ -1,5 +1,16 @@
 ---
 title: 2-Area OSPF Lab
+date: 2025-11-01
+description: "Multi-area OSPF lab using Cisco IOL routers and Alpine Linux in CML Free Tier — configuring inter-area routing, DHCP, and end-to-end connectivity across OSPF area boundaries."
+summary: "Four Cisco IOL routers across two OSPF areas in CML. Built to work through adjacency issues, inter-area LSA propagation, and DHCP for an Alpine Linux end host — the kind of topology that shows up on the CCNA."
+tags:
+  - networking
+  - ospf
+  - cisco
+  - ccna
+  - routing
+  - cml
+draft: false
 weight: 5
 ---
 
