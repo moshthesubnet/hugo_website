@@ -132,7 +132,7 @@ Runs daily at 2am, an hour before the 3am backup job. The API call runs entirely
 
 <!-- [ORIGINAL DATA] -->
 
-Config is now backed up to three places:
+Config is now backed up to two places:
 
 | Location | Trigger | Requires internet | Requires OPNsense up |
 |---|---|---|---|

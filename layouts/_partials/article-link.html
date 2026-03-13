@@ -1,0 +1,33 @@
+<article class="post-card">
+  {{- $href := .Permalink }}
+  {{- if .Params.externalUrl }}{{ $href = .Params.externalUrl }}{{ end }}
+
+  <div class="post-card-body">
+    <h3 class="post-card-title">
+      <a href="{{ $href }}"
+        {{ if .Params.externalUrl }}target="_blank" rel="noopener noreferrer"{{ end }}>
+        {{- .Title | emojify -}}
+      </a>
+    </h3>
+
+    <div class="post-card-meta">
+      {{ if .Date }}
+        <span class="post-card-date">{{ .Date.Format "2006-01-02" }}</span>
+      {{ end }}
+      {{ if and (.Params.showReadingTime | default (.Site.Params.article.showReadingTime | default true)) (ne .ReadingTime 0) }}
+        <span class="post-card-sep">//</span>
+        <span class="post-card-read">{{ .ReadingTime }}m read</span>
+      {{ end }}
+      {{ with .Params.tags }}
+        <span class="post-card-sep">//</span>
+        <span class="post-card-tags">
+          {{ range . }}<span class="post-card-tag">[{{ . }}]</span>{{ end }}
+        </span>
+      {{ end }}
+    </div>
+
+    {{ with .Params.summary }}
+      <p class="post-card-summary">{{ . | plainify | truncate 180 }}</p>
+    {{ end }}
+  </div>
+</article>
