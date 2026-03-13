@@ -12,5 +12,6 @@ weight = 1
     bio = "Documenting the journey from homelab to enterprise-grade networking."
     links = [
       { github = "https://github.com/moshthesubnet" },
-      { linkedin = "https://www.linkedin.com/in/skylerkingnetwork" }
+      { linkedin = "https://www.linkedin.com/in/skylerkingnetwork" },
+      { instagram = "https://www.instagram.com/moshthesubnet" }
     ]
