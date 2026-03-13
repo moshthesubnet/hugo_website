@@ -1,5 +1,5 @@
 ---
 title: Guides
-weight: 3
+weight: 4
 tags: ["networking", "docker", "self-hosted", "configuration"]
 ---

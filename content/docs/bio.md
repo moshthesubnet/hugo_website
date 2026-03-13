@@ -1,7 +1,7 @@
 ---
 title: About & Accomplishments
 description: "Skyler King — Cloud/Network Engineering student at WGU, CCNA certified, six certifications in two years. Career changer building toward enterprise networking roles through homelab work and real production experience."
-weight: 2
+weight: 1
 lastUpdated: "2026-03-12"
 tags: ["about", "networking", "career"]
 ---

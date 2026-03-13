@@ -1,5 +1,5 @@
 ---
 title: My Lab
-weight: 1
+weight: 3
 tags: ["proxmox", "opnsense", "homelab", "infrastructure"]
 ---
