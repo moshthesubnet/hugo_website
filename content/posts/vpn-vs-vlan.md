@@ -103,7 +103,7 @@ VLAN 999 as the native VLAN means untagged frames land there, which has no IP ad
 Here's how isolation levels break down across my VLANs — higher scores mean more restricted access:
 
 <figure>
-<svg viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Horizontal bar chart showing isolation level by VLAN, with VLAN 20 (Malware) and VLAN 50 (IoT) having the highest isolation scores" style="width:100%;max-width:560px;background:transparent">
+<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Horizontal bar chart showing isolation level by VLAN, with VLAN 20 (Malware) and VLAN 50 (IoT) having the highest isolation scores" style="width:100%;max-width:600px;background:transparent">
   <title>VLAN Isolation Level by Segment</title>
   <style>
     .label { font: 13px 'Fira Code', monospace; fill: #a0aec0; }
@@ -117,44 +117,44 @@ Here's how isolation levels break down across my VLANs — higher scores mean mo
     .bar-10 { fill: #2563eb; }
     .grid   { stroke: #2d3748; stroke-width: 1; }
   </style>
-  <!-- Grid lines -->
-  <line x1="140" y1="20" x2="140" y2="270" class="grid"/>
-  <line x1="220" y1="20" x2="220" y2="270" class="grid"/>
-  <line x1="300" y1="20" x2="300" y2="270" class="grid"/>
-  <line x1="380" y1="20" x2="380" y2="270" class="grid"/>
-  <line x1="460" y1="20" x2="460" y2="270" class="grid"/>
-  <line x1="540" y1="20" x2="540" y2="270" class="grid"/>
+  <!-- Grid lines: bar area 165–575, each unit = 41px -->
+  <line x1="165" y1="20" x2="165" y2="270" class="grid"/>
+  <line x1="247" y1="20" x2="247" y2="270" class="grid"/>
+  <line x1="329" y1="20" x2="329" y2="270" class="grid"/>
+  <line x1="411" y1="20" x2="411" y2="270" class="grid"/>
+  <line x1="493" y1="20" x2="493" y2="270" class="grid"/>
+  <line x1="575" y1="20" x2="575" y2="270" class="grid"/>
   <!-- Axis labels -->
-  <text x="140" y="285" text-anchor="middle" class="axis">0</text>
-  <text x="220" y="285" text-anchor="middle" class="axis">2</text>
-  <text x="300" y="285" text-anchor="middle" class="axis">4</text>
-  <text x="380" y="285" text-anchor="middle" class="axis">6</text>
-  <text x="460" y="285" text-anchor="middle" class="axis">8</text>
-  <text x="540" y="285" text-anchor="middle" class="axis">10</text>
-  <!-- VLAN 20 -->
-  <text x="130" y="47" text-anchor="end" class="label">VLAN 20 / Malware</text>
-  <rect x="140" y="33" width="400" height="20" class="bar-20" rx="2"/>
-  <text x="548" y="47" class="value">10</text>
-  <!-- VLAN 50 -->
-  <text x="130" y="87" text-anchor="end" class="label">VLAN 50 / IoT</text>
-  <rect x="140" y="73" width="360" height="20" class="bar-50" rx="2"/>
-  <text x="508" y="87" class="value">9</text>
-  <!-- VLAN 40 -->
-  <text x="130" y="127" text-anchor="end" class="label">VLAN 40 / Servers</text>
-  <rect x="140" y="113" width="280" height="20" class="bar-40" rx="2"/>
-  <text x="428" y="127" class="value">7</text>
-  <!-- VLAN 99 -->
-  <text x="130" y="167" text-anchor="end" class="label">VLAN 99 / MGMT</text>
-  <rect x="140" y="153" width="240" height="20" class="bar-99" rx="2"/>
-  <text x="388" y="167" class="value">6</text>
-  <!-- VLAN 30 -->
-  <text x="130" y="207" text-anchor="end" class="label">VLAN 30 / Homelab</text>
-  <rect x="140" y="193" width="160" height="20" class="bar-30" rx="2"/>
-  <text x="308" y="207" class="value">4</text>
-  <!-- VLAN 10 -->
-  <text x="130" y="247" text-anchor="end" class="label">VLAN 10 / Home</text>
-  <rect x="140" y="233" width="80" height="20" class="bar-10" rx="2"/>
-  <text x="228" y="247" class="value">2</text>
+  <text x="165" y="285" text-anchor="middle" class="axis">0</text>
+  <text x="247" y="285" text-anchor="middle" class="axis">2</text>
+  <text x="329" y="285" text-anchor="middle" class="axis">4</text>
+  <text x="411" y="285" text-anchor="middle" class="axis">6</text>
+  <text x="493" y="285" text-anchor="middle" class="axis">8</text>
+  <text x="575" y="285" text-anchor="middle" class="axis">10</text>
+  <!-- VLAN 20: score 10 → 410px -->
+  <text x="155" y="47" text-anchor="end" class="label">VLAN 20 / Malware</text>
+  <rect x="165" y="33" width="410" height="20" class="bar-20" rx="2"/>
+  <text x="583" y="47" class="value">10</text>
+  <!-- VLAN 50: score 9 → 369px -->
+  <text x="155" y="87" text-anchor="end" class="label">VLAN 50 / IoT</text>
+  <rect x="165" y="73" width="369" height="20" class="bar-50" rx="2"/>
+  <text x="542" y="87" class="value">9</text>
+  <!-- VLAN 40: score 7 → 287px -->
+  <text x="155" y="127" text-anchor="end" class="label">VLAN 40 / Servers</text>
+  <rect x="165" y="113" width="287" height="20" class="bar-40" rx="2"/>
+  <text x="460" y="127" class="value">7</text>
+  <!-- VLAN 99: score 6 → 246px -->
+  <text x="155" y="167" text-anchor="end" class="label">VLAN 99 / MGMT</text>
+  <rect x="165" y="153" width="246" height="20" class="bar-99" rx="2"/>
+  <text x="419" y="167" class="value">6</text>
+  <!-- VLAN 30: score 4 → 164px -->
+  <text x="155" y="207" text-anchor="end" class="label">VLAN 30 / Homelab</text>
+  <rect x="165" y="193" width="164" height="20" class="bar-30" rx="2"/>
+  <text x="337" y="207" class="value">4</text>
+  <!-- VLAN 10: score 2 → 82px -->
+  <text x="155" y="247" text-anchor="end" class="label">VLAN 10 / Home</text>
+  <rect x="165" y="233" width="82" height="20" class="bar-10" rx="2"/>
+  <text x="255" y="247" class="value">2</text>
 </svg>
 <figcaption style="font-size:0.8em;color:#718096;margin-top:4px">Isolation score by segment (0 = open, 10 = fully isolated). Original data from the lab's OPNsense firewall policy.</figcaption>
 </figure>
