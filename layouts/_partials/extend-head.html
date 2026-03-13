@@ -14,7 +14,7 @@
 {{- else if .Params.cover -}}
   {{- $ogImage = .Params.cover | absURL -}}
 {{- else -}}
-  {{- $ogImage = "/assets/github_profile.png" | absURL -}}
+  {{- $ogImage = .Site.Params.author.image | absURL -}}
 {{- end -}}
 {{- $ogTitle := cond .IsHome .Site.Title .Title -}}
 {{- $ogDesc := .Params.description | default .Site.Params.description | default "" -}}
