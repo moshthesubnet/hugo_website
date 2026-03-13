@@ -1,0 +1,636 @@
+{
+  "name": "Homelab Topology Docs Pipeline",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "b834351c-b3fa-4b51-adca-20b4f337e546",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://10.0.99.1:440/api/diagnostics/interface/getInterfaceConfig",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "id": "cbcf77c3-c25c-41bd-89f3-856643539054",
+      "name": "OPNsense: Get Interfaces",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        32,
+        -288
+      ],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "ty1SW3T6YsvvyLx1",
+          "name": "OPNsense API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://10.0.99.1:440/api/firewall/alias/searchItem",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "id": "458b34e9-fbbc-416c-b563-44d4212f79e0",
+      "name": "OPNsense: Get Aliases",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        32,
+        -80
+      ],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "ty1SW3T6YsvvyLx1",
+          "name": "OPNsense API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://10.0.99.1:440/api/routes/routes/searchroute",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "id": "cff68cda-9f6e-4eb4-851d-63a7d52cc9b0",
+      "name": "OPNsense: Get Routes",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        32,
+        112
+      ],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "ty1SW3T6YsvvyLx1",
+          "name": "OPNsense API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://10.0.99.1:440/api/dnsmasq/leases/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "id": "2de21fba-49e0-4d9e-bb6a-dd02f878fec6",
+      "name": "OPNsense: Get DHCP Leases",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        32,
+        320
+      ],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "ty1SW3T6YsvvyLx1",
+          "name": "OPNsense API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const state = {\n  collected_at: new Date().toISOString(),\n  source: 'opnsense',\n  data: {\n    interfaces: {},\n    aliases: {},\n    routes: {},\n    dhcp_leases: {}\n  }\n};\n\ntry { state.data.interfaces = $('OPNsense: Get Interfaces').first().json; } catch(e) {}\ntry { state.data.aliases = $('OPNsense: Get Aliases').first().json; } catch(e) {}\ntry { state.data.routes = $('OPNsense: Get Routes').first().json; } catch(e) {}\ntry { state.data.dhcp_leases = $('OPNsense: Get DHCP Leases').first().json; } catch(e) {}\n\nreturn [{ json: state }];"
+      },
+      "id": "348c9ee8-d4e8-405c-bd22-e5b51980162f",
+      "name": "Build State Object",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        16
+      ]
+    },
+    {
+      "parameters": {
+        "fileSelector": "/vault/homelab/topology/devices/opnsense-state.json",
+        "options": {}
+      },
+      "id": "114f4d7d-b9d5-41f0-8957-01191ab613b1",
+      "name": "Read Previous State",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        608,
+        272
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Compare current state with previous state to find changes\nconst current = $('Build State Object').first().json;\nlet previous = null;\n\ntry {\n  const prevData = $('Read Previous State').first();\n  if (prevData && prevData.json && prevData.json.data) {\n    previous = prevData.json;\n  }\n} catch (e) {\n  // No previous state exists, treat everything as new\n}\n\nconst diff = {\n  has_changes: false,\n  is_first_run: !previous,\n  changes: [],\n  current_state: current,\n  previous_collected_at: previous?.collected_at || null\n};\n\nif (!previous) {\n  diff.has_changes = true;\n  diff.changes.push('Initial topology scan — no previous state found');\n} else {\n  // Compare interfaces\n  const currIfaces = JSON.stringify(current.data.interfaces);\n  const prevIfaces = JSON.stringify(previous.data.interfaces);\n  if (currIfaces !== prevIfaces) {\n    diff.has_changes = true;\n    diff.changes.push('Interface configuration changed');\n  }\n\n  // Compare aliases\n  const currAliases = JSON.stringify(current.data.aliases);\n  const prevAliases = JSON.stringify(previous.data.aliases);\n  if (currAliases !== prevAliases) {\n    diff.has_changes = true;\n    diff.changes.push('Firewall aliases changed');\n  }\n\n  // Compare routes\n  const currRoutes = JSON.stringify(current.data.routes);\n  const prevRoutes = JSON.stringify(previous.data.routes);\n  if (currRoutes !== prevRoutes) {\n    diff.has_changes = true;\n    diff.changes.push('Routing table changed');\n  }\n\n  // Compare DHCP\n  const currDhcp = JSON.stringify(current.data.dhcp_leases);\n  const prevDhcp = JSON.stringify(previous.data.dhcp_leases);\n  if (currDhcp !== prevDhcp) {\n    diff.has_changes = true;\n    diff.changes.push('DHCP leases changed');\n  }\n}\n\nreturn [{ json: diff }];"
+      },
+      "id": "137bfbee-77ad-44d5-9b6e-3e38afe58b0f",
+      "name": "Diff: Detect Changes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        848,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.has_changes }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              },
+              "id": "965052e6-a6a1-4723-80bc-4849e379222c"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "80b8db96-1fdd-4ca8-9a1c-78f4f226e074",
+      "name": "Changes Detected?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.1,
+      "position": [
+        1104,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build the prompt for Claude Code\nconst diff = $('Diff: Detect Changes').first().json;\nconst state = diff.current_state;\n\nconst prompt = `You are a network documentation assistant for a homelab environment.\n\nHere is the current infrastructure state collected from OPNsense:\n\n\\`\\`\\`json\n${JSON.stringify(state.data, null, 2)}\n\\`\\`\\`\n\nDetected changes since last scan:\n${diff.changes.map(c => '- ' + c).join('\\n')}\n\nPlease generate TWO outputs separated by the delimiter ===SPLIT===\n\nOUTPUT 1: A YAML file (opnsense.yml) representing the current OPNsense state in a NetBox-compatible schema. Include:\n- Device metadata (name, role, site, device_type)\n- All interfaces with their IPs, subnets, VLAN assignments, and status\n- Firewall aliases organized by type\n- Static routes\n- Active DHCP scopes with ranges\n\nOUTPUT 2: A Markdown document (opnsense.md) for the Obsidian vault. Include:\n- YAML frontmatter with tags, date, and aliases\n- Human-readable summary of the OPNsense configuration\n- Interface table (name, IP, VLAN, description)\n- Notable firewall aliases\n- DHCP scope summary\n- A \"Changes\" section noting what changed in this scan\n- Use wiki-links [[like this]] for cross-references to other homelab notes\n\nKeep the tone concise and technical. This is a homelab run by a network engineering student.`;\n\n// Escape for shell - replace single quotes\nconst escaped = prompt.replace(/'/g, \"'\\\\''\" );\n\nreturn [{ json: { prompt: escaped } }];"
+      },
+      "id": "06f95787-7cfa-4d84-8ef9-7d7a2c582759",
+      "name": "Build Claude Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        16
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "command": "=/home/skyler/.local/bin/claude -p --dangerously-skip-permissions '{{ $json.prompt }}'",
+        "cwd": "/home"
+      },
+      "id": "f91ec139-feeb-4c08-922e-7a043294b5fa",
+      "name": "SSH: Claude Code",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        16
+      ],
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "9OjN61gsS195mdjk",
+          "name": "Claude Code VM SSH"
+        }
+      },
+      "notes": "CONFIGURE: Update SSH credentials to use key-based auth. Set the host to your Claude Code VM IP."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Split Claude's response into YAML and Markdown\nconst response = $json.stdout || $json.stderr || '';\nconst parts = response.split('===SPLIT===');\n\nconst yamlContent = (parts[0] || '').trim();\nconst mdContent = (parts[1] || '').trim();\n\n// Clean up any markdown code fences Claude might add\nconst cleanYaml = yamlContent\n  .replace(/^```ya?ml\\n?/gm, '')\n  .replace(/^```\\n?/gm, '')\n  .trim();\n\nconst cleanMd = mdContent\n  .replace(/^```markdown\\n?/gm, '')\n  .replace(/^```\\n?/gm, '')\n  .trim();\n\nreturn [\n  { json: { type: 'yaml', content: cleanYaml, filename: 'opnsense.yml' } },\n  { json: { type: 'markdown', content: cleanMd, filename: 'opnsense.md' } }\n];"
+      },
+      "id": "d16d88ce-b2a2-4f43-b572-1c3f871d7dd9",
+      "name": "Parse Claude Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1856,
+        16
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate changelog entry\nconst diff = $('Diff: Detect Changes').first().json;\nconst date = new Date().toISOString().split('T')[0];\nconst time = new Date().toISOString().split('T')[1].split('.')[0];\n\nconst entry = `\\n## ${date} ${time}\\n\\n${diff.changes.map(c => '- ' + c).join('\\n')}\\n`;\n\nreturn [{ json: { entry } }];"
+      },
+      "id": "7af6f52d-cd04-4aaf-bc2a-814c77a9723e",
+      "name": "Build Changelog Entry",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1888,
+        336
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "e0670d44-1188-4dec-97f1-7ea725088b30",
+      "name": "No Changes — Skip",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const fs = require('fs');\nconst state = $('Build State Object').first().json;\n\nfs.writeFileSync(\n  '/vault/homelab/topology/devices/opnsense-state.json',\n  JSON.stringify(state, null, 2),\n  'utf8'\n);\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2192,
+        176
+      ],
+      "id": "dfbd4aec-1cd6-4a29-ab18-44bf25810dfe",
+      "name": "Save Current State"
+    },
+    {
+      "parameters": {
+        "jsCode": "const fs = require('fs');\nconst entry = $('Build Changelog Entry').first().json.entry;\n\nfs.appendFileSync('/vault/homelab/topology/changelog.md', entry, 'utf8');\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2192,
+        336
+      ],
+      "id": "6dc48765-0c92-4c5b-979a-233fb9ab8809",
+      "name": "Append Changelog"
+    },
+    {
+      "parameters": {
+        "jsCode": "const fs = require('fs');\n\nfor (const item of $input.all()) {\n  const filePath = `/vault/homelab/topology/devices/${item.json.filename}`;\n  fs.writeFileSync(filePath, item.json.content, 'utf8');\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2192,
+        16
+      ],
+      "id": "ab0fbbee-87e1-4ec3-9020-5323a72f61f1",
+      "name": "Write to Vault"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        240,
+        -192
+      ],
+      "id": "114d5fd1-c724-45ae-bad0-e6900ad687f5",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        240,
+        208
+      ],
+      "id": "8fa19a23-3593-45a6-b33c-543c1b6b9317",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        448,
+        16
+      ],
+      "id": "b644c628-8acc-46c3-8c1b-e28263ea1fef",
+      "name": "Merge3"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtHour": 6
+            }
+          ]
+        }
+      },
+      "id": "c8320088-a171-4e79-9af6-e2dba2c72582",
+      "name": "Weekly 6am Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -320,
+        -96
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "OPNsense: Get Interfaces",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "OPNsense: Get Aliases",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "OPNsense: Get Routes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "OPNsense: Get DHCP Leases",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OPNsense: Get Interfaces": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OPNsense: Get Aliases": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "OPNsense: Get Routes": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OPNsense: Get DHCP Leases": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Build State Object": {
+      "main": [
+        [
+          {
+            "node": "Diff: Detect Changes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read Previous State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Previous State": {
+      "main": [
+        [
+          {
+            "node": "Diff: Detect Changes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Diff: Detect Changes": {
+      "main": [
+        [
+          {
+            "node": "Changes Detected?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Changes Detected?": {
+      "main": [
+        [
+          {
+            "node": "Build Claude Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Changes — Skip",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Claude Prompt": {
+      "main": [
+        [
+          {
+            "node": "SSH: Claude Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SSH: Claude Code": {
+      "main": [
+        [
+          {
+            "node": "Parse Claude Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Claude Response": {
+      "main": [
+        [
+          {
+            "node": "Build Changelog Entry",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Write to Vault",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Save Current State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Changelog Entry": {
+      "main": [
+        [
+          {
+            "node": "Append Changelog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "Build State Object",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Weekly 6am Trigger": {
+      "main": [
+        [
+          {
+            "node": "OPNsense: Get Interfaces",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "OPNsense: Get Aliases",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "OPNsense: Get Routes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "OPNsense: Get DHCP Leases",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "dbd38d4c-bce8-4e03-9f5d-f42598c4d974",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4d30e0d0c5fac11c3d7b35f87cb845a675bd85a1f83d9a7d7ada46664fe78d19"
+  },
+  "id": "uaeMVEjTOzZQ3VBN",
+  "tags": [
+    {
+      "updatedAt": "2026-03-04T22:32:27.801Z",
+      "createdAt": "2026-03-04T22:32:27.801Z",
+      "id": "Q0yqzRVQf1vdYk2J",
+      "name": "documentation"
+    },
+    {
+      "updatedAt": "2026-03-04T22:32:27.798Z",
+      "createdAt": "2026-03-04T22:32:27.798Z",
+      "id": "rFwlQXBkDZcGsIHj",
+      "name": "automation"
+    },
+    {
+      "updatedAt": "2026-03-04T22:32:27.803Z",
+      "createdAt": "2026-03-04T22:32:27.803Z",
+      "id": "z4iukTExLK1mlORR",
+      "name": "homelab"
+    }
+  ]
+}
