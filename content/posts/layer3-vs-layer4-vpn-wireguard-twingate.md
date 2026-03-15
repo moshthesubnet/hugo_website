@@ -85,7 +85,7 @@ AllowedIPs = 10.0.0.0/24
 PersistentKeepalive = 25
 ```
 
-When I connect from a coffee shop, my laptop gets `10.0.0.2` and can reach `10.0.0.1` (OPNsense), `10.0.0.10` (web server), `10.0.0.20` (Postgres), `10.0.0.30` (NAS), the management interface, all of it. That's the correct behavior for an admin who needs full network visibility. I'm the trusted user.
+When I connect from a coffee shop, my laptop gets `10.0.0.2` and could reach something like `10.0.0.1` (OPNsense), `10.0.0.10` (if I had a web server there), `10.0.0.20` (if I had a Postgres instance there), `10.0.0.30` (if I had a NAS there), the management interface, all of it. That's the correct behavior for an admin who needs full network visibility. I'm the trusted user.
 
 But think about what that config hands to a contractor. They're inside your `/24`. Everything that answers is reachable from their machine. WireGuard authenticated them; your firewall rules determine what they can actually do with that access — and if the rules are incomplete, missing, or wrong, the whole subnet is open.
 
@@ -115,9 +115,9 @@ The model is structurally different from a VPN at every step: the client authent
 
 ### TwinGate in My Lab — The Contractor Access Use Case
 
-I have a Postgres instance at `10.0.0.20:5432`. With TwinGate, I ran the connector on my network and defined exactly one resource: that host, that port. A contractor who needs database access gets TwinGate credentials.
+Say I had a Postgres instance at `10.0.0.20:5432`. With TwinGate, I ran the connector on my network and defined exactly one resource: that host, that port. A contractor who needs database access gets TwinGate credentials.
 
-They can connect to port 5432. They cannot ping `10.0.0.1`. They cannot see `10.0.0.10`. The web server, the NAS, the management interfaces — none of it exists from their perspective, because the connector hasn't brokered access to any of it. The network topology is invisible.
+They can connect to port 5432. They cannot ping `10.0.0.1`. They cannot reach anything else — if I had a web server at `10.0.0.10`, a NAS, management interfaces — none of it exists from their perspective, because the connector hasn't brokered access to any of it. The network topology is invisible.
 
 The first time I configured TwinGate, I tried to SSH to the host running the Postgres connector to verify it was working. Couldn't connect. Not a firewall issue, not a routing problem — the connector only proxies resources explicitly defined in the admin panel. I hadn't defined `host:22`. That was disorienting for about sixty seconds, then it was the clearest architectural lesson any tool has given me. Not a bug. That's the whole point.
 
