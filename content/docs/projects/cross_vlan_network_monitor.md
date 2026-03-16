@@ -347,4 +347,5 @@ start.sh            Bare-metal startup wrapper (configures HOST_IP, PORT, SYSLOG
 
 ## Related
 
+- [GitHub: moshthesubnet/netcensus](https://github.com/moshthesubnet/netcensus) — source code
 - [Blog post: My Router Already Knew. I Just Wasn't Asking.](/posts/cross-vlan-network-monitor/) — the full writeup with reasoning and lessons learned
