@@ -278,6 +278,8 @@ Microsoft's 2024 Digital Defense Report found over 90% of ransomware attacks inv
 
 *Python 3.12, FastAPI 0.115, Ubuntu VM, HOMELAB VLAN. The only outage was a dropped firewall rule blocking the scanner from the OPNsense management IP — which the scanner noticed before I did.*
 
+*Source code: [moshthesubnet/netcensus on GitHub](https://github.com/moshthesubnet/netcensus)*
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
