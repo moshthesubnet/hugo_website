@@ -5,12 +5,12 @@ draft: false
 description: "VPN vs VLAN explained at the OSI layer level — what each protects, what each can't do, and how to run both in a homelab. With a real 7-VLAN + WireGuard setup."
 summary: "VPN and VLAN share two words but solve completely different problems. Here's what each one does, why you can't swap one for the other, and how I run both in my homelab."
 tags: ["networking", "vpn", "vlan", "wireguard", "opnsense", "homelab", "ccna", "security"]
-images: ["https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80"]
+images: ["https://images.unsplash.com/photo-1681101378971-5f5dc4e5000e?w=1200&h=630&fit=crop&q=80&fm=webp"]
 ---
 
 {{< figure
-  src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80"
-  alt="Dark server rack with dense orange and teal fiber optic cables glowing against a black background"
+  src="https://images.unsplash.com/photo-1681101378971-5f5dc4e5000e?w=1200&h=630&fit=crop&q=80&fm=webp"
+  alt="Abstract glowing network of vibrant connections against a dark background representing network topology and security"
   caption="Two acronyms. Four matching letters. Completely different jobs."
 >}}
 

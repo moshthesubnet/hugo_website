@@ -5,9 +5,9 @@ lastUpdated: "2026-03-11"
 draft: false
 description: "My OPNsense VM froze during a 3am vzdump snapshot, severed all VLAN routing, and trapped Proxmox in a circular dependency. Here's how a 30-line bash script replaced a full VM backup — and why that was the right call."
 summary: "Scheduled vzdump backup → OPNsense snapshot freeze → VLAN routing severed → Proxmox can't reach backup storage. A circular dependency baked into my infrastructure. This is how I broke the loop."
-coverImage: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80"
-coverImageAlt: "Dark server rack cabinets with tangled orange and teal fiber cables and green LED status indicators"
-ogImage: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80"
+coverImage: "https://images.unsplash.com/photo-1718241905495-01e4e42c3eef?w=1200&h=630&fit=crop&q=80&fm=webp"
+coverImageAlt: "Dark server room with rows of rack-mounted servers illuminated by LED indicators in a data center"
+ogImage: "https://images.unsplash.com/photo-1718241905495-01e4e42c3eef?w=1200&h=630&fit=crop&q=80&fm=webp"
 tags:
   - proxmox
   - opnsense
@@ -210,7 +210,7 @@ The script validates its own output: if the file doesn't start with `<?xml`, it 
       },
       "image": {
         "@type": "ImageObject",
-        "url": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80",
+        "url": "https://images.unsplash.com/photo-1718241905495-01e4e42c3eef?w=1200&h=630&fit=crop&q=80&fm=webp",
         "width": 1200,
         "height": 630,
         "caption": "Dark server rack cabinets with tangled orange and teal fiber cables and green LED status indicators"

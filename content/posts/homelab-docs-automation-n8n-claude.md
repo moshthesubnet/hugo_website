@@ -5,9 +5,9 @@ lastmod: 2026-03-06
 draft: false
 description: "Homelab docs go stale fast. My n8n pipeline polls OPNsense weekly, diffs state, and triggers Claude Code via SSH to rewrite docs automatically. Five gotchas that cost real time."
 summary: "OPNsense REST API → n8n on DockerHost1 → Claude Code VM via SSH → NetBox YAML + Obsidian Markdown → Syncthing vault on TrueNAS. A documentation pipeline that updates itself, plus the five gotchas that nearly broke it."
-cover: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80"
-coverAlt: "Dense network cables snake through dark server rack enclosures lit by green LEDs in a data center."
-ogImage: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80"
+cover: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&h=630&fit=crop&q=80&fm=webp"
+coverAlt: "Green binary code and data streams cascading on dark background representing automation pipelines and data flow"
+ogImage: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&h=630&fit=crop&q=80&fm=webp"
 tags:
   - homelab
   - n8n
@@ -20,7 +20,7 @@ tags:
   - documentation
 ---
 
-![Dense network cables snake through dark server rack enclosures lit by green LEDs in a data center.](https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80)
+![Green binary code and data streams cascading on dark background representing automation pipelines and data flow](https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&h=630&fit=crop&q=80&fm=webp)
 *Photo by Taylor Vick on Unsplash*
 
 Homelab documentation has a half-life. You write it once, it's accurate for maybe 48 hours, then you add a VLAN, rename a firewall alias, move a VM, and quietly close the Obsidian tab without updating anything. Six months of weekend tinkering later, you have a vault full of beautiful lies.
@@ -314,7 +314,7 @@ Yes, it's a persistent Ubuntu 24.04 VM on Proxmox in the Lab VLAN — 2 vCPUs, 4
       },
       "image": {
         "@type": "ImageObject",
-        "url": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80",
+        "url": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&h=630&fit=crop&q=80&fm=webp",
         "width": 1200,
         "height": 630,
         "caption": "Dense network cables in a dark server rack lit by green LEDs"
