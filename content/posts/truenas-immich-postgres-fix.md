@@ -1,13 +1,13 @@
 ---
-title: "How to Fix the Immich 2.6 Postgres Upgrade Failure on TrueNAS (Without Losing Your Data)"
+title: "Fix Immich 2.6 Postgres Upgrade Failure on TrueNAS"
 date: 2026-03-20
 lastmod: 2026-03-20
 draft: false
 description: "Immich 2.6 dropped PG15 binaries from pgvecto, breaking every TrueNAS install on Postgres 15. Recover 17,512+ assets with this pg_dump → pg_restore fix."
 summary: "Immich 2.6.x dropped PG15 binaries from pgvecto — instant brick on every TrueNAS install still running Postgres 15. Your data is untouched. Here's the pg_dump → pg_restore path out, including the rename trap that costs you an hour."
-coverImage: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80"
-coverImageAlt: "Dense wall of color-coded ethernet cables running into a data center patch panel, representing server infrastructure and network complexity"
-ogImage: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80"
+coverImage: "https://images.unsplash.com/photo-1597852074816-d933c7d2b988?w=1200&h=630&fit=crop&q=80&fm=webp"
+coverImageAlt: "Multiple hard drive disks from a network attached storage array representing database storage and data recovery"
+ogImage: "https://images.unsplash.com/photo-1597852074816-d933c7d2b988?w=1200&h=630&fit=crop&q=80&fm=webp"
 tags:
   - immich
   - truenas
@@ -30,8 +30,8 @@ This post covers exactly what broke, the one mistake that costs an extra hour du
 {{< /alert >}}
 
 {{< figure
-  src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80"
-  alt="Dense wall of color-coded ethernet cables running into a data center patch panel — the kind of infrastructure Immich runs on in a TrueNAS homelab"
+  src="https://images.unsplash.com/photo-1597852074816-d933c7d2b988?w=1200&h=630&fit=crop&q=80&fm=webp"
+  alt="Multiple hard drive disks from a network attached storage array — the kind of storage Immich depends on in a TrueNAS homelab"
 >}}
 
 ## What Caused the Immich 2.6 Update to Break on TrueNAS?
@@ -51,7 +51,7 @@ The critical thing: **the upgrade fails before it modifies any data.** Your Post
 <!-- [PERSONAL EXPERIENCE] -->
 What this looks like in the TrueNAS Apps UI: Immich shows as failed. The app lifecycle log shows the pgvecto container pulling successfully (images already cached from a previous pull), then `pgvecto_upgrade` starting and exiting code 1 in under a second. Nothing after that. The main Immich server container doesn't even attempt to start.
 
-> Immich 2.6.x enforces a mandatory Postgres 15-to-18 major version upgrade on TrueNAS Community Edition installs. The new pgvecto container image ships without PG15 binaries, causing `pg_upgrade` to exit code 1 before modifying any data. A `pg_dump` → `pg_restore` procedure recovered all 17,512 assets from an 87MB backup in under 30 minutes, with face tags, albums, and shared links intact. ([truenas/apps issue #4628](https://github.com/truenas/apps))
+> **First-hand summary for anyone linking directly to this section:** Immich 2.6.x enforces a mandatory Postgres 15-to-18 major version upgrade on TrueNAS Community Edition installs. The new pgvecto container image ships without PG15 binaries, causing `pg_upgrade` to exit code 1 before modifying any data. A `pg_dump` → `pg_restore` procedure recovered all 17,512 assets from an 87MB backup in under 30 minutes, with face tags, albums, and shared links intact. ([truenas/apps issue #4628](https://github.com/truenas/apps/issues/4628))
 
 <figure>
   <svg viewBox="0 0 560 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Area line chart showing Immich GitHub star growth from 2,000 in 2022 to 95,300 stars in March 2026" style="width:100%;max-width:560px;background:transparent;overflow:visible">
@@ -136,7 +136,7 @@ Here's the log, captured live on the second failed start after the rename:
 The `.bak` suffix is completely invisible to the upgrade script. The only way to make it initialize fresh PG18 is to move the PG15 directory **outside the `pgData` mount point entirely** — not rename it within `pgData`, not suffix it, move it one full level up.
 
 {{< figure
-  src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=1200&h=630&fit=crop&q=80"
+  src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=1200&h=630&fit=crop&q=80&fm=webp"
   alt="Dark monitor displaying terminal command output with colorful syntax highlighting — the environment where this entire fix runs"
 >}}
 
@@ -265,7 +265,7 @@ Hold off on that until you've confirmed the UI looks correct. Keep the ZFS snaps
 ## What If You Already Deleted pgData?
 
 {{< figure
-  src="https://images.unsplash.com/photo-1591405351990-4726e331f141?w=1200&h=630&fit=crop&q=80"
+  src="https://images.unsplash.com/photo-1591405351990-4726e331f141?w=1200&h=630&fit=crop&q=80&fm=webp"
   alt="Close-up of a silver hard disk drive platter — a reminder that physical data recovery is far harder than a ZFS rollback taken before the incident"
 >}}
 
@@ -279,17 +279,17 @@ Your actual photo files almost certainly live on a separate dataset and should b
 
 If you took a ZFS snapshot before the update, you can roll back. In TrueNAS: **Datasets → [dataset] → Snapshots → [snapshot name] → Rollback**. The snapshot is the fastest path to a full recovery. This is exactly why that step isn't optional.
 
-## How to Prevent This on the Next Update
+## How to Prevent This on the Next TrueNAS App Update
 
 **97% of self-hosters use containerization** for their homelab apps — Docker Compose accounts for 83.2% of setups alone ([Self-Hosted Survey 2024](https://selfhosted-survey-2024.deployn.de/)). Container-based app updates are fast and convenient, but they can silently package breaking infrastructure changes. A Postgres major version jump isn't obvious from a UI that just says "Update available."
 
-Three things that make this painless on the next go-around:
+In my experience maintaining TrueNAS app deployments, three habits make the difference between a planned migration and an incident recovery:
 
-**Snapshot before every app update.** TrueNAS makes it two clicks. The Datasets panel has "Add Snapshot" on every dataset. Do it recursively on the parent to catch everything in one shot. ZFS snapshots are instant and storage-efficient — there's no cost to doing it every time.
+**First: snapshot before every app update.** TrueNAS makes it two clicks. The Datasets panel has "Add Snapshot" on every dataset. Do it recursively on the parent to catch everything in one shot. ZFS snapshots are instant and storage-efficient — there's no cost to doing it every time.
 
-**Read the release notes on version bumps.** The jump from 2.5.x to 2.6.x included a mandatory Postgres major version migration. It's in the changelog. 90 seconds of reading before hitting Update would have turned this into a planned procedure instead of an incident.
+**Beyond snapshots, read the release notes on version bumps.** The jump from 2.5.x to 2.6.x included a mandatory Postgres major version migration. It's in the changelog. 90 seconds of reading before hitting Update would have turned this into a planned procedure instead of an incident.
 
-**Run a monthly `pg_dump`.** The `-Fc` flag produces a compressed, restorable backup. Store it outside your `pgData` volume — on your photo dataset, or a separate backup dataset. It takes one line in a cron job. For a full automation approach, the same pattern I used for [OPNsense config backups](/posts/opnsense-backup-incident/) applies cleanly here.
+**Finally, run a monthly `pg_dump`.** The `-Fc` flag produces a compressed, restorable backup. Store it outside your `pgData` volume — on your photo dataset, or a separate backup dataset. It takes one line in a cron job. For a full automation approach, the same webhook and scheduling patterns from [Automating Homelab Documentation with n8n and Claude Code](/posts/homelab-docs-automation-n8n-claude/) apply cleanly here — replace the doc generation step with a `pg_dump` exec. I also documented the same backup-before-the-thing-you're-backing-up-depends-on problem with [OPNsense config backups](/posts/opnsense-backup-incident/).
 
 Privacy is the second-most-cited reason people run their own infrastructure at home — 34.7% of self-hosters name it as a primary motivation ([Self-Hosted Survey 2024](https://selfhosted-survey-2024.deployn.de/)). Self-hosting your photo library instead of handing it to Google means you own the failure modes. The backup is the cost of that ownership.
 
@@ -324,7 +324,7 @@ Privacy is the second-most-cited reason people run their own infrastructure at h
 </figure>
 
 {{< figure
-  src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&h=630&fit=crop&q=80"
+  src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&h=630&fit=crop&q=80&fm=webp"
   alt="Multiple monitors displaying code with blue and red ambient lighting — a homelab workstation, the environment where these incidents get diagnosed"
 >}}
 
@@ -334,7 +334,7 @@ Privacy is the second-most-cited reason people run their own infrastructure at h
 
 ### Why doesn't the new pgvecto image just include the PG15 binaries?
 
-Shipping both PG15 and PG18 binaries in the same container image increases image size and maintenance burden. The expectation was that `pg_upgrade` would handle in-place migration from the data directory — a reasonable assumption. But the toolchain changes in the new image made that impossible for existing Postgres 15 installs without an intermediate step. The specific issue is tracked in the [truenas/apps GitHub repository at issue #4628](https://github.com/truenas/apps). As of March 20, 2026, the community is actively working through variations of this fix.
+Shipping both PG15 and PG18 binaries in the same container image increases image size and maintenance burden. The expectation was that `pg_upgrade` would handle in-place migration from the data directory — a reasonable assumption. But the toolchain changes in the new image made that impossible for existing Postgres 15 installs without an intermediate step. The specific issue is tracked in the [truenas/apps GitHub repository at issue #4628](https://github.com/truenas/apps/issues/4628). As of March 20, 2026, the community is actively working through variations of this fix.
 
 ### What exactly does the pgvecto_upgrade container do?
 
@@ -352,7 +352,7 @@ That error appears when you try to update Immich through the TrueNAS Apps UI bef
 
 Yes. `pg_dump -Fc` captures the full database state, including the vector embeddings that power face recognition and smart search. After `pg_restore`, those features work without any reprocessing. Immich may kick off some background jobs automatically after startup — that's normal. Your existing face assignments, people groupings, and tagged memories will be intact.
 
-## Conclusion
+## Takeaways
 
 Immich 2.6 turned a routine app update into a data recovery exercise for a lot of people on March 20, 2026. The root cause was specific — a missing toolchain in a container image — but the fix is straightforward once you understand what actually broke.
 
@@ -362,7 +362,7 @@ The key takeaways:
 - **The rename trap is real.** Moving `15/` to `15.bak/` inside `pgData` doesn't trick the upgrade script — it scans the mount, not the directory name. Move it one level up.
 - **Snapshots before updates.** Every time. Two clicks. The cost of skipping one is a manual library scan and losing all your albums.
 
-If you're watching this issue develop, the community thread at [forums.truenas.com](https://forums.truenas.com/t/immich-app-update-to-2-6-0-fails-with-postress-error/64604) and [truenas/apps issue #4628](https://github.com/truenas/apps) are the places to watch for updates.
+If you're watching this issue develop, the community thread at [forums.truenas.com](https://forums.truenas.com/t/immich-app-update-to-2-6-0-fails-with-postress-error/64604) and [truenas/apps issue #4628](https://github.com/truenas/apps/issues/4628) are the places to watch for updates.
 
 ---
 
@@ -373,7 +373,7 @@ If you're watching this issue develop, the community thread at [forums.truenas.c
     {
       "@type": "BlogPosting",
       "@id": "https://moshthesubnet.com/posts/truenas-immich-postgres-fix/#article",
-      "headline": "How to Fix the Immich 2.6 Postgres Upgrade Failure on TrueNAS (Without Losing Your Data)",
+      "headline": "Fix Immich 2.6 Postgres Upgrade Failure on TrueNAS",
       "description": "Immich 2.6 dropped PG15 binaries from pgvecto, breaking every TrueNAS install on Postgres 15. Recover 17,512+ assets with this pg_dump → pg_restore fix.",
       "datePublished": "2026-03-20T00:00:00Z",
       "dateModified": "2026-03-20T00:00:00Z",
@@ -391,7 +391,7 @@ If you're watching this issue develop, the community thread at [forums.truenas.c
       },
       "image": {
         "@type": "ImageObject",
-        "url": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80",
+        "url": "https://images.unsplash.com/photo-1597852074816-d933c7d2b988?w=1200&h=630&fit=crop&q=80&fm=webp",
         "width": 1200,
         "height": 630,
         "caption": "Dense wall of color-coded ethernet cables running into a data center patch panel"
@@ -423,7 +423,7 @@ If you're watching this issue develop, the community thread at [forums.truenas.c
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "How to Fix the Immich 2.6 Postgres Upgrade Failure on TrueNAS",
+          "name": "Fix Immich 2.6 Postgres Upgrade Failure on TrueNAS",
           "item": "https://moshthesubnet.com/posts/truenas-immich-postgres-fix/"
         }
       ]
