@@ -1,7 +1,7 @@
 ---
 title: "Automating Homelab Documentation with n8n and Claude Code"
 date: 2026-03-05
-lastmod: 2026-03-06
+lastmod: 2026-03-23
 draft: false
 description: "Homelab docs go stale fast. My n8n pipeline polls OPNsense weekly, diffs state, and triggers Claude Code via SSH to rewrite docs automatically. Five gotchas that cost real time."
 summary: "OPNsense REST API → n8n on DockerHost1 → Claude Code VM via SSH → NetBox YAML + Obsidian Markdown → Syncthing vault on TrueNAS. A documentation pipeline that updates itself, plus the five gotchas that nearly broke it."
@@ -26,7 +26,7 @@ tags:
 Homelab documentation has a half-life. You write it once, it's accurate for maybe 48 hours, then you add a VLAN, rename a firewall alias, move a VM, and quietly close the Obsidian tab without updating anything. Six months of weekend tinkering later, you have a vault full of beautiful lies.
 
 {{< alert >}}
-**TL;DR:** n8n polls the OPNsense REST API on a weekly schedule, diffs against saved state, and SSHs into a dedicated Claude Code VM on the Lab VLAN when something changes. Updated NetBox YAML and Obsidian Markdown land on NFS-mounted TrueNAS storage and sync everywhere via Syncthing. Zero manual steps. Five gotchas below.
+**TL;DR:** n8n polls the OPNsense REST API on a weekly schedule, diffs against saved state, and SSHs into a dedicated Claude Code VM on the Lab VLAN when something changes. Updated NetBox YAML and Obsidian Markdown are written to TrueNAS storage via SSH from the Claude Code VM and sync everywhere via Syncthing. Zero manual steps. Five gotchas below.
 {{< /alert >}}
 
 [Jump to download ↓](#how-to-import-this-workflow)
@@ -55,8 +55,8 @@ SSH → Claude Code VM — Lab VLAN (10.30.30.0/24)
     ├── generates NetBox-compatible YAML
     └── generates Obsidian Markdown
          │
-         ▼
-    NFS mount → TrueNAS (MGMT VLAN) → Syncthing → Obsidian vault
+         ▼ (base64 SSH writes back from n8n)
+    NFS mount on Claude Code VM → TrueNAS (MGMT VLAN) → Syncthing → Obsidian vault
 ```
 
 ## Why SSH Into Claude Code
@@ -90,35 +90,31 @@ n8n's HTTP Request nodes handle auth with HTTP Basic using the API key and secre
 
 ## Pulling and Diffing Network State
 
-n8n 2.10.3 runs in Docker on DockerHost1 in the Servers VLAN (10.30.40.0/28). The workflow has six stages: a schedule trigger, four parallel HTTP Request nodes, chained Merge nodes to consolidate the results, a Code node that diffs against saved state, an IF node that branches on whether anything changed, and the SSH execution node.
+n8n 2.10.3 runs in Docker on DockerHost1 in the Servers VLAN (10.30.40.0/28). The workflow has six stages: a schedule trigger, four parallel HTTP Request nodes, chained Merge nodes to consolidate the results, a Code node that diffs against saved state, an IF node that branches on whether anything changed, and the SSH execution pipeline.
 
 The parallel API pull nodes each connect to a chain of Merge nodes. n8n Merge nodes only accept two inputs — you discover this the first time you try to fan in four data sources at once. The fix: chain them. Interfaces + Aliases into Merge1, Routes + DHCP into Merge2, then Merge1 + Merge2 into Merge3, which feeds Build State Object. Annoying, functional, expanded in gotcha five.
 
-The diff logic in the Code node:
+The diff logic in the Code node compares each section independently:
 
 ```javascript
-const fs = require('fs');
-const statePath = '/data/homelab-state.json';
-
 const current = $input.all()[0].json;
+const previous = $('Read Previous State').first().json;
 
-let previous = {};
-try {
-  previous = JSON.parse(fs.readFileSync(statePath, 'utf8'));
-} catch (e) {
-  // first run, no saved state
+const sections = ['interfaces', 'aliases', 'routes', 'dhcp_leases'];
+const changes = [];
+
+for (const section of sections) {
+  const curr = JSON.stringify(current[section]);
+  const prev = JSON.stringify(previous[section] || {});
+  if (curr !== prev) changes.push(`${section} changed`);
 }
 
-const changed = JSON.stringify(current) !== JSON.stringify(previous);
-
-if (changed) {
-  fs.writeFileSync(statePath, JSON.stringify(current, null, 2));
-}
-
-return [{ json: { changed, payload: current } }];
+return [{ json: { has_changes: changes.length > 0, changes } }];
 ```
 
-If `changed` is true, the IF node routes to SSH execution. If not, the workflow ends quietly.
+`Read Previous State` is a separate Code node that reads the saved JSON snapshot from the vault via `fs.readFileSync`. State saving happens at the end of the pipeline via SSH — see gotcha three.
+
+If `has_changes` is true, the IF node routes to SSH execution. If not, the workflow ends quietly.
 
 ## Triggering Claude Code Over SSH
 
@@ -159,53 +155,45 @@ GET /api/dhcpv4/leases/search_lease
 
 If you wrote automation against an older OPNsense version, test the endpoint before assuming the schema is identical. The `active_lease` field moved. I was filtering on a key that no longer existed and getting empty results with no error — valid JSON, just not the JSON I expected. The [OPNsense 26.1 release notes](https://docs.opnsense.org/releases/CE_26.1.html) document this under the DHCP section.
 
-### 3. n8n's Write Node Only Accepts Binary — So Skip It
+### 3. n8n Code Nodes Run on n8n's Docker Host — Not on Your Vault Host
 
-n8n 2.10.3's "Read/Write Files from Disk" node doesn't accept plain text. It expects binary. Pass it a string and you get `Property 'data' is missing` with zero indication of what's actually wrong.
+This one cost several runs before I understood what was happening. A Code node in n8n executes JavaScript on the machine running n8n — DockerHost1 in the Servers VLAN. Not on llm-server. Not on the machine where `/mnt/vault1337` is NFS-mounted. Doing `fs.writeFileSync('/mnt/vault1337/homelab/...')` in a Code node writes to DockerHost1's filesystem, where that path doesn't exist. The error: `ENOENT: no such file or directory`.
 
-First instinct: add a "Convert to File" node before every write, set MIME type to `text/plain`, let it produce the binary blob the Write node needs. It works. It also means an extra node per file write, and a workflow that's harder to follow than it needs to be.
+The instinct is to mount the vault on DockerHost1 too. Don't. It means two NFS clients writing to the same paths, more permission surface, and another mount to break. The actual fix: route all vault writes through SSH nodes, targeting the host that already has the vault mounted.
 
-The real fix: unlock the `fs` built-in for Code nodes. Add `NODE_FUNCTION_ALLOW_BUILTIN=fs` to the n8n service in Docker Compose:
+Since `Buffer` isn't available in n8n expression evaluators — only in Code nodes — you can't base64-encode in the SSH command expression directly. The pattern that works:
 
-```yaml
-services:
-  n8n:
-    image: n8nio/n8n:2.10.3
-    environment:
-      - NODE_FUNCTION_ALLOW_BUILTIN=fs
-    group_add:
-      - "3000"
-    volumes:
-      - /mnt/docs:/docs
-```
-
-Then write files directly from a Code node, the same way you would in any Node script:
-
+1. **Code node** — parse Claude's output, pre-encode each file as base64 and attach it to the item JSON:
 ```javascript
-const fs = require('fs');
-fs.writeFileSync('/docs/homelab/topology/opnsense.md', markdownOutput);
-fs.writeFileSync('/docs/homelab/topology/opnsense.yml', yamlOutput);
+const base64Content = Buffer.from(markdownOutput).toString('base64');
+return [{ json: { filename: 'opnsense.md', base64Content } }];
 ```
 
-No Write node. No Convert to File node. The Code node parses Claude's response and writes both files in the same step.
-
-### 4. NFS Permissions: TrueNAS and Container UIDs
-
-The documentation output lands on a TrueNAS dataset in the MGMT VLAN, mounted over NFS, owned by the Syncthing user at UID 568 — a TrueNAS-specific service account UID. The n8n container runs as its own user. Writes fail.
-
-My fix: created a supplementary group on TrueNAS (GID 3000), added it to the dataset ACL with write permissions, then added that GID to the n8n container via `group_add` in Docker Compose:
-
-```yaml
-services:
-  n8n:
-    image: n8nio/n8n:2.10.3
-    group_add:
-      - "3000"
-    volumes:
-      - /mnt/docs:/docs
+2. **SSH node** — decode on the target host using the pre-encoded value:
+```bash
+echo '{{ $json.base64Content }}' | base64 -d > /mnt/vault1337/homelab/topology/devices/opnsense.md
 ```
 
-Make sure your NFS export has `mapall user` set appropriately or that the GID is honored by the export rules. `nfs4_getfacl` is your friend for debugging this.
+No filesystem access required on DockerHost1. The target host handles the write. The base64 encoding sidesteps every shell escaping issue with arbitrary text content.
+
+### 4. NFS Permissions Are Now the SSH Host's Problem
+
+The documentation output lands on a TrueNAS dataset mounted over NFS at `/mnt/vault1337` on the Claude Code VM — owned by the Syncthing user at UID 568, a TrueNAS-specific service account. Since vault writes go through SSH nodes (see gotcha three), the n8n container itself never touches NFS. No `group_add`, no volume mounts on DockerHost1 needed.
+
+The permissions problem shifts entirely to the SSH target host. That host's user needs write access to the NFS mount. My fix: created a supplementary group on TrueNAS (GID 3000), added it to the dataset ACL with write permissions, added the SSH user to that group on llm-server, and confirmed NFS export honors the GID:
+
+```bash
+# on TrueNAS — check dataset ACL
+nfs4_getfacl /mnt/vault1337/homelab
+
+# on llm-server — confirm group membership
+groups $USER
+
+# test write as the SSH user
+touch /mnt/vault1337/homelab/test && rm /mnt/vault1337/homelab/test
+```
+
+If your NFS export uses `mapall`, make sure it maps to a user that has ACL write permission on the dataset. Syncthing at UID 568 owns the files; your SSH user just needs group-level write access.
 
 ### 5. Merge Node Chaining for 4+ Inputs
 
@@ -213,7 +201,7 @@ Merge nodes accept exactly two inputs. With four parallel API calls, you need th
 
 ## The Output
 
-The generated output has two forms: structured YAML for NetBox and narrative Markdown for the Obsidian vault. Claude returns both in a single stdout response, separated by a `===SPLIT===` delimiter. The Parse Claude Response Code node splits on that, strips any code fences Claude adds, and the Write to Vault Code node writes both files to the NFS-mounted TrueNAS share via `fs.writeFileSync`.
+The generated output has two forms: structured YAML for NetBox and narrative Markdown for the Obsidian vault. Claude returns both in a single stdout response, separated by a `===SPLIT===` delimiter. The Parse Claude Response Code node splits on that, strips any code fences Claude adds, and pre-encodes each output as base64. Separate SSH nodes then write each file to the vault host using `echo '...' | base64 -d > /path/to/file` — safely passing arbitrary text through the shell without escaping issues.
 
 The NetBox YAML output for a DHCP entry on the Lab VLAN:
 
@@ -248,7 +236,7 @@ Ready to set up your own Homelab Topology Pipeline? Grab the template below. Onc
 {{< button href="/downloads/Homelab%20Topology%20Docs%20Pipeline%20template.json" download="Homelab Topology Docs Pipeline template.json" >}}Download Workflow Template{{< /button >}}
 
 {{< alert >}}
-**Note:** This workflow assumes a self-hosted n8n instance running in Docker with your Obsidian vault mounted and accessible to the container. The file write operations in the Code nodes will not work on n8n Cloud or any setup where the vault path isn't directly accessible from the n8n container.
+**Note:** This workflow routes all file writes through SSH — the n8n container never touches the vault directly. You need SSH access from n8n to a host that has your vault mounted, and an OPNsense API credential and SSH credential configured in n8n. It will work on n8n Cloud as long as the SSH target is reachable.
 {{< /alert >}}
 
 ## What's Next
@@ -299,7 +287,7 @@ Yes, it's a persistent Ubuntu 24.04 VM on Proxmox in the Lab VLAN — 2 vCPUs, 4
       "headline": "Automating Homelab Documentation with n8n and Claude Code",
       "description": "Homelab docs go stale fast. My n8n pipeline polls OPNsense weekly, diffs state, and triggers Claude Code via SSH to rewrite docs automatically. Five gotchas that cost real time.",
       "datePublished": "2026-03-05T00:00:00Z",
-      "dateModified": "2026-03-06T00:00:00Z",
+      "dateModified": "2026-03-23T00:00:00Z",
       "author": {
         "@type": "Person",
         "@id": "https://moshthesubnet.com/#author",
