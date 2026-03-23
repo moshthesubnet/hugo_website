@@ -1,7 +1,7 @@
 ---
 title: "n8n Homelab Docs Pipeline"
 date: 2026-02-28
-lastmod: 2026-03-05
+lastmod: 2026-03-23
 description: "Automated homelab documentation pipeline. n8n pulls live state from OPNsense, diffs it, and triggers Claude Code over SSH to regenerate Obsidian Markdown and NetBox YAML on every change."
 summary: "An n8n workflow that keeps homelab docs honest — polling OPNsense weekly, detecting drift, and invoking Claude Code via SSH to rewrite topology docs automatically."
 tags:
@@ -65,8 +65,8 @@ flowchart LR
     SCHED --> N8N
     MANUAL --> N8N
     N8N <-->|"REST API state"| OPN
-    N8N <-->|"SSH claude -p<br/>(if changes)"| CLAUDE
-    N8N -->|"NFS write"| TRUENAS
+    N8N <-->|"SSH claude -p + file writes<br/>(if changes)"| CLAUDE
+    CLAUDE -->|"NFS write (via mount)"| TRUENAS
     TRUENAS -->|"Background sync"| OBSIDIAN
 
     classDef trigger fill:#1a365d,stroke:#63b3ed,stroke-width:2px,color:#ebf8ff
@@ -231,7 +231,7 @@ flowchart LR
 
 | Component | Role |
 |-----------|------|
-| **n8n 2.10.3** | Workflow orchestration — scheduling, HTTP, SSH, diffing, file writes |
+| **n8n 2.10.3** | Workflow orchestration — scheduling, HTTP, SSH, diffing, state management |
 | **OPNsense 26.1** | Network state source — interfaces, aliases, routes, DHCP leases |
 | **Claude Code** | Documentation generation — runs `claude -p` non-interactively over SSH |
 | **TrueNAS** | NFS share hosting the Obsidian vault |
@@ -243,7 +243,7 @@ flowchart LR
 
 ## n8n Workflow Breakdown
 
-The workflow has 20 nodes across six logical stages. Both triggers fan into the same pipeline — the weekly schedule runs at 6am, the manual trigger is for on-demand runs.
+The workflow has 23 nodes across six logical stages. Both triggers fan into the same pipeline — the weekly schedule runs at 6am, the manual trigger is for on-demand runs.
 
 {{< mermaid >}}
 flowchart TD
@@ -267,22 +267,24 @@ flowchart TD
 
     subgraph state["State + Diff"]
         BSO["Build State Object<br/>(Code)"]
-        RPS["Read Previous State<br/>(ReadWriteFile)"]
+        RPS["Read Previous State<br/>(Code — fs.readFileSync)"]
         DIFF["Diff: Detect Changes<br/>(Code — per section)"]
         IF["Changes Detected?<br/>(IF node)"]
     end
 
     subgraph claude["Claude Pipeline"]
         BCP["Build Claude Prompt<br/>(Code)"]
+        SSHTMP["SSH: Write to tmp file<br/>(prompt → /tmp/doc-prompt.txt)"]
         SSH["SSH: Claude Code<br/>claude -p --dangerously-skip-permissions"]
-        PCR["Parse Claude Response<br/>(Code — delimiter split)"]
+        PCR["Parse Claude Response<br/>(Code — delimiter split + base64 encode)"]
     end
 
     subgraph output["Output (parallel)"]
-        WV["Write to Vault<br/>opnsense.yml + opnsense.md"]
-        BCE["Build Changelog Entry<br/>(Code)"]
-        SCS["Save Current State<br/>opnsense-state.json"]
-        AC["Append Changelog<br/>changelog.md"]
+        WV["SSH: Write to Vault<br/>opnsense.yml + opnsense.md"]
+        BCE["Build Changelog Entry<br/>(Code — base64 encode)"]
+        PREP["Prepare State<br/>(Code — base64 encode)"]
+        SCS["SSH: Save Current State<br/>opnsense-state.json"]
+        AC["SSH: Append Changelog<br/>changelog.md"]
         SKIP["No Changes — Skip<br/>(noOp)"]
     end
 
@@ -305,13 +307,15 @@ flowchart TD
     IF -->|true| BCP
     IF -->|false| SKIP
 
-    BCP --> SSH
+    BCP --> SSHTMP
+    SSHTMP --> SSH
     SSH --> PCR
 
     PCR --> WV
     PCR --> BCE
-    PCR --> SCS
+    PCR --> PREP
     BCE --> AC
+    PREP --> SCS
 
     classDef trigger fill:#1a365d,stroke:#63b3ed,stroke-width:2px,color:#ebf8ff
     classDef api fill:#1a202c,stroke:#4fd1c5,stroke-width:2px,color:#e6fffa
@@ -323,8 +327,8 @@ flowchart TD
     class SCHED,MANUAL trigger
     class GI,GA,GR,GD api
     class M1,M2,M3 merge
-    class BSO,RPS,DIFF,IF,BCP,PCR,BCE code
-    class SSH,WV,SCS,AC io
+    class BSO,RPS,DIFF,IF,BCP,PCR,BCE,PREP code
+    class SSHTMP,SSH,WV,SCS,AC io
     class SKIP skip
 {{< /mermaid >}}
 
@@ -349,24 +353,27 @@ Merge nodes accept exactly two inputs, so the four responses are consolidated wi
 
 ### Stage 4 — State & Diff
 
-`Build State Object` assembles a single JSON document with a `collected_at` timestamp and all four data sections, then fans out to two nodes simultaneously: it triggers `Read Previous State` (a ReadWriteFile node reading `opnsense-state.json` from the vault, `continueOnFail: true` to handle the first run) and feeds `Diff: Detect Changes` directly. Both paths converge at the Diff node, which compares each section independently — interfaces, aliases, routes, and DHCP leases — and produces a `has_changes` boolean and a human-readable `changes` array.
+`Build State Object` assembles a single JSON document with a `collected_at` timestamp and all four data sections, then fans out to two nodes simultaneously: it triggers `Read Previous State` (a Code node using `fs.readFileSync` to load `opnsense-state.json` from `/mnt/vault1337/homelab/topology/devices/`, `continueOnFail: true` to handle the first run) and feeds `Diff: Detect Changes` directly. Both paths converge at the Diff node, which compares each section independently — interfaces, aliases, routes, and DHCP leases — and produces a `has_changes` boolean and a human-readable `changes` array.
 
 ### Stage 5 — Claude Pipeline
 
-If changes are detected, `Build Claude Prompt` constructs the full prompt with the current state JSON and the changes list, then passes it inline to the SSH node. The command run on the Claude Code VM:
+If changes are detected, `Build Claude Prompt` constructs the full prompt with the current state JSON and the changes list. A dedicated SSH node (`SSH: Write to tmp file`) writes the prompt to `/tmp/doc-prompt.txt` on the Claude Code VM first — avoiding shell escaping issues with large JSON payloads embedded in command strings. A second SSH node then runs Claude:
 
 ```bash
-/home/skyler/.local/bin/claude -p --dangerously-skip-permissions '{prompt}'
+/home/skyler/.local/bin/claude \
+  --print \
+  --dangerously-skip-permissions \
+  "$(cat /tmp/doc-prompt.txt)"
 ```
 
-Claude is instructed to return two outputs separated by `===SPLIT===`: a NetBox-compatible YAML file first, then the Obsidian Markdown doc. `Parse Claude Response` splits on that delimiter and strips any code fences Claude adds.
+Claude is instructed to return two outputs separated by `===SPLIT===`: a NetBox-compatible YAML file first, then the Obsidian Markdown doc. `Parse Claude Response` splits on that delimiter, strips any code fences Claude adds, and pre-encodes both outputs as base64 for the SSH write nodes downstream.
 
 ### Stage 6 — Output (parallel)
 
-`Parse Claude Response` fans out to three Code nodes simultaneously:
-- Write to Vault — writes `opnsense.yml` and `opnsense.md` to `/vault/homelab/topology/devices/` using `fs.writeFileSync`
-- Build Changelog Entry → Append Changelog — formats a timestamped markdown entry and appends it to `/vault/homelab/topology/changelog.md`
-- Save Current State — overwrites `opnsense-state.json` with the current run's data so the next diff has a baseline
+`Parse Claude Response` fans out to three branches simultaneously, all writing to the vault host via SSH using base64-encoded content (`echo '...' | base64 -d > /path`):
+- **SSH: Write to Vault** — writes `opnsense.yml` and `opnsense.md` to `/mnt/vault1337/homelab/topology/devices/`
+- **Build Changelog Entry → SSH: Append Changelog** — formats a timestamped markdown entry, base64-encodes it, and appends it to `/mnt/vault1337/homelab/topology/changelog.md`
+- **Prepare State → SSH: Save Current State** — a Code node base64-encodes the current state JSON; the SSH node overwrites `opnsense-state.json` so the next diff has a baseline
 
 ---
 
@@ -417,21 +424,11 @@ The changelog is what actually gets read. Full state is background context. The 
 
 ## Challenges Solved
 
-### NFS Permissions
+### NFS Permissions (SSH Host, Not n8n Container)
 
-TrueNAS runs Syncthing at UID 568 — a platform-specific service account. The n8n Docker container runs as its own user. Writes to the NFS share fail by default.
+TrueNAS runs Syncthing at UID 568 — a platform-specific service account. File writes go through SSH nodes targeting the Claude Code VM (llm-server), which has the vault NFS-mounted at `/mnt/vault1337`. The n8n container itself never touches NFS.
 
-Fix: Created a supplementary group (GID 3000) on TrueNAS, added it to the dataset ACL with write permissions, and added it to the n8n container via `group_add` in Docker Compose:
-
-```yaml
-services:
-  n8n:
-    image: n8nio/n8n:2.10.3
-    group_add:
-      - "3000"
-    volumes:
-      - /mnt/docs:/docs
-```
+Fix: Created a supplementary group (GID 3000) on TrueNAS, added it to the dataset ACL with write permissions, and added the SSH user on llm-server to that group. No Docker Compose changes needed on the n8n host.
 
 ### Claude Code PATH in Non-Interactive SSH
 
@@ -445,17 +442,15 @@ Fix: Hardcode the full binary path. For a user-local npm install:
 
 Find it with `which claude` in an interactive session, then never use a shell alias or `$PATH` reference in the SSH command.
 
-### n8n Code Node — No `fs` Module
+### Code Node Filesystem Isolation
 
-The n8n Code node sandboxes JavaScript and blocks Node built-ins including `fs`. Reading and writing files from the Code node directly isn't possible.
+n8n Code nodes execute on the machine running n8n (DockerHost1 in the Servers VLAN). `fs.writeFileSync('/mnt/vault1337/...')` in a Code node tries to write to that path on DockerHost1 — where it doesn't exist. The error is `ENOENT`, which looks like a permissions problem but isn't.
 
-Fix: Use the dedicated **Read/Write Files from Disk** node for file operations. The Code node handles the diff logic only; file I/O is a separate node.
+Fix: Route all vault writes through SSH nodes targeting llm-server, which has `/mnt/vault1337` NFS-mounted. Since `Buffer` is not available in n8n expression evaluators, pre-encode content as base64 in Code nodes, then use SSH nodes to decode and write:
 
-### n8n Write Node — Binary Only
-
-The Write node doesn't accept plain text strings. Passing a string directly throws `Property 'data' is missing`.
-
-Fix: Add a **Convert to File** node before the Write node. Input: the text string. Output MIME type: `text/plain`. The Convert node produces the binary blob the Write node expects.
+```bash
+echo '{{ $json.base64Content }}' | base64 -d > /mnt/vault1337/homelab/topology/devices/opnsense.md
+```
 
 ### OPNsense 26.1 DHCP Endpoint Change
 
