@@ -8,7 +8,7 @@
    FONTS
    --------------------------------------------------------- */
 body, p, li, td, th {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
 code, pre, kbd, samp {
@@ -28,7 +28,22 @@ h1, h2, h3, h4, h5, h6 {
    --------------------------------------------------------- */
 body {
   font-size: 1.0625rem;
-  color: #D4D4D4;
+  color: #D5D2DB;
+}
+
+/* ---------------------------------------------------------
+   GRAIN OVERLAY — subtle noise texture breaks sterile AI look
+   --------------------------------------------------------- */
+html::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
 }
 
 /* ---------------------------------------------------------
@@ -50,7 +65,7 @@ article, main {
    Custom.css loads after Congo, so same selector wins.
    --------------------------------------------------------- */
 .prose {
-  --tw-prose-invert-body:          #D4D4D4;
+  --tw-prose-invert-body:          #D5D2DB;
   --tw-prose-invert-headings:      #A855F7;  /* violet-500 — darker, still readable on #121212 */
   --tw-prose-invert-links:         #00D4FF;  /* Electric Blue */
   --tw-prose-invert-bold:          #F0F0F0;
@@ -273,14 +288,14 @@ article .prose p,
 main .prose p {
   line-height: 1.78;
   margin-bottom: 1.35rem;
-  color: #D4D4D4;
+  color: #D5D2DB;
 }
 
 article .prose li,
 main .prose li {
   line-height: 1.75;
   margin-bottom: 0.4rem;
-  color: #D4D4D4;
+  color: #D5D2DB;
 }
 
 /* ---------------------------------------------------------
@@ -730,7 +745,7 @@ body:has(.home-page) main {
 
 .home-hero-sub {
   font-size: 0.975rem;
-  color: #909090;
+  color: #ABABAB;
   line-height: 1.75;
   max-width: 510px;
   margin-bottom: 2.25rem;
@@ -951,7 +966,7 @@ body:has(.home-page) main {
   letter-spacing: 3px;
   line-height: 1;
   color: #00D4FF;
-  text-shadow: 0 0 40px rgba(0, 212, 255, 0.45);
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.18);
   margin-bottom: 0.85rem;
 }
 
@@ -968,7 +983,7 @@ body:has(.home-page) main {
 
 .home-win-desc {
   font-size: 0.85rem;
-  color: #6A6A6A;
+  color: #7E7E7E;
   line-height: 1.65;
   margin: 0;
 }
@@ -1036,7 +1051,7 @@ body:has(.home-page) main {
 .home-cert-date {
   font-family: 'Fira Code', monospace;
   font-size: 0.68rem;
-  color: #484848;
+  color: #5E5E5E;
   margin-top: 0.2rem;
 }
 
@@ -1137,7 +1152,7 @@ body:has(.home-page) main {
 
 .home-project-desc {
   font-size: 0.855rem;
-  color: #686868;
+  color: #7C7C7C;
   line-height: 1.68;
   margin: 0 0 1rem !important;
   flex: 1;
@@ -1220,7 +1235,7 @@ body:has(.home-page) main {
 
 .home-topology-desc {
   font-size: 0.875rem;
-  color: #555;
+  color: #6E6E6E;
   max-width: 460px;
   line-height: 1.65;
   margin: 0;
