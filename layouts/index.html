@@ -2,11 +2,17 @@
 <div class="home-page">
 
   {{/* ═══════════════════════════════════════════
-       HERO
+       HERO — Centered profile layout
   ══════════════════════════════════════════════ */}}
   <section class="home-hero">
     <div class="home-hero-bg"></div>
     <div class="home-hero-inner">
+
+      <div class="home-hero-photo-wrap">
+        <div class="home-hero-photo-frame">
+          <img src="/assets/github_profile.png" alt="Skyler King" class="home-hero-photo">
+        </div>
+      </div>
 
       <div class="home-hero-text">
         <h1 class="home-hero-title">
@@ -17,18 +23,24 @@
           homelab enthusiast, and emo/punk rock fan. I document everything from
           breaking OSPF in the lab to fixing critical infrastructure in production.
         </p>
-        <div class="home-hero-cta">
-          <a href="/docs/projects/projects/" class="home-btn home-btn-primary">View Projects</a>
-          <a href="/docs/bio/" class="home-btn home-btn-secondary">My Story →</a>
-        </div>
       </div>
 
-      <div class="home-hero-photo-wrap">
-        <div class="home-hero-photo-frame">
-          <img src="/assets/github_profile.png" alt="Skyler King" class="home-hero-photo">
-          <div class="home-hero-corner home-hero-corner-tl"></div>
-          <div class="home-hero-corner home-hero-corner-br"></div>
-        </div>
+      <nav class="home-social-icons" aria-label="Social links">
+        <a href="https://www.linkedin.com/in/skylerkingnetwork" target="_blank" rel="noopener noreferrer" class="home-social-link" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://github.com/moshthesubnet" target="_blank" rel="noopener noreferrer" class="home-social-link" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        </a>
+        <a href="https://instagram.com/moshthesubnet" target="_blank" rel="noopener noreferrer" class="home-social-link" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </a>
+      </nav>
+
+      <div class="home-hero-cta">
+        <a href="/posts/" class="home-btn home-btn-primary">Read the Blog</a>
+        <a href="/docs/projects/projects/" class="home-btn home-btn-secondary">Witness the Chaos →</a>
+        <a href="/docs/bio/" class="home-btn home-btn-secondary">Proof that I do Stuff →</a>
       </div>
 
     </div>
@@ -57,193 +69,93 @@
   </div>
 
   {{/* ═══════════════════════════════════════════
-       RECENT WINS
+       RECENT POSTS
   ══════════════════════════════════════════════ */}}
+  {{ $posts := first 4 (where .Site.RegularPages "Section" "posts") }}
+  {{ if $posts }}
   <section class="home-section">
     <div class="home-section-header">
-      <h2 class="home-section-title">RECENT WINS</h2>
+      <h2 class="home-section-title">RECENT POSTS</h2>
       <div class="home-section-line"></div>
     </div>
-    <div class="home-wins-grid">
-
-      <div class="home-win-card">
-        <div class="home-win-metric">$15K</div>
-        <h3 class="home-win-title">Critical Infrastructure Rescue</h3>
-        <p class="home-win-desc">Diagnosed and fixed a production IPsec VPN tunnel failure that had downed a licensing server, saving ~$15k in operational delays.</p>
-      </div>
-
-      <div class="home-win-card">
-        <div class="home-win-metric">+30%</div>
-        <h3 class="home-win-title">Enterprise Network Segmentation</h3>
-        <p class="home-win-desc">Improved network performance and eliminated VLAN 1 vulnerabilities by migrating to a secure 7-VLAN architecture with dedicated management VLAN.</p>
-      </div>
-
-      <div class="home-win-card">
-        <div class="home-win-metric">48H</div>
-        <h3 class="home-win-title">Rapid Site Deployment</h3>
-        <p class="home-win-desc">Built complete IT infrastructure for a newly acquired office — 25 workstations plus conferencing, from zero to full operation.</p>
-      </div>
-
+    <div class="home-posts-grid">
+      {{ range $posts }}
+      <article class="post-card">
+        <div class="post-card-prompt">
+          <span class="post-card-sigil">$</span>
+          <span class="post-card-cmd">cat</span>
+          <a href="{{ .Permalink }}" class="post-card-filename">{{ .File.BaseFileName }}<span class="post-card-ext">.md</span></a>
+        </div>
+        <h2 class="post-card-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+        <div class="post-card-meta">
+          <span class="post-card-date">{{ .Date.Format "2006-01-02" }}</span>
+          {{ with .Params.tags }}
+          <span class="post-card-sep">·</span>
+          <div class="post-card-tags">
+            {{ range first 3 . }}<span class="post-card-tag">#{{ . }}</span>{{ end }}
+          </div>
+          {{ end }}
+        </div>
+        {{ with .Summary }}<p class="post-card-summary">{{ . | plainify | truncate 140 }}</p>{{ end }}
+      </article>
+      {{ end }}
+    </div>
+    <div class="home-posts-more">
+      <a href="/posts/" class="home-btn home-btn-secondary">View All Posts →</a>
     </div>
   </section>
-
-  {{/* ═══════════════════════════════════════════
-       CERTIFICATIONS
-  ══════════════════════════════════════════════ */}}
-  <section class="home-section home-section-alt">
-    <div class="home-section-inner">
-      <div class="home-section-header">
-        <h2 class="home-section-title">CERTIFICATIONS</h2>
-        <div class="home-section-line"></div>
-      </div>
-      <p class="home-section-sub">Validated skills. No paper tigers here.</p>
-      <div class="home-certs-grid">
-
-        <div class="home-cert-card">
-          <div class="home-cert-badge home-cert-blue">CLOUD+</div>
-          <div class="home-cert-info">
-            <div class="home-cert-name">CompTIA Cloud+</div>
-            <div class="home-cert-date">Dec 2025</div>
-          </div>
-        </div>
-
-        <div class="home-cert-card">
-          <div class="home-cert-badge home-cert-violet">CBROPS</div>
-          <div class="home-cert-info">
-            <div class="home-cert-name">CCNA Cybersecurity</div>
-            <div class="home-cert-date">Jun 2025</div>
-          </div>
-        </div>
-
-        <div class="home-cert-card">
-          <div class="home-cert-badge home-cert-violet">CCNA</div>
-          <div class="home-cert-info">
-            <div class="home-cert-name">Cisco Certified Network Associate</div>
-            <div class="home-cert-date">Feb 2025</div>
-          </div>
-        </div>
-
-        <div class="home-cert-card">
-          <div class="home-cert-badge home-cert-blue">ITIL 4</div>
-          <div class="home-cert-info">
-            <div class="home-cert-name">ITIL Foundation</div>
-            <div class="home-cert-date">Jun 2024</div>
-          </div>
-        </div>
-
-        <div class="home-cert-card">
-          <div class="home-cert-badge home-cert-green">LPI</div>
-          <div class="home-cert-info">
-            <div class="home-cert-name">Linux Essentials</div>
-            <div class="home-cert-date">May 2024</div>
-          </div>
-        </div>
-
-        <div class="home-cert-card">
-          <div class="home-cert-badge home-cert-blue">A+</div>
-          <div class="home-cert-info">
-            <div class="home-cert-name">CompTIA A+</div>
-            <div class="home-cert-date">Mar 2024</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  {{/* ═══════════════════════════════════════════
-       TECH STACK
-  ══════════════════════════════════════════════ */}}
-  <section class="home-section">
-    <div class="home-section-header">
-      <h2 class="home-section-title">THE STACK</h2>
-      <div class="home-section-line"></div>
-    </div>
-    <div class="home-stack-grid">
-
-      <div class="home-stack-group">
-        <div class="home-stack-group-label">HARDWARE</div>
-        <div class="home-stack-tags">
-          <span class="home-tag">Cisco Routers/Switches</span>
-          <span class="home-tag">Ubiquiti Unifi</span>
-          <span class="home-tag">Proxmox</span>
-        </div>
-      </div>
-
-      <div class="home-stack-group">
-        <div class="home-stack-group-label">SOFTWARE</div>
-        <div class="home-stack-tags">
-          <span class="home-tag">OPNsense</span>
-          <span class="home-tag">Docker</span>
-          <span class="home-tag">Splunk</span>
-          <span class="home-tag">Wireshark</span>
-        </div>
-      </div>
-
-      <div class="home-stack-group">
-        <div class="home-stack-group-label">AUTOMATION</div>
-        <div class="home-stack-tags">
-          <span class="home-tag">Python</span>
-          <span class="home-tag">Ansible</span>
-          <span class="home-tag">Terraform</span>
-        </div>
-      </div>
-
-    </div>
-  </section>
+  {{ end }}
 
   {{/* ═══════════════════════════════════════════
        FEATURED PROJECTS
   ══════════════════════════════════════════════ */}}
-  <section class="home-section home-section-alt">
-    <div class="home-section-inner">
-      <div class="home-section-header">
-        <h2 class="home-section-title">FEATURED PROJECTS</h2>
-        <div class="home-section-line"></div>
-      </div>
-      <div class="home-projects-grid">
+  <section class="home-section">
+    <div class="home-section-header">
+      <h2 class="home-section-title">FEATURED PROJECTS</h2>
+      <div class="home-section-line"></div>
+    </div>
+    <div class="home-projects-grid">
 
-        <article class="home-project-card">
-          <div class="home-project-num" aria-hidden="true">01</div>
-          <h3 class="home-project-title">n8n Homelab Docs Pipeline</h3>
-          <p class="home-project-desc">Automated documentation pipeline treating live network state as source of truth — polling OPNsense weekly, diffing against saved state, and triggering Claude Code via SSH to regenerate topology docs on every change.</p>
-          <div class="home-project-tags">
-            <span class="home-tag">n8n</span>
-            <span class="home-tag">OPNsense API</span>
-            <span class="home-tag">Claude Code</span>
-            <span class="home-tag">TrueNAS</span>
-            <span class="home-tag">Syncthing</span>
-          </div>
-          <a href="/docs/projects/n8n-homelab-docs-pipeline/" class="home-project-link">View Documentation →</a>
-        </article>
+      <article class="home-project-card">
+        <div class="home-project-num" aria-hidden="true">01</div>
+        <h3 class="home-project-title">n8n Homelab Docs Pipeline</h3>
+        <p class="home-project-desc">Automated documentation pipeline treating live network state as source of truth — polling OPNsense weekly, diffing against saved state, and triggering Claude Code via SSH to regenerate topology docs on every change.</p>
+        <div class="home-project-tags">
+          <span class="home-tag">n8n</span>
+          <span class="home-tag">OPNsense API</span>
+          <span class="home-tag">Claude Code</span>
+          <span class="home-tag">TrueNAS</span>
+          <span class="home-tag">Syncthing</span>
+        </div>
+        <a href="/docs/projects/n8n-homelab-docs-pipeline/" class="home-project-link">View Documentation →</a>
+      </article>
 
-        <article class="home-project-card">
-          <div class="home-project-num" aria-hidden="true">02</div>
-          <h3 class="home-project-title">Cross-VLAN Network Monitor</h3>
-          <p class="home-project-desc">FastAPI app that bypasses ARP's layer-2 blind spots — querying OPNsense, Proxmox, and Docker APIs directly for a unified cross-VLAN device inventory. No raw sockets, no root required.</p>
-          <div class="home-project-tags">
-            <span class="home-tag">FastAPI</span>
-            <span class="home-tag">OPNsense</span>
-            <span class="home-tag">Proxmox</span>
-            <span class="home-tag">Docker</span>
-          </div>
-          <a href="/docs/projects/cross_vlan_network_monitor/" class="home-project-link">View Documentation →</a>
-        </article>
+      <article class="home-project-card">
+        <div class="home-project-num" aria-hidden="true">02</div>
+        <h3 class="home-project-title">Cross-VLAN Network Monitor</h3>
+        <p class="home-project-desc">FastAPI app that bypasses ARP's layer-2 blind spots — querying OPNsense, Proxmox, and Docker APIs directly for a unified cross-VLAN device inventory. No raw sockets, no root required.</p>
+        <div class="home-project-tags">
+          <span class="home-tag">FastAPI</span>
+          <span class="home-tag">OPNsense</span>
+          <span class="home-tag">Proxmox</span>
+          <span class="home-tag">Docker</span>
+        </div>
+        <a href="/docs/projects/cross_vlan_network_monitor/" class="home-project-link">View Documentation →</a>
+      </article>
 
-        <article class="home-project-card">
-          <div class="home-project-num" aria-hidden="true">03</div>
-          <h3 class="home-project-title">VLAN Segmentation &amp; Hardening</h3>
-          <p class="home-project-desc">Redesigned homelab from a flat network to a properly segmented 7-VLAN architecture — eliminating VLAN 1 vulnerabilities and isolating home, malware analysis, IoT, servers, and management traffic.</p>
-          <div class="home-project-tags">
-            <span class="home-tag">OPNsense</span>
-            <span class="home-tag">VLAN Design</span>
-            <span class="home-tag">Security</span>
-            <span class="home-tag">Unifi</span>
-          </div>
-          <a href="/docs/projects/vlan_segmentation/" class="home-project-link">View Documentation →</a>
-        </article>
+      <article class="home-project-card">
+        <div class="home-project-num" aria-hidden="true">03</div>
+        <h3 class="home-project-title">VLAN Segmentation &amp; Hardening</h3>
+        <p class="home-project-desc">Redesigned homelab from a flat network to a properly segmented 7-VLAN architecture — eliminating VLAN 1 vulnerabilities and isolating home, malware analysis, IoT, servers, and management traffic.</p>
+        <div class="home-project-tags">
+          <span class="home-tag">OPNsense</span>
+          <span class="home-tag">VLAN Design</span>
+          <span class="home-tag">Security</span>
+          <span class="home-tag">Unifi</span>
+        </div>
+        <a href="/docs/projects/vlan_segmentation/" class="home-project-link">View Documentation →</a>
+      </article>
 
-      </div>
     </div>
   </section>
 
