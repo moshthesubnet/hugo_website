@@ -20,4 +20,4 @@ enableInlineShortcodes = true
     title = true
 
 [permalinks]
-  writing = "/writing/:filename/"
+  writing = "/writing/:contentbasename/"
