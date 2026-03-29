@@ -1,33 +1,16 @@
-<article class="post-card">
-  {{- $href := .Permalink }}
-  {{- if .Params.externalUrl }}{{ $href = .Params.externalUrl }}{{ end }}
-
-  <div class="post-card-body">
-    <h3 class="post-card-title">
-      <a href="{{ $href }}"
-        {{ if .Params.externalUrl }}target="_blank" rel="noopener noreferrer"{{ end }}>
-        {{- .Title | emojify -}}
-      </a>
-    </h3>
-
-    <div class="post-card-meta">
-      {{ if .Date }}
-        <span class="post-card-date">{{ .Date.Format "2006-01-02" }}</span>
-      {{ end }}
-      {{ if and (.Params.showReadingTime | default (.Site.Params.article.showReadingTime | default true)) (ne .ReadingTime 0) }}
-        <span class="post-card-sep">//</span>
-        <span class="post-card-read">{{ .ReadingTime }}m read</span>
-      {{ end }}
-      {{ with .Params.tags }}
-        <span class="post-card-sep">//</span>
-        <span class="post-card-tags">
-          {{ range . }}<span class="post-card-tag">[{{ . }}]</span>{{ end }}
-        </span>
-      {{ end }}
-    </div>
-
-    {{ with .Params.summary }}
-      <p class="post-card-summary">{{ . | plainify | truncate 180 }}</p>
+{{- $page := . -}}
+<div class="list-entry">
+  <a href="{{ $page.Permalink }}" class="list-entry-title">{{ $page.Title }}</a>
+  {{ with $page.Description }}
+    <div class="list-entry-desc">{{ . }}</div>
+  {{ end }}
+  {{ if eq $page.Section "writing" }}
+    {{ if not $page.Date.IsZero }}
+      <div class="list-entry-meta">{{ $page.Date.Format "January 2006" }}</div>
     {{ end }}
-  </div>
-</article>
+  {{ else if eq $page.Section "projects" }}
+    {{ with $page.Params.stack }}
+      <div class="list-entry-meta">{{ . }}</div>
+    {{ end }}
+  {{ end }}
+</div>
