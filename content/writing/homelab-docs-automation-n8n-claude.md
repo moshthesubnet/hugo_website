@@ -1,5 +1,6 @@
 ---
 title: "Automating Homelab Documentation with n8n and Claude Code"
+aliases: ["/posts/homelab-docs-automation-n8n-claude/"]
 date: 2026-03-05
 lastmod: 2026-03-23
 draft: false

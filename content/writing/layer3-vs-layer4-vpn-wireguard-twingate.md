@@ -1,5 +1,6 @@
 ---
 title: "Layer 3 vs Layer 4 VPN: What's the Actual Difference?"
+aliases: ["/posts/layer3-vs-layer4-vpn-wireguard-twingate/"]
 date: 2026-03-13
 draft: false
 description: "Layer 3 VPNs (WireGuard) assign a virtual IP and put you on the network. Layer 4 ZTNA (TwinGate) brokers per-resource access with no IP assigned. Real lab breakdown with diagrams."
