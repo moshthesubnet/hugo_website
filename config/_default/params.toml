@@ -1,28 +1,27 @@
-colorScheme = "cyberviolet"
+colorScheme = "minimal"
 defaultAppearance = "dark"
 autoSwitchAppearance = false
 enableSearch = true
 enableCodeCopy = true
-mainSections = ["docs"]
+mainSections = ["writing"]
 
 [header]
   layout = "basic"
-  logo = "img/logo transparent.png"
-  showTitle = false
+  showTitle = true
 
 [homepage]
-  layout = "page"
+  layout = "custom"
 
 [article]
-  showDate = false
-  showDateUpdated = true
+  showDate = true
+  showDateUpdated = false
   showReadingTime = false
   showTableOfContents = true
-  showAuthor = true
+  showAuthor = false
   mermaid = true
 
 [list]
-  showSummary = false
+  showSummary = true
   groupByYear = false
 
 [footer]

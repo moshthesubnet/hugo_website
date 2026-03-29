@@ -18,3 +18,6 @@ enableInlineShortcodes = true
   [markup.goldmark.parser.attribute]
     block = true
     title = true
+
+[permalinks]
+  writing = "/writing/:filename/"
