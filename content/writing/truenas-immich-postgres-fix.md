@@ -1,5 +1,6 @@
 ---
 title: "Fix Immich 2.6 Postgres Upgrade Failure on TrueNAS"
+aliases: ["/posts/truenas-immich-postgres-fix/"]
 date: 2026-03-20
 lastmod: 2026-03-20
 draft: false

@@ -1,5 +1,6 @@
 ---
 title: "VPN vs VLAN: The Difference That Actually Matters"
+aliases: ["/posts/vpn-vs-vlan/"]
 date: 2026-03-12
 draft: false
 description: "VPN vs VLAN explained at the OSI layer level — what each protects, what each can't do, and how to run both in a homelab. With a real 7-VLAN + WireGuard setup."

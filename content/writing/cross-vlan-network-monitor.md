@@ -1,5 +1,6 @@
 ---
 title: "My Router Already Knew. I Just Wasn't Asking."
+aliases: ["/posts/cross-vlan-network-monitor/"]
 date: 2026-03-09
 lastmod: 2026-03-09
 draft: false

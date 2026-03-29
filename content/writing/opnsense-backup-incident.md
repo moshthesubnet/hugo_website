@@ -1,5 +1,6 @@
 ---
 title: "The Backup That Ate My Network"
+aliases: ["/posts/opnsense-backup-incident/"]
 date: 2026-03-04
 lastUpdated: "2026-03-11"
 draft: false
