@@ -248,7 +248,7 @@ In the traditional sense, no. TwinGate doesn't create a virtual network interfac
 
 ### Can WireGuard do zero trust?
 
-Not natively. WireGuard handles encryption and peer authentication at the kernel level. Per-resource access control is left to your firewall, which you configure and maintain separately. You can approximate ZTNA with OPNsense firewall rules scoped per WireGuard peer — but the virtual interface still exists, the network topology is visible to connected peers, and every firewall rule has to be correct every time. [See the VPN vs VLAN post for how this is configured in practice.](/posts/vpn-vs-vlan)
+Not natively. WireGuard handles encryption and peer authentication at the kernel level. Per-resource access control is left to your firewall, which you configure and maintain separately. You can approximate ZTNA with OPNsense firewall rules scoped per WireGuard peer — but the virtual interface still exists, the network topology is visible to connected peers, and every firewall rule has to be correct every time. [See the VPN vs VLAN post for how this is configured in practice.](/writing/vpn-vs-vlan)
 
 ### Is Layer 4 more secure than Layer 3?
 
@@ -273,6 +273,6 @@ Both say "VPN." They're doing fundamentally different things at different layers
 
 If you're using WireGuard for everything including third-party access, the blast radius section is the one to re-read. The firewall-rules-per-peer approach works until it doesn't — until a rule is missing, credentials leak, or you forget to revoke access after a project ends.
 
-For the full segmentation architecture this sits inside — the 7-VLAN setup, OPNsense inter-VLAN rules, and where WireGuard peers actually land — the [VPN vs VLAN breakdown](/posts/vpn-vs-vlan) has the full topology. And for the complete lab context, the [lab overview](/docs/lab/overview) shows where both tools live in the stack.
+For the full segmentation architecture this sits inside — the 7-VLAN setup, OPNsense inter-VLAN rules, and where WireGuard peers actually land — the [VPN vs VLAN breakdown](/writing/vpn-vs-vlan) has the full topology. And for the complete lab context, the [lab overview](/docs/lab/overview) shows where both tools live in the stack.
 
 If you came here from the reel: Layer 3 is a network. Layer 4 is a door. That was the whole thing. This is just why the difference matters.

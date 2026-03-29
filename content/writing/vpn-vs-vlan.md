@@ -342,6 +342,6 @@ VPN = Layer 3+, enforced by the firewall, encrypted tunnel, external transit sec
 
 Neither replaces the other. They're doing different things at different layers of the stack.
 
-If you want to see the full VLAN architecture this is based on, the [VLAN segmentation project writeup](/docs/projects/VLAN_segmentation) has the before/after topology, the full firewall rules matrix, and the configuration examples. For the homelab stack context, the [lab overview](/docs/lab/overview) shows how everything fits together — Proxmox, OPNsense, UniFi, and where the WireGuard endpoint lives.
+If you want to see the full VLAN architecture this is based on, the [VLAN segmentation project writeup](/projects/vlan-segmentation) has the before/after topology, the full firewall rules matrix, and the configuration examples. For the homelab stack context, the [lab overview](/docs/lab/overview) shows how everything fits together — Proxmox, OPNsense, UniFi, and where the WireGuard endpoint lives.
 
 If you came here from the reel: that's the whole thing, expanded. The switch enforces the VLANs. OPNsense enforces the routing and the firewall rules. WireGuard handles the encrypted tunnel from outside. They're not competing — they're stacked.

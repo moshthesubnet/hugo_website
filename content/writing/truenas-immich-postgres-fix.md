@@ -290,7 +290,7 @@ In my experience maintaining TrueNAS app deployments, three habits make the diff
 
 **Beyond snapshots, read the release notes on version bumps.** The jump from 2.5.x to 2.6.x included a mandatory Postgres major version migration. It's in the changelog. 90 seconds of reading before hitting Update would have turned this into a planned procedure instead of an incident.
 
-**Finally, run a monthly `pg_dump`.** The `-Fc` flag produces a compressed, restorable backup. Store it outside your `pgData` volume — on your photo dataset, or a separate backup dataset. It takes one line in a cron job. For a full automation approach, the same webhook and scheduling patterns from [Automating Homelab Documentation with n8n and Claude Code](/posts/homelab-docs-automation-n8n-claude/) apply cleanly here — replace the doc generation step with a `pg_dump` exec. I also documented the same backup-before-the-thing-you're-backing-up-depends-on problem with [OPNsense config backups](/posts/opnsense-backup-incident/).
+**Finally, run a monthly `pg_dump`.** The `-Fc` flag produces a compressed, restorable backup. Store it outside your `pgData` volume — on your photo dataset, or a separate backup dataset. It takes one line in a cron job. For a full automation approach, the same webhook and scheduling patterns from [Automating Homelab Documentation with n8n and Claude Code](/writing/homelab-docs-automation-n8n-claude/) apply cleanly here — replace the doc generation step with a `pg_dump` exec. I also documented the same backup-before-the-thing-you're-backing-up-depends-on problem with [OPNsense config backups](/writing/opnsense-backup-incident/).
 
 Privacy is the second-most-cited reason people run their own infrastructure at home — 34.7% of self-hosters name it as a primary motivation ([Self-Hosted Survey 2024](https://selfhosted-survey-2024.deployn.de/)). Self-hosting your photo library instead of handing it to Google means you own the failure modes. The backup is the cost of that ownership.
 
@@ -373,7 +373,7 @@ If you're watching this issue develop, the community thread at [forums.truenas.c
   "@graph": [
     {
       "@type": "BlogPosting",
-      "@id": "https://moshthesubnet.com/posts/truenas-immich-postgres-fix/#article",
+      "@id": "https://moshthesubnet.com/writing/truenas-immich-postgres-fix/#article",
       "headline": "Fix Immich 2.6 Postgres Upgrade Failure on TrueNAS",
       "description": "Immich 2.6 dropped PG15 binaries from pgvecto, breaking every TrueNAS install on Postgres 15. Recover 17,512+ assets with this pg_dump → pg_restore fix.",
       "datePublished": "2026-03-20T00:00:00Z",
@@ -399,7 +399,7 @@ If you're watching this issue develop, the community thread at [forums.truenas.c
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "https://moshthesubnet.com/posts/truenas-immich-postgres-fix/"
+        "@id": "https://moshthesubnet.com/writing/truenas-immich-postgres-fix/"
       },
       "articleSection": "Homelab",
       "keywords": ["Immich", "TrueNAS", "Postgres", "pgvecto", "pg_dump", "pg_restore", "homelab", "self-hosted", "Docker", "database migration", "incident response"],
@@ -407,7 +407,7 @@ If you're watching this issue develop, the community thread at [forums.truenas.c
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://moshthesubnet.com/posts/truenas-immich-postgres-fix/#breadcrumb",
+      "@id": "https://moshthesubnet.com/writing/truenas-immich-postgres-fix/#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
@@ -419,19 +419,19 @@ If you're watching this issue develop, the community thread at [forums.truenas.c
           "@type": "ListItem",
           "position": 2,
           "name": "Posts",
-          "item": "https://moshthesubnet.com/posts/"
+          "item": "https://moshthesubnet.com/writing/"
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": "Fix Immich 2.6 Postgres Upgrade Failure on TrueNAS",
-          "item": "https://moshthesubnet.com/posts/truenas-immich-postgres-fix/"
+          "item": "https://moshthesubnet.com/writing/truenas-immich-postgres-fix/"
         }
       ]
     },
     {
       "@type": "FAQPage",
-      "@id": "https://moshthesubnet.com/posts/truenas-immich-postgres-fix/#faq",
+      "@id": "https://moshthesubnet.com/writing/truenas-immich-postgres-fix/#faq",
       "mainEntity": [
         {
           "@type": "Question",
