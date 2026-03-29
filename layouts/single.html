@@ -61,7 +61,7 @@
     </header>
 
     {{/* Divider between header and body */}}
-    <div class="max-w-prose"><hr class="home-divider" style="margin-bottom: 2rem;"></div>
+    <div class="max-w-prose mb-8"><hr class="home-divider"></div>
 
     <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
       {{ if and (.Params.showTableOfContents | default (.Site.Params.article.showTableOfContents | default false)) (in .TableOfContents "<ul") }}

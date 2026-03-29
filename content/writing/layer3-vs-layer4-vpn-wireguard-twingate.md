@@ -175,7 +175,7 @@ The blast radius column is where the decision actually lives:
   <rect x="195" y="80" width="9" height="28" fill="#60a5fa" rx="3"/>
   <text x="212" y="98" class="brv">1</text>
 </svg>
-<figcaption style="font-size:0.8em;color:#718096;margin-top:4px">Hosts or resources reachable by a compromised credential. WireGuard with AllowedIPs = 10.0.0.0/24 vs a TwinGate connector with one defined resource. Original data from the lab.</figcaption>
+<figcaption style="font-size:0.8em;color:#737373;margin-top:4px">Hosts or resources reachable by a compromised credential. WireGuard with AllowedIPs = 10.0.0.0/24 vs a TwinGate connector with one defined resource. Original data from the lab.</figcaption>
 </figure>
 
 <!-- [UNIQUE INSIGHT] -->

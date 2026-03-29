@@ -76,18 +76,18 @@ What this looks like in the TrueNAS Apps UI: Immich shows as failed. The app lif
     <!-- Area fill -->
     <polygon
       points="60,265 156,229 252,178 348,144 444,70 540,51 540,270 60,270"
-      fill="rgba(99,102,241,0.13)"
+      fill="rgba(94,234,212,0.08)"
       stroke="none"/>
     <!-- Line -->
     <polyline
       points="60,265 156,229 252,178 348,144 444,70 540,51"
       fill="none"
-      stroke="#6366f1"
+      stroke="#5eead4"
       stroke-width="2.5"
       stroke-linejoin="round"
       stroke-linecap="round"/>
     <!-- Data points -->
-    <g fill="#6366f1">
+    <g fill="#5eead4">
       <circle cx="60" cy="265" r="4"/>
       <circle cx="156" cy="229" r="4"/>
       <circle cx="252" cy="178" r="4"/>
@@ -97,7 +97,7 @@ What this looks like in the TrueNAS Apps UI: Immich shows as failed. The app lif
     </g>
     <!-- Start and end labels -->
     <text x="68" y="255" fill="#94a3b8" font-size="10" font-family="system-ui,sans-serif">2K</text>
-    <text x="513" y="41" fill="#6366f1" font-size="11" font-weight="600" font-family="system-ui,sans-serif">95.3K ★</text>
+    <text x="513" y="41" fill="#5eead4" font-size="11" font-weight="600" font-family="system-ui,sans-serif">95.3K ★</text>
     <!-- v2.6.x annotation -->
     <line x1="540" y1="51" x2="521" y2="26" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,2"/>
     <text x="519" y="22" fill="#f59e0b" font-size="10" font-family="system-ui,sans-serif" text-anchor="end">v2.6.x (Mar 2026)</text>
@@ -113,7 +113,7 @@ What this looks like in the TrueNAS Apps UI: Immich shows as failed. The app lif
     <!-- Title -->
     <text x="300" y="18" fill="#e2e8f0" font-size="13" font-weight="600" text-anchor="middle" font-family="system-ui,sans-serif">Immich GitHub Stars (2022–Mar 2026)</text>
   </svg>
-  <figcaption style="font-size:0.8rem;color:#94a3b8;text-align:center;margin-top:0.5rem">Source: <a href="https://github.com/immich-app/immich">github.com/immich-app/immich</a> (live, March 2026); <a href="https://immich.app/blog/2025-year-in-review">Immich 2025 Year in Review</a></figcaption>
+  <figcaption style="font-size:0.8rem;color:#737373;text-align:center;margin-top:0.5rem">Source: <a href="https://github.com/immich-app/immich">github.com/immich-app/immich</a> (live, March 2026); <a href="https://immich.app/blog/2025-year-in-review">Immich 2025 Year in Review</a></figcaption>
 </figure>
 
 ## The Rename Trap: Why 15.bak Inside pgData Still Fails
@@ -302,9 +302,9 @@ Privacy is the second-most-cited reason people run their own infrastructure at h
     <!-- Baseline -->
     <line x1="163" y1="30" x2="163" y2="243" stroke="rgba(148,163,184,0.25)" stroke-width="1"/>
     <!-- Bars -->
-    <rect x="164" y="33"  width="331" height="38" rx="4" fill="#6366f1" opacity="0.85"/>
-    <rect x="164" y="88"  width="325" height="38" rx="4" fill="#8b5cf6" opacity="0.85"/>
-    <rect x="164" y="143" width="150" height="38" rx="4" fill="#06b6d4" opacity="0.85"/>
+    <rect x="164" y="33"  width="331" height="38" rx="4" fill="#5eead4" opacity="0.85"/>
+    <rect x="164" y="88"  width="325" height="38" rx="4" fill="#2dd4bf" opacity="0.85"/>
+    <rect x="164" y="143" width="150" height="38" rx="4" fill="#14b8a6" opacity="0.85"/>
     <rect x="164" y="198" width="131" height="38" rx="4" fill="#64748b" opacity="0.85"/>
     <!-- Left labels -->
     <g fill="#cbd5e1" font-size="12" text-anchor="end" font-family="system-ui,sans-serif" dominant-baseline="middle">
@@ -321,7 +321,7 @@ Privacy is the second-most-cited reason people run their own infrastructure at h
       <text x="302" y="217">14.0%</text>
     </g>
   </svg>
-  <figcaption style="font-size:0.8rem;color:#94a3b8;text-align:center;margin-top:0.5rem">Source: <a href="https://selfhosted-survey-2024.deployn.de/">Self-Hosted Survey 2024</a> (n=2,181, August 2024)</figcaption>
+  <figcaption style="font-size:0.8rem;color:#737373;text-align:center;margin-top:0.5rem">Source: <a href="https://selfhosted-survey-2024.deployn.de/">Self-Hosted Survey 2024</a> (n=2,181, August 2024)</figcaption>
 </figure>
 
 {{< figure
