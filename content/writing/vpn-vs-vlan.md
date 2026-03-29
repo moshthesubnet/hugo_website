@@ -111,11 +111,11 @@ Here's how isolation levels break down across my VLANs — higher scores mean mo
     .value { font: 12px 'Fira Code', monospace; fill: #e2e8f0; }
     .axis  { font: 11px monospace; fill: #718096; }
     .bar-20 { fill: #fc4f4f; }
-    .bar-50 { fill: #7c3aed; }
-    .bar-40 { fill: #6366f1; }
-    .bar-99 { fill: #4f46e5; }
-    .bar-30 { fill: #3b82f6; }
-    .bar-10 { fill: #2563eb; }
+    .bar-50 { fill: #5eead4; }
+    .bar-40 { fill: #2dd4bf; }
+    .bar-99 { fill: #14b8a6; }
+    .bar-30 { fill: #0d9488; }
+    .bar-10 { fill: #115e59; }
     .grid   { stroke: #2d3748; stroke-width: 1; }
   </style>
   <!-- Grid lines: bar area 165–575, each unit = 41px -->
@@ -157,7 +157,7 @@ Here's how isolation levels break down across my VLANs — higher scores mean mo
   <rect x="165" y="233" width="82" height="20" class="bar-10" rx="2"/>
   <text x="255" y="247" class="value">2</text>
 </svg>
-<figcaption style="font-size:0.8em;color:#718096;margin-top:4px">Isolation score by segment (0 = open, 10 = fully isolated). Original data from the lab's OPNsense firewall policy.</figcaption>
+<figcaption style="font-size:0.8em;color:#737373;margin-top:4px">Isolation score by segment (0 = open, 10 = fully isolated). Original data from the lab's OPNsense firewall policy.</figcaption>
 </figure>
 
 ---
@@ -198,18 +198,18 @@ As for protocol, three are worth knowing:
   <text x="540" y="168" text-anchor="middle" class="ba">5,010 Mbps</text>
   <!-- WireGuard -->
   <text x="150" y="47" text-anchor="end" class="bl">WireGuard</text>
-  <rect x="160" y="33" width="380" height="22" fill="#7c3aed" rx="2"/>
+  <rect x="160" y="33" width="380" height="22" fill="#5eead4" rx="2"/>
   <text x="548" y="47" class="bv">5,010</text>
   <!-- IPsec -->
   <text x="150" y="92" text-anchor="end" class="bl">IPsec (AES256)</text>
-  <rect x="160" y="78" width="326" height="22" fill="#4f46e5" rx="2"/>
+  <rect x="160" y="78" width="326" height="22" fill="#2dd4bf" rx="2"/>
   <text x="494" y="92" class="bv">4,300</text>
   <!-- OpenVPN -->
   <text x="150" y="137" text-anchor="end" class="bl">OpenVPN</text>
-  <rect x="160" y="123" width="80" height="22" fill="#2563eb" rx="2"/>
+  <rect x="160" y="123" width="80" height="22" fill="#14b8a6" rx="2"/>
   <text x="248" y="137" class="bv">1,050</text>
 </svg>
-<figcaption style="font-size:0.8em;color:#718096;margin-top:4px">Throughput in Mbps on a Protectli VP6670, OPNsense 25.7, iPerf3 over 60-second runs. Source: <a href="https://kb.protectli.com/kb/vpn-performance-results/" style="color:#7c3aed">Protectli Knowledge Base, September 2025</a>.</figcaption>
+<figcaption style="font-size:0.8em;color:#737373;margin-top:4px">Throughput in Mbps on a Protectli VP6670, OPNsense 25.7, iPerf3 over 60-second runs. Source: <a href="https://kb.protectli.com/kb/vpn-performance-results/">Protectli Knowledge Base, September 2025</a>.</figcaption>
 </figure>
 
 ### WireGuard on OPNsense — My Setup

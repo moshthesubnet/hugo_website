@@ -146,16 +146,16 @@ Config is now backed up to two places:
   <title>Backup Recovery: Expectation vs. Reality</title>
   <text x="16" y="28" font-family="system-ui,sans-serif" font-size="15" font-weight="700" fill="#e5e7eb">Backup Recovery: Expectation vs. Reality</text>
   <text x="16" y="62" font-family="system-ui,sans-serif" font-size="12" fill="#9ca3af">Expect to recover within hours</text>
-  <rect x="16" y="70" width="276" height="32" rx="4" fill="#8b5cf6"/>
-  <text x="300" y="92" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#8b5cf6">60%</text>
+  <rect x="16" y="70" width="276" height="32" rx="4" fill="#5eead4"/>
+  <text x="300" y="92" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#5eead4">60%</text>
   <text x="16" y="128" font-family="system-ui,sans-serif" font-size="12" fill="#9ca3af">Actually recovered within hours</text>
-  <rect x="16" y="136" width="161" height="32" rx="4" fill="#3b82f6"/>
-  <text x="185" y="158" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#3b82f6">35%</text>
+  <rect x="16" y="136" width="161" height="32" rx="4" fill="#2dd4bf"/>
+  <text x="185" y="158" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#2dd4bf">35%</text>
   <line x1="16" y1="186" x2="584" y2="186" stroke="#374151" stroke-width="1"/>
   <text x="16" y="206" font-family="system-ui,sans-serif" font-size="11" fill="#6b7280">Source: Unitrends State of Backup and Recovery Report 2025, n=3,000+ IT professionals</text>
   <text x="16" y="222" font-family="system-ui,sans-serif" font-size="11" fill="#6b7280">The 25-point gap only shows up when you actually try to recover.</text>
 </svg>
-<figcaption style="font-size:0.8em;color:#6b7280;text-align:center;margin-top:0.5rem">
+<figcaption style="font-size:0.8em;color:#737373;text-align:center;margin-top:0.5rem">
   Source: <a href="https://www.unitrends.com/blog/the-state-of-backup-and-recovery-2025-trends-and-challenges/">Unitrends State of Backup and Recovery Report 2025</a>
 </figcaption>
 </figure>

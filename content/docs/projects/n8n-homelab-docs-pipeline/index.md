@@ -71,7 +71,7 @@ flowchart LR
 
     classDef trigger fill:#1a365d,stroke:#63b3ed,stroke-width:2px,color:#ebf8ff
     classDef api fill:#1a202c,stroke:#4fd1c5,stroke-width:2px,color:#e6fffa
-    classDef code fill:#44337a,stroke:#b794f4,stroke-width:2px,color:#faf5ff
+    classDef code fill:#134e4a,stroke:#5eead4,stroke-width:2px,color:#faf5ff
     classDef io fill:#5f370e,stroke:#f6ad55,stroke-width:2px,color:#fffaf0
 
     class SCHED,MANUAL trigger
@@ -103,9 +103,9 @@ flowchart LR
   gap: 6px;
 }
 .mermaid-btn {
-  background: #1a1a2e;
-  color: #b794f4;
-  border: 1px solid #553c9a;
+  background: #1a1a1a;
+  color: #a3a3a3;
+  border: 1px solid #262626;
   border-radius: 4px;
   width: 32px;
   height: 32px;
@@ -118,7 +118,7 @@ flowchart LR
   transition: background 0.15s, color 0.15s;
 }
 .mermaid-btn:hover {
-  background: #553c9a;
+  background: #262626;
   color: #faf5ff;
 }
 .mermaid-zoom-hint {
@@ -126,7 +126,7 @@ flowchart LR
   top: 12px;
   left: 12px;
   font-size: 0.7rem;
-  color: #4a4a6a;
+  color: #525252;
   pointer-events: none;
   z-index: 10;
   white-space: nowrap;
@@ -320,7 +320,7 @@ flowchart TD
     classDef trigger fill:#1a365d,stroke:#63b3ed,stroke-width:2px,color:#ebf8ff
     classDef api fill:#1a202c,stroke:#4fd1c5,stroke-width:2px,color:#e6fffa
     classDef merge fill:#2d3748,stroke:#718096,stroke-width:1px,color:#e2e8f0
-    classDef code fill:#44337a,stroke:#b794f4,stroke-width:2px,color:#faf5ff
+    classDef code fill:#134e4a,stroke:#5eead4,stroke-width:2px,color:#faf5ff
     classDef io fill:#5f370e,stroke:#f6ad55,stroke-width:2px,color:#fffaf0
     classDef skip fill:#1a202c,stroke:#4a5568,stroke-width:1px,color:#718096
 

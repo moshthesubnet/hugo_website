@@ -102,15 +102,17 @@ Congo v2.13.0 has a bug with Hugo 0.157.0: `_partials/functions/warnings.html` c
 - Pushes to main trigger automatic deployment
 
 ## Content
-- Blog posts live in content/posts/ as markdown files
+- Blog posts live in content/writing/ as markdown files
+- Project docs live in content/projects/ as markdown files
+- About page at content/about/_index.md
 - Front matter follows Congo conventions (title, date, draft, tags, description, summary)
 
 ## Design language
-- Colors: Cyber Violet and Electric Blue
-- Headings: Bebas Neue
+- Colors: Near-black (#111111) background, muted teal (#5eead4) accent, neutral grays
+- Headings: System sans-serif (body), Georgia (hero/page titles)
 - Code blocks: Fira Code
-- Aesthetic: brutalist, sharp edges, neon glows
-- Tone: technical and personal, dry networking humor with emo undertones
+- Aesthetic: minimal, content-first, single-column, no visual gimmicks
+- Tone: professional with personality — dry networking humor, confident first-person
 
 ## Writing style
 - Posts are portfolio-quality writeups: confident, technical, first-person

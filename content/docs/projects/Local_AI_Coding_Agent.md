@@ -49,7 +49,7 @@ graph LR
     %% Styling
     classDef vlan fill:#121212,stroke:#4fd1c5,stroke-dasharray: 5 5,color:#eeeeee
     classDef device fill:#234e52,stroke:#4fd1c5,stroke-width:2px,color:#e6fffa
-    classDef service fill:#44337a,stroke:#b794f4,stroke-width:2px,color:#faf5ff
+    classDef service fill:#134e4a,stroke:#5eead4,stroke-width:2px,color:#faf5ff
     classDef storage fill:#5f370e,stroke:#f6ad55,stroke-width:2px,color:#ffffff
 
     class DevEnv,LabEnv vlan

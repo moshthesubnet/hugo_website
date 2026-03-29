@@ -42,16 +42,16 @@ The naive approach is to run a scanner. I tried that. It saw exactly one VLAN.
   <text x="310" y="26" text-anchor="middle" fill="#e2e8f0" font-family="system-ui,sans-serif" font-size="13" font-weight="600">Network Visibility Gap</text>
   <!-- Bar 1: 38% -->
   <text x="215" y="62" text-anchor="end" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="11">Can't identify all devices</text>
-  <rect x="222" y="50" width="144" height="18" rx="3" fill="#6d28d9"/>
-  <text x="372" y="63" fill="#c4b5fd" font-family="system-ui,sans-serif" font-size="12" font-weight="600">38%</text>
+  <rect x="222" y="50" width="144" height="18" rx="3" fill="#14b8a6"/>
+  <text x="372" y="63" fill="#5eead4" font-family="system-ui,sans-serif" font-size="12" font-weight="600">38%</text>
   <!-- Bar 2: 71% -->
   <text x="215" y="102" text-anchor="end" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="11">Visibility gaps delay detection</text>
-  <rect x="222" y="90" width="269" height="18" rx="3" fill="#2563eb"/>
-  <text x="497" y="103" fill="#93c5fd" font-family="system-ui,sans-serif" font-size="12" font-weight="600">71%</text>
+  <rect x="222" y="90" width="269" height="18" rx="3" fill="#2dd4bf"/>
+  <text x="497" y="103" fill="#99f6e4" font-family="system-ui,sans-serif" font-size="12" font-weight="600">71%</text>
   <!-- Bar 3: 90%+ -->
   <text x="215" y="142" text-anchor="end" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="11">Ransomware via unmanaged devices</text>
-  <rect x="222" y="130" width="342" height="18" rx="3" fill="#0e7490"/>
-  <text x="570" y="143" fill="#67e8f9" font-family="system-ui,sans-serif" font-size="12" font-weight="600">90%+</text>
+  <rect x="222" y="130" width="342" height="18" rx="3" fill="#0d9488"/>
+  <text x="570" y="143" fill="#5eead4" font-family="system-ui,sans-serif" font-size="12" font-weight="600">90%+</text>
   <!-- Scale labels -->
   <text x="222" y="168" fill="#475569" font-family="system-ui,sans-serif" font-size="10">0%</text>
   <text x="317" y="168" fill="#475569" font-family="system-ui,sans-serif" font-size="10">25%</text>
