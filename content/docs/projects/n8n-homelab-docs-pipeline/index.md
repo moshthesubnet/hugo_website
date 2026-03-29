@@ -493,4 +493,4 @@ DHCP ────┘
 
 ## Related
 
-- [Blog post: Automating Homelab Documentation with n8n and Claude Code](/posts/homelab-docs-automation-n8n-claude/) — the full writeup with gotchas and reasoning
+- [Blog post: Automating Homelab Documentation with n8n and Claude Code](/writing/homelab-docs-automation-n8n-claude/) — the full writeup with gotchas and reasoning

@@ -81,7 +81,7 @@ I needed a local copy of the config, on the Proxmox host itself, that doesn't re
 
 **Step 3: Set up an API-based config pull.**
 
-OPNsense has a REST API with a backup endpoint. I created a dedicated read-only API user with backup privileges — no admin access, no write permissions, just enough to pull the config XML. The auth model is HTTP Basic with an API key and secret — the same model used by the [OPNsense diagnostics API for cross-VLAN network monitoring](/posts/cross-vlan-network-monitor/). Credentials stored in a root-only `.env` file on the Proxmox host.
+OPNsense has a REST API with a backup endpoint. I created a dedicated read-only API user with backup privileges — no admin access, no write permissions, just enough to pull the config XML. The auth model is HTTP Basic with an API key and secret — the same model used by the [OPNsense diagnostics API for cross-VLAN network monitoring](/writing/cross-vlan-network-monitor/). Credentials stored in a root-only `.env` file on the Proxmox host.
 
 {{< alert >}}
 Keep API credentials in a file with `chmod 600`, owned by root. The `.env` file should never be world-readable, and definitely shouldn't live in a directory served by anything.
@@ -184,7 +184,7 @@ If vzdump causes a network disruption — even a brief one — the API call runn
 
 ### What if OPNsense is down when the backup script runs?
 
-The script validates its own output: if the file doesn't start with `<?xml`, it logs failure, deletes the partial file, and exits with code 1. The previous day's config stays on disk. If you want active alerting on failures, exit code 1 plugs cleanly into a webhook — I route mine through [n8n for alerting](/posts/homelab-docs-automation-n8n-claude/).
+The script validates its own output: if the file doesn't start with `<?xml`, it logs failure, deletes the partial file, and exits with code 1. The previous day's config stays on disk. If you want active alerting on failures, exit code 1 plugs cleanly into a webhook — I route mine through [n8n for alerting](/writing/homelab-docs-automation-n8n-claude/).
 
 <script type="application/ld+json">
 {
@@ -192,7 +192,7 @@ The script validates its own output: if the file doesn't start with `<?xml`, it 
   "@graph": [
     {
       "@type": "BlogPosting",
-      "@id": "https://moshthesubnet.com/posts/opnsense-backup-incident/#article",
+      "@id": "https://moshthesubnet.com/writing/opnsense-backup-incident/#article",
       "headline": "The Backup That Ate My Network",
       "description": "My OPNsense VM froze during a 3am vzdump snapshot, severed all VLAN routing, and trapped Proxmox in a circular dependency. Here's how a 30-line bash script replaced a full VM backup — and why that was the right call.",
       "datePublished": "2026-03-04T00:00:00Z",
@@ -218,7 +218,7 @@ The script validates its own output: if the file doesn't start with `<?xml`, it 
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "https://moshthesubnet.com/posts/opnsense-backup-incident/"
+        "@id": "https://moshthesubnet.com/writing/opnsense-backup-incident/"
       },
       "articleSection": "Homelab",
       "keywords": ["OPNsense", "Proxmox", "vzdump", "backup", "homelab", "bash", "incident response", "VLAN", "firewall", "config backup"],
@@ -226,7 +226,7 @@ The script validates its own output: if the file doesn't start with `<?xml`, it 
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://moshthesubnet.com/posts/opnsense-backup-incident/#breadcrumb",
+      "@id": "https://moshthesubnet.com/writing/opnsense-backup-incident/#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
@@ -238,19 +238,19 @@ The script validates its own output: if the file doesn't start with `<?xml`, it 
           "@type": "ListItem",
           "position": 2,
           "name": "Posts",
-          "item": "https://moshthesubnet.com/posts/"
+          "item": "https://moshthesubnet.com/writing/"
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": "The Backup That Ate My Network",
-          "item": "https://moshthesubnet.com/posts/opnsense-backup-incident/"
+          "item": "https://moshthesubnet.com/writing/opnsense-backup-incident/"
         }
       ]
     },
     {
       "@type": "FAQPage",
-      "@id": "https://moshthesubnet.com/posts/opnsense-backup-incident/#faq",
+      "@id": "https://moshthesubnet.com/writing/opnsense-backup-incident/#faq",
       "mainEntity": [
         {
           "@type": "Question",
