@@ -85,6 +85,14 @@ body > footer a:hover {
   text-decoration: underline !important;
 }
 
+/* Active nav link — teal underline bar */
+body > header a.nav-active {
+  color: #fafafa !important;
+  border-bottom: 2px solid #5eead4;
+  padding-bottom: 2px;
+  text-decoration: none !important;
+}
+
 /* ---------------------------------------------------------
    HEADER — minimal, no full-bleed
    --------------------------------------------------------- */
