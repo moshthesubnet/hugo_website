@@ -11,6 +11,7 @@ tags:
   - homelab
   - security
   - infrastructure
+images: ["/img/projects/vlan-segmentation-og.png"]
 draft: false
 weight: 6
 ---
