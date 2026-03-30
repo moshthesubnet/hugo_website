@@ -108,6 +108,29 @@ body > header a[href="/"] {
   font-weight: 500;
 }
 
+/* Switch Stack logo hover — "stack coming online" */
+.site-logo .switch-bar,
+.site-logo .switch-led,
+.site-logo .switch-port {
+  transition: opacity 0.2s ease;
+}
+
+.site-logo-link:hover .switch-bar,
+.site-logo-link:hover .switch-led,
+.site-logo-link:hover .switch-port {
+  opacity: 1 !important;
+}
+
+/* Remove default link underline from logo link */
+.site-logo-link {
+  text-decoration: none !important;
+}
+
+.site-logo-link span {
+  color: #fafafa !important;
+  font-weight: 500;
+}
+
 /* ---------------------------------------------------------
    FOOTER — minimal
    --------------------------------------------------------- */
