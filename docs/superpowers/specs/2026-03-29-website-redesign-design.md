@@ -80,7 +80,7 @@ All pages share: 720px max-width content column, centered. Same nav, same footer
 
 Top to bottom:
 
-1. **Hero** — Serif statement: "My career path has more hops than my traceroute." followed by a brief intro paragraph: "Cloud & Network Engineering student at WGU. CCNA and a modest homelab I use to break things on purpose. I document the thinking behind every fix, build, and mistake."
+1. **Hero** — Serif statement: "My career path has more hops than my traceroute." followed by a brief intro paragraph: "Network Engineering and Security student at WGU (Cisco Track). CCNA and a modest homelab I use to break things on purpose. I document the thinking behind every fix, build, and mistake."
 2. **Divider**
 3. **Recent Writing** — Section label + 3 most recent posts. Each shows title (teal, linked) and one-line description (#525252). No dates on the homepage listing.
 4. **Divider**

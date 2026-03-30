@@ -161,7 +161,7 @@ weight = 1
   [params.author]
     name = "Skyler King"
     headline = "Network & Cloud Engineer"
-    bio = "Cloud & Network Engineering student at WGU. CCNA and a modest homelab I use to break things on purpose."
+    bio = "Network Engineering and Security student at WGU (Cisco Track). CCNA and a modest homelab I use to break things on purpose."
     links = [
       { github = "https://github.com/moshthesubnet" },
       { linkedin = "https://www.linkedin.com/in/skylerkingnetwork" },
@@ -758,7 +758,7 @@ Replace the entire file with the minimal homepage layout. This uses Hugo's templ
   {{/* ── Hero ──────────────────────────────────────────────── */}}
   <section style="padding: 3.75rem 0 3rem;">
     <h1 class="home-hero-title">My career path has more hops than my traceroute.</h1>
-    <p class="home-hero-intro">Cloud & Network Engineering student at WGU. CCNA and a modest homelab I use to break things on purpose. I document the thinking behind every fix, build, and mistake.</p>
+    <p class="home-hero-intro">Network Engineering and Security student at WGU (Cisco Track). CCNA and a modest homelab I use to break things on purpose. I document the thinking behind every fix, build, and mistake.</p>
   </section>
 
   <hr class="home-divider">
@@ -1141,7 +1141,7 @@ Create `content/about/_index.md`. Pull the narrative from the existing `content/
 ```markdown
 ---
 title: "About"
-description: "Skyler King — Cloud & Network Engineering student, career changer, homelab enthusiast."
+description: "Skyler King — Network Engineering & Security student, career changer, homelab enthusiast."
 aliases: ["/docs/bio/"]
 ---
 
