@@ -1,6 +1,6 @@
 ---
 title: About & Accomplishments
-description: "Skyler King — Cloud/Network Engineering student at WGU, CCNA certified, six certifications in two years. Career changer building toward enterprise networking roles through homelab work and real production experience."
+description: "Skyler King — Network Engineering and Security student at WGU, CCNA certified, six certifications in two years. Career changer building toward enterprise networking roles through homelab work and real production experience."
 weight: 1
 lastUpdated: "2026-03-12"
 tags: ["about", "networking", "career"]
@@ -8,7 +8,7 @@ tags: ["about", "networking", "career"]
 
 <!-- [PERSONAL EXPERIENCE] Career change narrative — first-hand account -->
 
-> **TL;DR:** Career changer who retrained into networking from scratch — six certifications in two years, a CCNA, a homelab running 17 VMs across 7 VLANs, and real production experience that includes saving an estimated $15k in downtime by diagnosing a failed IPsec VPN tunnel. Currently finishing a B.S. in Cloud and Network Engineering at WGU.
+> **TL;DR:** Career changer who retrained into networking from scratch — six certifications in two years, a CCNA, a homelab running 17 VMs across 7 VLANs, and real production experience that includes saving an estimated $15k in downtime by diagnosing a failed IPsec VPN tunnel. Currently finishing a B.S. in Network Engineering and Security (Cisco Track) at WGU.
 
 ---
 ## Who I Am
@@ -17,7 +17,7 @@ I didn't come up through a CS degree. My background was entirely non-technical �
 
 Then I decided to change that. <!-- [PERSONAL EXPERIENCE] -->
 
-The decision was deliberate, not accidental. Before enrolling anywhere, I researched which networking certifications actually mattered to employers — which ones showed up in job postings, which ones hiring managers actually cared about. CCNA came up as the number one most sought-after certification in networking, and it wasn't close. That settled it. I enrolled in the WGU B.S. in Cloud and Network Engineering, specifically the Cisco Track, because the program is built around earning those certifications: A+, Linux Essentials, CCNA, ITIL, CCNA Cybersecurity, Cloud+. The degree and the credentials are the same thing. <!-- [PERSONAL EXPERIENCE] -->
+The decision was deliberate, not accidental. Before enrolling anywhere, I researched which networking certifications actually mattered to employers — which ones showed up in job postings, which ones hiring managers actually cared about. CCNA came up as the number one most sought-after certification in networking, and it wasn't close. That settled it. I enrolled in the WGU B.S. in Network Engineering and Security, Cisco Track, because the program is built around earning those certifications: A+, Linux Essentials, CCNA, ITIL, CCNA Cybersecurity, Cloud+. The degree and the credentials are the same thing. <!-- [PERSONAL EXPERIENCE] -->
 
 What I didn't anticipate was the homelab getting out of hand. It started as a study environment and turned into something I'd be comfortable running in a small production context. The homelab wasn't a side project — it was the curriculum. You don't really understand VLANs until you've misconfigured one at midnight and had to trace exactly what broke.
 

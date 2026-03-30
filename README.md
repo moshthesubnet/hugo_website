@@ -1,6 +1,6 @@
 # Mosh The Subnet — Personal Documentation Site
 
-Personal documentation site for Skyler King — Cloud/Network Engineering student, homelab enthusiast. Built with [Hugo](https://gohugo.io/) and the [Congo](https://github.com/jpanther/congo) theme, deployed on [Cloudflare Pages](https://pages.cloudflare.com/).
+Personal documentation site for Skyler King — Network Engineering and Security student (Cisco Track), homelab enthusiast. Built with [Hugo](https://gohugo.io/) and the [Congo](https://github.com/jpanther/congo) theme, deployed on [Cloudflare Pages](https://pages.cloudflare.com/).
 
 **Live site:** [moshthesubnet.com](https://moshthesubnet.com)
 
