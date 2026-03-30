@@ -85,20 +85,37 @@ body > footer a:hover {
   text-decoration: underline !important;
 }
 
-/* Active nav link — teal underline bar extending full width of nav item */
+/* Active nav link — teal bar sweeping left to right */
 body > header a.nav-active {
   color: #fafafa !important;
   text-decoration: none !important;
 }
 
+body > header a.nav-active span {
+  text-decoration: none !important;
+}
+
 body > header li:has(a.nav-active) {
-  border-bottom: 2px solid #5eead4;
+  position: relative;
   padding-bottom: 4px;
 }
 
-/* Suppress the Tailwind group-hover:underline on the span inside active links */
-body > header a.nav-active span {
-  text-decoration: none !important;
+body > header li:has(a.nav-active)::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #5eead4;
+  transform: scaleX(1);
+  transform-origin: left center;
+  animation: nav-bar-in 0.3s ease forwards;
+}
+
+@keyframes nav-bar-in {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
 }
 
 /* ---------------------------------------------------------
