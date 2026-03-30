@@ -12,6 +12,7 @@ tags:
   - opnsense
   - proxmox
   - docker
+images: ["/img/projects/cross-vlan-network-monitor-og.png"]
 draft: false
 weight: 2
 ---

@@ -11,6 +11,7 @@ tags:
   - ccna
   - routing
   - cml
+images: ["/img/projects/ospf-lab-og.png"]
 draft: false
 weight: 5
 ---
