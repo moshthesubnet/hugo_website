@@ -1,3 +1,4 @@
+images = ["/img/concert-logo.png"]
 colorScheme = "minimal"
 defaultAppearance = "dark"
 autoSwitchAppearance = false
