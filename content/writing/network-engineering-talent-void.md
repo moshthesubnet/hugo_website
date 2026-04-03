@@ -169,35 +169,35 @@ The skills gap centers on a hybrid profile that didn't exist as a job category 1
     <rect width="560" height="380" fill="#0f172a" rx="12"/>
     <text x="280" y="36" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="600">Most In-Demand Network Engineering Skills (2026)</text>
     <text x="280" y="54" text-anchor="middle" fill="#94a3b8" font-size="11">% of employers reporting difficulty filling roles requiring each skill</text>
-    <!-- Horizontal bars -->
-    <!-- SD-WAN / Cloud Networking: 84% -->
-    <text x="160" y="90" text-anchor="end" fill="#94a3b8" font-size="11">SD-WAN / Cloud Networking</text>
-    <rect x="170" y="78" width="319" height="18" fill="#6366f1" rx="3"/>
-    <text x="483" y="91" fill="#e2e8f0" font-size="11" font-weight="600"> 84%</text>
-    <!-- Zero-Trust Architecture: 37% -->
-    <text x="160" y="122" text-anchor="end" fill="#94a3b8" font-size="11">Zero-Trust Architecture</text>
-    <rect x="170" y="110" width="141" height="18" fill="#6366f1" rx="3"/>
-    <text x="319" y="123" fill="#e2e8f0" font-size="11" font-weight="600"> 37%</text>
-    <!-- Network Automation (Python/Ansible): 35% -->
-    <text x="160" y="154" text-anchor="end" fill="#94a3b8" font-size="11">Network Automation (Python/Ansible)</text>
-    <rect x="170" y="142" width="133" height="18" fill="#22d3ee" rx="3"/>
-    <text x="311" y="155" fill="#e2e8f0" font-size="11" font-weight="600"> 35%</text>
-    <!-- AIOps / Intent-Based Networking: 31% -->
-    <text x="160" y="186" text-anchor="end" fill="#94a3b8" font-size="11">AIOps / Intent-Based Networking</text>
-    <rect x="170" y="174" width="118" height="18" fill="#22d3ee" rx="3"/>
-    <text x="296" y="187" fill="#e2e8f0" font-size="11" font-weight="600"> 31%</text>
-    <!-- Multi-Cloud Networking: 28% -->
-    <text x="160" y="218" text-anchor="end" fill="#94a3b8" font-size="11">Multi-Cloud Networking</text>
-    <rect x="170" y="206" width="106" height="18" fill="#8b5cf6" rx="3"/>
-    <text x="284" y="219" fill="#e2e8f0" font-size="11" font-weight="600"> 28%</text>
-    <!-- Private 5G / Edge: 22% -->
-    <text x="160" y="250" text-anchor="end" fill="#94a3b8" font-size="11">Private 5G / Edge Computing</text>
-    <rect x="170" y="238" width="84" height="18" fill="#8b5cf6" rx="3"/>
-    <text x="262" y="251" fill="#e2e8f0" font-size="11" font-weight="600"> 22%</text>
-    <!-- Wi-Fi 7 / Wireless Design: 18% -->
-    <text x="160" y="282" text-anchor="end" fill="#94a3b8" font-size="11">Wi-Fi 7 / Wireless Design</text>
-    <rect x="170" y="270" width="68" height="18" fill="#475569" rx="3"/>
-    <text x="246" y="283" fill="#e2e8f0" font-size="11" font-weight="600"> 18%</text>
+    <!-- Horizontal bars — labels end at x=222, bars start at x=230, max bar width=300px (100%=300) -->
+    <!-- SD-WAN / Cloud Networking: 84% = 252px -->
+    <text x="222" y="90" text-anchor="end" fill="#94a3b8" font-size="11">SD-WAN / Cloud Networking</text>
+    <rect x="230" y="78" width="252" height="18" fill="#6366f1" rx="3"/>
+    <text x="487" y="91" fill="#e2e8f0" font-size="11" font-weight="600"> 84%</text>
+    <!-- Zero-Trust Architecture: 37% = 111px -->
+    <text x="222" y="122" text-anchor="end" fill="#94a3b8" font-size="11">Zero-Trust Architecture</text>
+    <rect x="230" y="110" width="111" height="18" fill="#6366f1" rx="3"/>
+    <text x="346" y="123" fill="#e2e8f0" font-size="11" font-weight="600"> 37%</text>
+    <!-- Network Automation (Python/Ansible): 35% = 105px -->
+    <text x="222" y="154" text-anchor="end" fill="#94a3b8" font-size="11">Network Automation (Python/Ansible)</text>
+    <rect x="230" y="142" width="105" height="18" fill="#22d3ee" rx="3"/>
+    <text x="340" y="155" fill="#e2e8f0" font-size="11" font-weight="600"> 35%</text>
+    <!-- AIOps / Intent-Based Networking: 31% = 93px -->
+    <text x="222" y="186" text-anchor="end" fill="#94a3b8" font-size="11">AIOps / Intent-Based Networking</text>
+    <rect x="230" y="174" width="93" height="18" fill="#22d3ee" rx="3"/>
+    <text x="328" y="187" fill="#e2e8f0" font-size="11" font-weight="600"> 31%</text>
+    <!-- Multi-Cloud Networking: 28% = 84px -->
+    <text x="222" y="218" text-anchor="end" fill="#94a3b8" font-size="11">Multi-Cloud Networking</text>
+    <rect x="230" y="206" width="84" height="18" fill="#8b5cf6" rx="3"/>
+    <text x="319" y="219" fill="#e2e8f0" font-size="11" font-weight="600"> 28%</text>
+    <!-- Private 5G / Edge: 22% = 66px -->
+    <text x="222" y="250" text-anchor="end" fill="#94a3b8" font-size="11">Private 5G / Edge Computing</text>
+    <rect x="230" y="238" width="66" height="18" fill="#8b5cf6" rx="3"/>
+    <text x="301" y="251" fill="#e2e8f0" font-size="11" font-weight="600"> 22%</text>
+    <!-- Wi-Fi 7 / Wireless Design: 18% = 54px -->
+    <text x="222" y="282" text-anchor="end" fill="#94a3b8" font-size="11">Wi-Fi 7 / Wireless Design</text>
+    <rect x="230" y="270" width="54" height="18" fill="#475569" rx="3"/>
+    <text x="289" y="283" fill="#e2e8f0" font-size="11" font-weight="600"> 18%</text>
     <!-- Source -->
     <text x="280" y="360" text-anchor="middle" fill="#64748b" font-size="10">Source: Mordor Intelligence, Franklin Fitch, and PrivateLTEand5G industry surveys, 2024–2026</text>
   </svg>
