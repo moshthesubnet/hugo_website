@@ -21,6 +21,8 @@ tags:
   - documentation
 ---
 
+*By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
+
 ![Green binary code and data streams cascading on dark background representing automation pipelines and data flow](https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&h=630&fit=crop&q=80&fm=webp)
 *Photo by Taylor Vick on Unsplash*
 

@@ -19,6 +19,8 @@ tags:
   - incident-response
 ---
 
+*By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
+
 At 3am on a Tuesday, my scheduled Proxmox backup job killed my network. Not in the dramatic "something exploded" sense — more like it quietly held a pillow over its face until everything went still. The kind of failure you only find out about in the morning when you notice the timestamps stopped.
 
 > **TL;DR:** A vzdump snapshot froze my OPNsense VM, severing the cross-VLAN route the backup job needed to reach storage. The backup was destroying the infrastructure it depended on. I removed OPNsense from the backup job and replaced it with a 30-line bash script that pulls the config XML via the OPNsense REST API — no snapshot, no freeze, no loop. A [Unitrends 2025 report](https://www.unitrends.com/blog/the-state-of-backup-and-recovery-2025-trends-and-challenges/) found that 60% of organizations believe they can recover within hours; only 35% actually can. This post is a close-up of how that gap happens.

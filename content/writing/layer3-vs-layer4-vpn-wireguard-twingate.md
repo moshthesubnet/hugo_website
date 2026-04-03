@@ -11,6 +11,8 @@ ogImage: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&h=
 tags: ["vpn", "wireguard", "ztna", "twingate", "networking", "homelab", "security", "ccna"]
 ---
 
+*By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
+
 {{< figure
   src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&h=630&fit=crop&q=80"
   alt="Close-up of a silver padlock resting on a dark keyboard, symbolizing network access control and security"
