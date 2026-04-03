@@ -46,35 +46,35 @@ The human impact is already showing up in HR data. According to a 2025 survey, 7
 What makes this different from a normal hiring cycle? The shortage isn't concentrated in one niche or one geography. It cuts across enterprise networking, cloud infrastructure, and telecommunications simultaneously. Companies aren't just competing with their direct industry rivals for talent — they're competing with every sector that runs digital infrastructure, which at this point is every sector.
 
 <figure>
-  <svg viewBox="0 0 560 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;font-family:system-ui,sans-serif;">
-    <rect width="560" height="340" fill="#0f172a" rx="12"/>
+  <svg viewBox="0 0 560 370" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;font-family:system-ui,sans-serif;">
+    <rect width="560" height="370" fill="#0f172a" rx="12"/>
     <text x="280" y="36" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="600">Projected U.S. Job Growth (2024–2034)</text>
     <text x="280" y="54" text-anchor="middle" fill="#94a3b8" font-size="11">Selected roles vs. all occupations average</text>
     <!-- Y-axis label -->
-    <text x="18" y="200" text-anchor="middle" fill="#94a3b8" font-size="10" transform="rotate(-90,18,200)">Growth %</text>
+    <text x="18" y="210" text-anchor="middle" fill="#94a3b8" font-size="10" transform="rotate(-90,18,210)">Growth %</text>
     <!-- Bars -->
     <!-- Network Architects: 12% -->
-    <rect x="80" y="110" width="70" height="144" fill="#6366f1" rx="4"/>
-    <text x="115" y="104" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">12%</text>
-    <text x="115" y="278" text-anchor="middle" fill="#94a3b8" font-size="10">Network</text>
-    <text x="115" y="291" text-anchor="middle" fill="#94a3b8" font-size="10">Architects</text>
+    <rect x="80" y="136" width="70" height="144" fill="#6366f1" rx="4"/>
+    <text x="115" y="130" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">12%</text>
+    <text x="115" y="304" text-anchor="middle" fill="#94a3b8" font-size="10">Network</text>
+    <text x="115" y="317" text-anchor="middle" fill="#94a3b8" font-size="10">Architects</text>
     <!-- Info Security: 33% -->
-    <rect x="185" y="54" width="70" height="200" fill="#22d3ee" rx="4"/>
-    <text x="220" y="48" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">33%</text>
-    <text x="220" y="278" text-anchor="middle" fill="#94a3b8" font-size="10">Info Security</text>
-    <text x="220" y="291" text-anchor="middle" fill="#94a3b8" font-size="10">Analysts</text>
+    <rect x="185" y="80" width="70" height="200" fill="#22d3ee" rx="4"/>
+    <text x="220" y="74" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">33%</text>
+    <text x="220" y="304" text-anchor="middle" fill="#94a3b8" font-size="10">Info Security</text>
+    <text x="220" y="317" text-anchor="middle" fill="#94a3b8" font-size="10">Analysts</text>
     <!-- Cloud/Systems: 17% -->
-    <rect x="290" y="86" width="70" height="168" fill="#8b5cf6" rx="4"/>
-    <text x="325" y="80" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">17%</text>
-    <text x="325" y="278" text-anchor="middle" fill="#94a3b8" font-size="10">Systems</text>
-    <text x="325" y="291" text-anchor="middle" fill="#94a3b8" font-size="10">Architects</text>
+    <rect x="290" y="112" width="70" height="168" fill="#8b5cf6" rx="4"/>
+    <text x="325" y="106" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">17%</text>
+    <text x="325" y="304" text-anchor="middle" fill="#94a3b8" font-size="10">Systems</text>
+    <text x="325" y="317" text-anchor="middle" fill="#94a3b8" font-size="10">Architects</text>
     <!-- All Occupations: 4% -->
-    <rect x="395" y="206" width="70" height="48" fill="#475569" rx="4"/>
-    <text x="430" y="200" text-anchor="middle" fill="#94a3b8" font-size="13" font-weight="700">4%</text>
-    <text x="430" y="278" text-anchor="middle" fill="#94a3b8" font-size="10">All</text>
-    <text x="430" y="291" text-anchor="middle" fill="#94a3b8" font-size="10">Occupations</text>
+    <rect x="395" y="232" width="70" height="48" fill="#475569" rx="4"/>
+    <text x="430" y="226" text-anchor="middle" fill="#94a3b8" font-size="13" font-weight="700">4%</text>
+    <text x="430" y="304" text-anchor="middle" fill="#94a3b8" font-size="10">All</text>
+    <text x="430" y="317" text-anchor="middle" fill="#94a3b8" font-size="10">Occupations</text>
     <!-- Baseline -->
-    <line x1="60" y1="254" x2="500" y2="254" stroke="#334155" stroke-width="1"/>
+    <line x1="60" y1="280" x2="500" y2="280" stroke="#334155" stroke-width="1"/>
   </svg>
   <figcaption style="text-align:center;font-size:0.8rem;color:#94a3b8;margin-top:0.5rem;">Source: U.S. Bureau of Labor Statistics, Occupational Outlook Handbook, 2024</figcaption>
 </figure>
