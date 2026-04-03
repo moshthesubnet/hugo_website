@@ -20,6 +20,8 @@ tags:
   - automation
 ---
 
+*By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
+
 ![Close-up of a green circuit board with rows of electronic components under cool blue lighting.](https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=630&fit=crop&q=80)
 *Photo by Alexandre Debiève on Unsplash*
 

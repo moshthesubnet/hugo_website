@@ -20,6 +20,8 @@ tags:
   - incident-response
 ---
 
+*By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
+
 Immich 2.6.0 dropped on March 20, 2026, and immediately broke every TrueNAS Community Edition install still running Postgres 15. No warning. No graceful fallback. The app update fires, the pgvecto upgrade container starts, and then — nothing. The Immich server never comes back up.
 
 The failure is specific: the new pgvecto image ships without the Postgres 15 binaries that `pg_upgrade` needs for an in-place major version migration. Your photos, albums, and metadata are completely intact. The problem is that the upgrade can't run — and until it does, Immich won't start.
