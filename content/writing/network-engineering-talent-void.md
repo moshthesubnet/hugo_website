@@ -27,7 +27,9 @@ Three forces are converging at the same time: a retirement wave that's pulling d
 
 The companies that recognize this now will build pipelines. The rest will compete on salary for a shrinking pool of talent they can't afford and probably can't find.
 
-> **TL;DR:** Network engineering has over 1.2 million unfilled roles globally ([Tecla](https://www.tecla.io/blog/tech-talent-shortage), 2025), with 12% job growth projected through 2034. A retirement wave, automation eliminating the entry-level training pipeline, and demand for rare hybrid skills (cloud + security + automation) are converging into a structural crisis. Organizations need pipeline strategies now, not better job postings.
+{{< alert >}}
+**TL;DR:** Network engineering has over 1.2 million unfilled roles globally ([Tecla](https://www.tecla.io/blog/tech-talent-shortage), 2025), with 12% job growth projected through 2034. A retirement wave, automation eliminating the entry-level training pipeline, and demand for rare hybrid skills (cloud + security + automation) are converging into a structural crisis. Organizations need pipeline strategies now, not better job postings.
+{{< /alert >}}
 
 ---
 
