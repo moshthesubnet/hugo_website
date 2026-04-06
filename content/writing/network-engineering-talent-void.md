@@ -17,8 +17,6 @@ tags:
   - automation
 ---
 
-# The Coming Talent Void in Network Engineering
-
 *By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
 
 The U.S. Bureau of Labor Statistics projects more than 25,000 new network engineering openings annually through 2034, at a growth rate nearly triple the national average. Those numbers don't capture the full picture — they measure new roles, not the wave of retirements that will compound them. This isn't a temporary hiring blip from a slow quarter. It's a structural problem that has been building for years and is about to get significantly worse.
