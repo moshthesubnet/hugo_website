@@ -7,8 +7,8 @@ description: "Layer 3 VPNs (WireGuard) assign a virtual IP and put you on the ne
 summary: "WireGuard and TwinGate both call themselves VPNs. One gives you a network interface and full subnet access. The other gives you a single door. Here's what that means for your lab and for anyone else you hand access to."
 coverImage: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&h=630&fit=crop&q=80"
 coverImageAlt: "Close-up of a silver padlock resting on a dark keyboard, symbolizing network access control and security"
-ogImage: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&h=630&fit=crop&q=80"
 tags: ["vpn", "wireguard", "ztna", "twingate", "networking", "homelab", "security", "ccna"]
+images: ["/img/posts/layer3-vs-layer4-vpn-wireguard-twingate-og.png"]
 ---
 
 *By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*

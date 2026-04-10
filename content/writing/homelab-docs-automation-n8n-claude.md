@@ -6,9 +6,7 @@ lastmod: 2026-03-23
 draft: false
 description: "Homelab docs go stale fast. My n8n pipeline polls OPNsense weekly, diffs state, and triggers Claude Code via SSH to rewrite docs automatically. Five gotchas that cost real time."
 summary: "OPNsense REST API → n8n on DockerHost1 → Claude Code VM via SSH → NetBox YAML + Obsidian Markdown → Syncthing vault on TrueNAS. A documentation pipeline that updates itself, plus the five gotchas that nearly broke it."
-cover: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&h=630&fit=crop&q=80&fm=webp"
 coverAlt: "Green binary code and data streams cascading on dark background representing automation pipelines and data flow"
-ogImage: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&h=630&fit=crop&q=80&fm=webp"
 tags:
   - homelab
   - n8n
@@ -19,6 +17,7 @@ tags:
   - obsidian
   - truenas
   - documentation
+images: ["/img/posts/homelab-docs-automation-n8n-claude-og.png"]
 ---
 
 *By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*

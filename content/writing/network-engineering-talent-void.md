@@ -6,15 +6,14 @@ lastmod: 2026-04-03
 draft: false
 description: "The BLS projects 12% growth in network engineering through 2034 — nearly triple the national average — while a retirement wave, automation, and a widening skills gap converge into a structural workforce crisis."
 summary: "Over 25,000 annual openings projected through 2034 at 12% BLS-confirmed growth, while a retirement wave pulls institutional knowledge out the door and automation dismantles the apprenticeship pipeline — the network engineering talent void isn't coming. It's already here."
-cover: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80"
 coverAlt: "Long corridor of illuminated server racks in a modern data center facility"
-ogImage: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80"
 tags:
   - networking
   - workforce
   - career
   - netdevops
   - automation
+images: ["/img/posts/network-engineering-talent-void-og.png"]
 ---
 
 *By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
