@@ -817,6 +817,31 @@ article .tag:hover,
   color: #5eead4 !important;
 }
 
+.home-contact-success {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  color: #5eead4;
+  font-size: 0.9375rem;
+  padding: 0.75rem 0;
+}
+
+.home-contact-success[style*="display"] {
+  display: flex;
+}
+
+.home-contact-form-error {
+  color: #f87171;
+  font-size: 0.8125rem;
+  margin-bottom: 0.5rem;
+}
+
+.home-contact-field-error {
+  color: #f87171;
+  font-size: 0.75rem;
+  margin-top: 0.125rem;
+}
+
 @media (max-width: 640px) {
   .home-contact-card {
     padding: 1.25rem;
