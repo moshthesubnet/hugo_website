@@ -93,17 +93,9 @@
   <hr class="home-divider">
   {{ end }}
 
-  {{/* ── Certifications ────────────────────────────────────── */}}
-  <section class="home-section">
-    <div class="home-section-label">Certifications</div>
-    <div class="home-certs">
-      <span>CCNA</span><span class="home-certs-dot">·</span>
-      <span>Cloud+</span><span class="home-certs-dot">·</span>
-      <span>CBROPS</span><span class="home-certs-dot">·</span>
-      <span>ITIL 4</span><span class="home-certs-dot">·</span>
-      <span>Linux Essentials</span><span class="home-certs-dot">·</span>
-      <span>A+</span>
-    </div>
+  {{/* ── Contact ───────────────────────────────────────────── */}}
+  <section class="home-section home-contact">
+    {{ partial "contact-form.html" . }}
   </section>
 
 </div>
