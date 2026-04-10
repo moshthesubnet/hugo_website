@@ -8,7 +8,6 @@ description: "My OPNsense VM froze during a 3am vzdump snapshot, severed all VLA
 summary: "Scheduled vzdump backup → OPNsense snapshot freeze → VLAN routing severed → Proxmox can't reach backup storage. A circular dependency baked into my infrastructure. This is how I broke the loop."
 coverImage: "https://images.unsplash.com/photo-1718241905495-01e4e42c3eef?w=1200&h=630&fit=crop&q=80&fm=webp"
 coverImageAlt: "Dark server room with rows of rack-mounted servers illuminated by LED indicators in a data center"
-ogImage: "https://images.unsplash.com/photo-1718241905495-01e4e42c3eef?w=1200&h=630&fit=crop&q=80&fm=webp"
 tags:
   - proxmox
   - opnsense
@@ -17,6 +16,7 @@ tags:
   - bash
   - automation
   - incident-response
+images: ["/img/posts/opnsense-backup-incident-og.png"]
 ---
 
 *By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*

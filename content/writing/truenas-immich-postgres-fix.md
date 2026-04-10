@@ -8,7 +8,6 @@ description: "Immich 2.6 dropped PG15 binaries from pgvecto, breaking every True
 summary: "Immich 2.6.x dropped PG15 binaries from pgvecto — instant brick on every TrueNAS install still running Postgres 15. Your data is untouched. Here's the pg_dump → pg_restore path out, including the rename trap that costs you an hour."
 coverImage: "https://images.unsplash.com/photo-1597852074816-d933c7d2b988?w=1200&h=630&fit=crop&q=80&fm=webp"
 coverImageAlt: "Multiple hard drive disks from a network attached storage array representing database storage and data recovery"
-ogImage: "https://images.unsplash.com/photo-1597852074816-d933c7d2b988?w=1200&h=630&fit=crop&q=80&fm=webp"
 tags:
   - immich
   - truenas
@@ -18,6 +17,7 @@ tags:
   - docker
   - database
   - incident-response
+images: ["/img/posts/truenas-immich-postgres-fix-og.png"]
 ---
 
 *By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*

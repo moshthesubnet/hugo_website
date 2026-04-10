@@ -6,9 +6,7 @@ lastmod: 2026-03-09
 draft: false
 description: "ARP can't cross VLANs. I built a FastAPI app that queries OPNsense, Proxmox, and Docker APIs for a complete homelab device inventory — no raw sockets, no root required."
 summary: "ARP broadcast → hits one VLAN → sees nothing else. OPNsense REST API → global ARP table for every VLAN → Proxmox API → VM name, node, power state → Docker API → containers with correct host attribution. All merged into SQLite. No raw sockets. No root."
-cover: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=630&fit=crop&q=80"
 coverAlt: "Close-up of a green circuit board with rows of electronic components under cool blue lighting."
-ogImage: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=630&fit=crop&q=80"
 tags:
   - homelab
   - python
@@ -18,6 +16,7 @@ tags:
   - proxmox
   - docker
   - automation
+images: ["/img/posts/cross-vlan-network-monitor-og.png"]
 ---
 
 *By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
