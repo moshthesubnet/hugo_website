@@ -26,5 +26,3 @@ Two Proxmox nodes, 17 VMs and LXCs, 7 VLANs, OPNsense firewall, Cisco switches, 
 | ITIL 4 Foundation | Jun 2024 |
 | LPI Linux Essentials | May 2024 |
 | CompTIA A+ | Mar 2024 |
-
-{{< contact-form >}}
