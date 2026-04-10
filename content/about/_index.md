@@ -27,6 +27,4 @@ Two Proxmox nodes, 17 VMs and LXCs, 7 VLANs, OPNsense firewall, Cisco switches, 
 | LPI Linux Essentials | May 2024 |
 | CompTIA A+ | Mar 2024 |
 
-## Get in touch
-
-The best way to reach me is on [LinkedIn](https://www.linkedin.com/in/skylerkingnetwork). You can also find me on [GitHub](https://github.com/moshthesubnet) and [Instagram](https://instagram.com/moshthesubnet).
+{{< contact-form >}}
