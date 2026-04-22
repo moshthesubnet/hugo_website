@@ -4,7 +4,7 @@ description: "Skyler King — Network Engineering and Security student, career c
 aliases: ["/docs/bio/"]
 ---
 
-I'm Skyler King — a career changer turned network engineering and security student at WGU. Before tech, I worked as a Certified Occupational Therapy Assistant in the medical industry. I traded patient care for packet captures, and I haven't looked back.
+I'm Skyler King — a career changer turned network engineering and security student at WGU. Before tech, I worked as a Certified Occupational Therapy Assistant in the medical industry. I traded ADLs for ACLs, and I haven't looked back.
 
 I got into networking the way most people do: by breaking something in a homelab and spending a weekend figuring out why. That homelab has since grown into a multi-node Proxmox cluster with OPNsense, TrueNAS, Docker, and more VLANs than I probably need.
 
