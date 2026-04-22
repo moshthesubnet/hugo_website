@@ -3,7 +3,10 @@
 
   {{/* ── Hero Identity Block ──────────────────────────────── */}}
   <section class="home-hero">
-    <img src="/img/profile.png" alt="{{ .Site.Params.author.name }}" class="home-hero-photo">
+    <div class="home-hero-photo-wrap">
+      <div class="home-hero-ring"></div>
+      <img src="/img/profile.png" alt="{{ .Site.Params.author.name }}" class="home-hero-photo">
+    </div>
     <div class="home-hero-identity">
       <h1 class="home-hero-name">Hi, I'm {{ .Site.Params.author.name }}</h1>
       <p class="home-hero-tagline"><span id="hero-typewriter"></span></p>
