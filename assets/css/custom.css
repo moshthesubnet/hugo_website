@@ -704,6 +704,26 @@ article .tag:hover,
 }
 
 /* ---------------------------------------------------------
+   HERO — particle star field
+   --------------------------------------------------------- */
+.home-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+#hero-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.home-hero > *:not(canvas) {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------------------------------------------------------
    HOMEPAGE — contact form
    --------------------------------------------------------- */
 .home-contact {
