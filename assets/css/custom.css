@@ -950,3 +950,34 @@ article .tag:hover,
     height: 160px !important;
   }
 }
+
+/* ---------------------------------------------------------
+   HERO — floating skill chip badges
+   --------------------------------------------------------- */
+.home-hero-chip {
+  position: absolute;
+  background: #1a1a1a;
+  border: 1px solid #5eead4;
+  border-radius: 3px;
+  color: #5eead4;
+  font-size: 0.75rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  padding: 0.25rem 0.625rem;
+  white-space: nowrap;
+  z-index: 3;
+  animation: chip-float 3s ease-in-out infinite;
+}
+
+.home-hero-chip--tl { top: 12%;  left: -18%; animation-delay: 0s;     }
+.home-hero-chip--bl { bottom: 18%; left: -14%; animation-delay: 0.75s;  }
+.home-hero-chip--tr { top: 18%;  right: -14%; animation-delay: 1.5s;   }
+.home-hero-chip--br { bottom: 12%; right: -18%; animation-delay: 2.25s; }
+
+@keyframes chip-float {
+  0%, 100% { transform: translateY(0);   }
+  50%       { transform: translateY(-6px); }
+}
+
+@media (max-width: 640px) {
+  .home-hero-chip { display: none; }
+}
