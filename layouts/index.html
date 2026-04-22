@@ -44,18 +44,19 @@
   <section class="home-section">
     <div class="home-section-label">Recent Writing</div>
     <div class="home-card-grid">
-      {{ range $posts }}
-      <a href="{{ .Permalink }}" class="home-card">
-        {{ with .Params.images }}
+      {{ range $i, $post := $posts }}
+      <a href="{{ $post.Permalink }}" class="home-card">
+        <span class="home-card-num">{{ printf "%02d" (add $i 1) }}</span>
+        {{ with $post.Params.images }}
         <div class="home-card-thumb">
-          <img src="{{ index . 0 }}" alt="{{ $.Title }}" loading="lazy">
+          <img src="{{ index . 0 }}" alt="{{ $post.Title }}" loading="lazy">
         </div>
         {{ end }}
         <div class="home-card-body">
-          <div class="home-card-title">{{ .Title }}</div>
-          <div class="home-card-date">{{ .Date.Format "Jan 2006" }}</div>
-          <div class="home-card-desc">{{ .Description }}</div>
-          {{ with .Params.tags }}
+          <div class="home-card-title">{{ $post.Title }}</div>
+          <div class="home-card-date">{{ $post.Date.Format "Jan 2006" }}</div>
+          <div class="home-card-desc">{{ $post.Description }}</div>
+          {{ with $post.Params.tags }}
           <div class="home-card-tags">
             {{ range first 3 . }}<span class="home-card-tag">{{ . }}</span>{{ end }}
           </div>
@@ -75,18 +76,19 @@
   <section class="home-section">
     <div class="home-section-label">Featured Projects</div>
     <div class="home-card-grid">
-      {{ range first 3 $projects }}
-      <a href="{{ .Permalink }}" class="home-card">
-        {{ with .Params.images }}
+      {{ range $i, $project := first 3 $projects }}
+      <a href="{{ $project.Permalink }}" class="home-card">
+        <span class="home-card-num">{{ printf "%02d" (add $i 1) }}</span>
+        {{ with $project.Params.images }}
         <div class="home-card-thumb">
-          <img src="{{ index . 0 }}" alt="{{ $.Title }}" loading="lazy">
+          <img src="{{ index . 0 }}" alt="{{ $project.Title }}" loading="lazy">
         </div>
         {{ end }}
         <div class="home-card-body">
-          <div class="home-card-title">{{ .Title }}</div>
-          <div class="home-card-date">{{ .Date.Format "Jan 2006" }}</div>
-          <div class="home-card-desc">{{ .Description }}</div>
-          {{ with .Params.tags }}
+          <div class="home-card-title">{{ $project.Title }}</div>
+          <div class="home-card-date">{{ $project.Date.Format "Jan 2006" }}</div>
+          <div class="home-card-desc">{{ $project.Description }}</div>
+          {{ with $project.Params.tags }}
           <div class="home-card-tags">
             {{ range first 3 . }}<span class="home-card-tag">{{ . }}</span>{{ end }}
           </div>

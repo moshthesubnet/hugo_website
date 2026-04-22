@@ -981,3 +981,41 @@ article .tag:hover,
 @media (max-width: 640px) {
   .home-hero-chip { display: none; }
 }
+
+/* ---------------------------------------------------------
+   HOMEPAGE — numbered card badges + hover overlay
+   --------------------------------------------------------- */
+.home-card-num {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.875rem;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.75rem;
+  color: rgba(94, 234, 212, 0.3);
+  line-height: 1;
+  z-index: 1;
+}
+
+/* Cards need relative positioning for the badge */
+.home-card {
+  position: relative;
+}
+
+/* Teal wash on thumbnail hover */
+.home-card-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(94, 234, 212, 0.08);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.home-card:hover .home-card-thumb::after {
+  opacity: 1;
+}
+
+/* Thumbnail needs relative for the ::after overlay */
+.home-card-thumb {
+  position: relative;
+}
