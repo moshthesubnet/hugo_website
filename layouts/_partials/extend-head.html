@@ -31,3 +31,7 @@
 <meta name="twitter:description" content="{{ $ogDesc }}">
 <meta name="twitter:image" content="{{ $ogImage }}">
 {{- /* ── /Open Graph ──────────────────────────────────────────────────── */ -}}
+
+{{- if .IsHome -}}
+<script src="/js/hero-animations.js" defer></script>
+{{- end -}}
