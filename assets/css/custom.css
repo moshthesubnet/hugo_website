@@ -882,3 +882,71 @@ article .tag:hover,
     padding: 1.25rem;
   }
 }
+
+/* ---------------------------------------------------------
+   HERO — glowing animated photo ring
+   --------------------------------------------------------- */
+.home-hero-photo-wrap {
+  position: relative;
+  width: 304px;
+  height: 304px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Dim base ring */
+.home-hero-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(94, 234, 212, 0.2);
+}
+
+/* Spinning arc overlay */
+.home-hero-ring::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #5eead4;
+  border-right-color: rgba(94, 234, 212, 0.4);
+  animation: ring-spin 4s linear infinite;
+}
+
+@keyframes ring-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Photo — override old border, add glow pulse */
+.home-hero-photo {
+  width: 240px !important;
+  height: 240px !important;
+  border: 1px solid #262626 !important;
+  position: relative;
+  z-index: 2;
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 18px rgba(94, 234, 212, 0.2); }
+  50%       { box-shadow: 0 0 32px rgba(94, 234, 212, 0.4); }
+}
+
+@media (max-width: 640px) {
+  .home-hero-photo-wrap {
+    width: auto;
+    height: auto;
+  }
+
+  .home-hero-ring {
+    display: none;
+  }
+
+  .home-hero-photo {
+    width: 160px !important;
+    height: 160px !important;
+  }
+}
