@@ -1019,3 +1019,20 @@ article .tag:hover,
 .home-card-thumb {
   position: relative;
 }
+
+/* ---------------------------------------------------------
+   HERO — social icon + label
+   --------------------------------------------------------- */
+.home-social-link {
+  gap: 0.4rem;
+}
+
+.home-social-label {
+  font-size: 0.8125rem;
+  color: #5eead4;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+@media (max-width: 640px) {
+  .home-social-label { display: none; }
+}
