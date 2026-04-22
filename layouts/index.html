@@ -6,7 +6,7 @@
     <img src="/img/profile.png" alt="{{ .Site.Params.author.name }}" class="home-hero-photo">
     <div class="home-hero-identity">
       <h1 class="home-hero-name">Hi, I'm {{ .Site.Params.author.name }}</h1>
-      <p class="home-hero-tagline">{{ .Site.Params.author.headline }}</p>
+      <p class="home-hero-tagline"><span id="hero-typewriter"></span></p>
       <p class="home-hero-bio">{{ .Site.Params.author.bio }}</p>
       {{ with .Site.Params.author.links }}
       <div class="home-social-icons">
