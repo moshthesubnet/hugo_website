@@ -1,5 +1,5 @@
 {{ define "main" }}
-<div class="max-w-4xl mx-auto px-6">
+<div class="home-page-container">
 
   {{/* ── Hero Identity Block ──────────────────────────────── */}}
   <section class="home-hero">
@@ -13,7 +13,7 @@
     </div>
     <div class="home-hero-identity">
       <h1 class="home-hero-name">Hi, I'm {{ .Site.Params.author.name }}</h1>
-      <p class="home-hero-tagline"><span id="hero-typewriter"></span></p>
+      <p class="home-hero-tagline"><span class="home-hero-iam">I am</span> <span id="hero-typewriter"></span></p>
       <p class="home-hero-bio">{{ .Site.Params.author.bio }}</p>
       {{ with .Site.Params.author.links }}
       <div class="home-social-icons">
@@ -49,13 +49,13 @@
     <div class="home-card-grid">
       {{ range $i, $post := $posts }}
       <a href="{{ $post.Permalink }}" class="home-card">
-        <span class="home-card-num">{{ printf "%02d" (add $i 1) }}</span>
         {{ with $post.Params.images }}
         <div class="home-card-thumb">
           <img src="{{ index . 0 }}" alt="{{ $post.Title }}" loading="lazy">
         </div>
         {{ end }}
         <div class="home-card-body">
+          <div class="home-card-num">{{ printf "%02d" (add $i 1) }}</div>
           <div class="home-card-title">{{ $post.Title }}</div>
           <div class="home-card-date">{{ $post.Date.Format "Jan 2006" }}</div>
           <div class="home-card-desc">{{ $post.Description }}</div>
@@ -81,13 +81,13 @@
     <div class="home-card-grid">
       {{ range $i, $project := first 3 $projects }}
       <a href="{{ $project.Permalink }}" class="home-card">
-        <span class="home-card-num">{{ printf "%02d" (add $i 1) }}</span>
         {{ with $project.Params.images }}
         <div class="home-card-thumb">
           <img src="{{ index . 0 }}" alt="{{ $project.Title }}" loading="lazy">
         </div>
         {{ end }}
         <div class="home-card-body">
+          <div class="home-card-num">{{ printf "%02d" (add $i 1) }}</div>
           <div class="home-card-title">{{ $project.Title }}</div>
           <div class="home-card-date">{{ $project.Date.Format "Jan 2006" }}</div>
           <div class="home-card-desc">{{ $project.Description }}</div>

@@ -74,9 +74,10 @@
     if (!el) return;
 
     var phrases = [
-      'Network Enthusiast.',
-      'Homelab Wrecker.',
-      'Tech Content Wannabe.'
+      'Panic! At The Patch Panel',
+      'Homelab Wrecker',
+      'Default Gateway Dreams',
+      'Kenough'
     ];
     var phraseIdx = 0;
     var charIdx = 0;
