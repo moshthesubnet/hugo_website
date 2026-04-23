@@ -1086,11 +1086,11 @@ article .tag:hover,
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   gap: 0.5rem;
 }
 
 .home-cred-title {
+  font-family: system-ui, -apple-system, sans-serif;
   font-size: 1.125rem;
   font-weight: 600;
   color: #e5e5e5;
@@ -1098,6 +1098,7 @@ article .tag:hover,
 }
 
 .home-cred-issuer {
+  font-family: system-ui, -apple-system, sans-serif;
   font-size: 0.875rem;
   color: #5eead4;
 }
@@ -1114,5 +1115,9 @@ article .tag:hover,
     flex-direction: column;
     align-items: center;
     text-align: center;
+  }
+
+  .home-cred-badge {
+    width: 120px;
   }
 }
