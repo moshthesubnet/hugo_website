@@ -3,8 +3,6 @@
 
   /* ── Particles ────────────────────────────────────────────── */
   function initParticles() {
-    if (window.innerWidth < 641) return;
-
     var hero = document.querySelector('.home-hero');
     if (!hero) return;
 
