@@ -959,7 +959,8 @@ article .tag:hover,
   }
 
   .home-hero-ring {
-    display: none;
+    width: 200px;
+    height: 200px;
   }
 
   .home-hero-photo {
@@ -1127,6 +1128,6 @@ article .tag:hover,
   }
 
   .home-cred-badge {
-    width: 160px;
+    width: 200px;
   }
 }
