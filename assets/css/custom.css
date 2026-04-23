@@ -1080,6 +1080,9 @@ article .tag:hover,
 .home-cred-badge {
   flex-shrink: 0;
   width: 150px;
+  background: #fff;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .home-cred-meta {
