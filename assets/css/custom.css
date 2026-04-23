@@ -992,7 +992,10 @@ article .tag:hover,
 }
 
 @media (max-width: 640px) {
-  .home-hero-chip { display: none; }
+  .home-hero-chip {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.4rem;
+  }
 }
 
 /* ---------------------------------------------------------
