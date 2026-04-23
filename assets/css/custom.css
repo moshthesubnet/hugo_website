@@ -5,6 +5,24 @@
    ========================================================= */
 
 /* ---------------------------------------------------------
+   HOMEPAGE — full-width container
+   --------------------------------------------------------- */
+.home-page-container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+
+@media (max-width: 640px) {
+  .home-page-container {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+/* ---------------------------------------------------------
    TYPOGRAPHY
    --------------------------------------------------------- */
 body, p, li, td, th {
@@ -529,7 +547,7 @@ article .tag:hover,
 }
 
 .home-hero-identity {
-  flex: 1;
+  margin-left: auto;
 }
 
 .home-hero-name {
@@ -723,7 +741,6 @@ article .tag:hover,
    --------------------------------------------------------- */
 .home-hero {
   position: relative;
-  overflow: hidden;
 }
 
 #hero-particles {
@@ -986,19 +1003,11 @@ article .tag:hover,
    HOMEPAGE — numbered card badges + hover overlay
    --------------------------------------------------------- */
 .home-card-num {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.875rem;
   font-family: 'Fira Code', monospace;
-  font-size: 0.75rem;
-  color: rgba(94, 234, 212, 0.3);
+  font-size: 1.5rem;
+  color: rgba(94, 234, 212, 0.45);
   line-height: 1;
-  z-index: 1;
-}
-
-/* Cards need relative positioning for the badge */
-.home-card {
-  position: relative;
+  margin-bottom: 0.5rem;
 }
 
 /* Teal wash on thumbnail hover */
@@ -1035,4 +1044,15 @@ article .tag:hover,
 
 @media (max-width: 640px) {
   .home-social-label { display: none; }
+}
+
+/* ---------------------------------------------------------
+   HERO — typewriter prefix color split
+   --------------------------------------------------------- */
+.home-hero-iam {
+  color: #a3a3a3;
+}
+
+#hero-typewriter {
+  color: #5eead4;
 }
