@@ -954,11 +954,6 @@ article .tag:hover,
 
 @media (max-width: 640px) {
   .home-hero-photo-wrap {
-    width: auto;
-    height: auto;
-  }
-
-  .home-hero-ring {
     width: 200px;
     height: 200px;
   }
