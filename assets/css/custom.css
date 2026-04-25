@@ -125,6 +125,12 @@ body > header nav button {
   justify-content: center;
 }
 
+/* Congo theme — appearance toggle (h-8 w-8) needs larger tap area */
+button.flex.h-8.w-8 {
+  min-height: 44px;
+  min-width: 44px;
+}
+
 /* Active nav link — teal bar sweeping left to right */
 body > header a.nav-active {
   color: #fafafa !important;
