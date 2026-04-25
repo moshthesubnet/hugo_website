@@ -103,6 +103,15 @@ body > footer a:hover {
   text-decoration: underline !important;
 }
 
+/* Nav links — 44px minimum touch target */
+body > header nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 /* Active nav link — teal bar sweeping left to right */
 body > header a.nav-active {
   color: #fafafa !important;
