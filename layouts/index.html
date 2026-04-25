@@ -45,7 +45,7 @@
   {{ $posts := first 3 (where .Site.RegularPages "Section" "writing") }}
   {{ if $posts }}
   <section class="home-section">
-    <div class="home-section-label">WRITING</div>
+    <h2 class="home-section-label">WRITING</h2>
     <div class="home-card-grid">
       {{ range $i, $post := $posts }}
       <a href="{{ $post.Permalink }}" class="home-card">
@@ -77,7 +77,7 @@
   {{ $projects := where .Site.RegularPages "Section" "projects" }}
   {{ if $projects }}
   <section class="home-section">
-    <div class="home-section-label">PROJECTS</div>
+    <h2 class="home-section-label">PROJECTS</h2>
     <div class="home-card-grid">
       {{ range $i, $project := first 3 $projects }}
       <a href="{{ $project.Permalink }}" class="home-card">
@@ -107,7 +107,7 @@
 
   {{/* ── Credentials ──────────────────────────────────────── */}}
   <section class="home-section">
-    <div class="home-section-label">CREDENTIALS</div>
+    <h2 class="home-section-label">CREDENTIALS</h2>
     <div class="home-cred-grid">
 
       <div class="home-cred-card">
@@ -144,7 +144,7 @@
 
   {{/* ── Contact ───────────────────────────────────────────── */}}
   <section class="home-section home-contact">
-    <div class="home-section-label">GET IN TOUCH</div>
+    <h2 class="home-section-label">GET IN TOUCH</h2>
     {{ partial "contact-form.html" . }}
   </section>
 
