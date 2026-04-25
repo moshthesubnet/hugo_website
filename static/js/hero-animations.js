@@ -67,7 +67,7 @@
   }
 
   /* ── Typewriter ───────────────────────────────────────────── */
-  function initTypewriter() {
+  function initTypewriter(reducedMotion) {
     var el = document.getElementById('hero-typewriter');
     if (!el) return;
 
@@ -105,11 +105,16 @@
       }
     }
 
+    if (reducedMotion) {
+      el.textContent = phrases[0];
+      return;
+    }
     setTimeout(tick, 800);
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    initParticles();
-    initTypewriter();
+    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reducedMotion) initParticles();
+    initTypewriter(reducedMotion);
   });
 })();

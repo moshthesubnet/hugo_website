@@ -502,6 +502,17 @@ article .tag:hover,
 }
 
 /* ---------------------------------------------------------
+   REDUCED MOTION — disable all decorative animations
+   --------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-ring::before          { animation: none; }
+  .home-hero-photo                 { animation: none; }
+  .home-hero-chip                  { animation: none; }
+  #hero-typewriter::after          { animation: none; opacity: 1; }
+  body > header li:has(a.nav-active)::after { animation: none; clip-path: none; }
+}
+
+/* ---------------------------------------------------------
    SCROLLBAR
    --------------------------------------------------------- */
 ::-webkit-scrollbar { width: 8px; }
