@@ -107,13 +107,22 @@ body > footer a:hover {
   text-decoration: underline !important;
 }
 
-/* Nav links — 44px minimum touch target */
-body > header nav a {
+/* Nav links + search — 44px minimum touch target */
+body > header nav a,
+body > header nav button {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
+  min-width: 44px;
   padding-top: 0;
   padding-bottom: 0;
+}
+
+/* Hero social links — 44px touch target */
+.home-social-link {
+  min-height: 44px;
+  min-width: 44px;
+  justify-content: center;
 }
 
 /* Active nav link — teal bar sweeping left to right */
