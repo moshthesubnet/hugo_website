@@ -16,7 +16,7 @@ tags:
   - protocols
   - bgp
   - ccna
-images: ["https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80"]
+images: ["/img/posts/ipv8-vs-ipv6-og.png"]
 ---
 
 *By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
