@@ -118,7 +118,7 @@ The standard explanation is that IPv6 is technically harder, breaks too many thi
 
 The real story is NAT. IPv6 was designed to solve IPv4 address exhaustion. By the time exhaustion became acute, NAT had already turned address exhaustion from a crisis into a budget line item. ISPs deployed Carrier-Grade NAT. Enterprises ran private RFC 1918 ranges behind their firewalls. The forcing function evaporated.
 
-Once the burning platform stopped burning, the rest of the friction had time to compound. Enterprise application owners discovered that most of their stack was still IPv4-only and would stay that way through the next refresh cycle. Hardware refresh cycles take 10 to 20 years in serious infrastructure. Dual-stack deployment doubled operational complexity, and most teams ran both protocols indefinitely rather than ever completing the cutover. The IPv4 address market did the rest — addresses that traded for around $5 in 2011 now sell in the $50–60 range, creating a financial incentive to hoard rather than migrate ([ipxo.com](https://www.ipxo.com/), 2025).
+Once the burning platform stopped burning, the rest of the friction had time to compound. Enterprise application owners discovered that most of their stack was still IPv4-only and would stay that way through the next refresh cycle. Hardware refresh cycles take 10 to 20 years in serious infrastructure. Dual-stack deployment doubled operational complexity, and most teams ran both protocols indefinitely rather than ever completing the cutover. IPv4 addresses that traded for around $5 in 2011 now sell in the $50–60 range — a working secondary market that pays holders to sit on them, not migrate ([ipxo.com](https://www.ipxo.com/), 2025).
 
 There's geography on top of all that. Mobile carriers — building greenfield networks on a tight timeline — lead the curve, sitting well above the global average. Enterprises lag well below it. France and Germany are above 75%. Africa averages 4%. There is no single "IPv6 adoption rate." There are dozens of curves moving at different speeds, and the network engineers managing them are doing it on top of [a workforce crisis](/writing/network-engineering-talent-void/) that's pulling institutional knowledge out the door faster than it's coming in.
 
@@ -154,7 +154,7 @@ The bounded routing table is also a real structural fix. Today's BGP table sits 
   caption="The unbounded BGP routing table is the kind of problem you only notice when you try to fit it on a router."
 >}}
 
-The Zone Server concept — collapsing DHCP, DNS, NTP, OAuth, WHOIS, ACL, and logging into a single managed plane — has real operational appeal. Anyone who's built [a homelab inventory by stitching together OPNsense, Proxmox, and Docker APIs](/writing/cross-vlan-network-monitor/) has felt the pain of fragmented network management. Unifying those services isn't crazy. It's how every cloud provider already runs their internal network plane. The draft is just proposing to standardize that pattern as part of the IP suite itself.
+The Zone Server concept — collapsing DHCP, DNS, NTP, OAuth, WHOIS, ACL, and logging into a single managed plane — makes operational sense. Anyone who's built [a homelab inventory by stitching together OPNsense, Proxmox, and Docker APIs](/writing/cross-vlan-network-monitor/) has felt the pain of fragmented network management. Unifying those services isn't crazy. It's how every cloud provider already runs their internal network plane. The draft is just proposing to standardize that pattern as part of the IP suite itself.
 
 The 8to4 tunneling story is also more honest than IPv6's. There is no flag day. There is no required dual-stack period. Whether the implementation actually delivers on that is a different question, but the framing is correct.
 
@@ -164,17 +164,27 @@ The diagnosis is good. The treatment is where it falls apart.
 
 ## Where does IPv8 break down?
 
-The Hacker News thread on IPv8 ran 111 comments, most of them critical, and the criticisms cluster around six specific architectural problems. Each one is, on its own, sufficient to keep the draft from advancing through any IETF working group review. Together, they describe a proposal that needs significant redesign before serious standardization could begin.
+The Hacker News thread on IPv8 ran 111 comments, most of them critical, and the criticisms cluster around six specific architectural problems. Any one of them would be enough to stall the draft in working group review. Together, they describe something that needs a significant redesign.
 
-**The OAuth2 bootstrapping problem.** Mandatory OAuth2 JWT at Layer 3 means every host needs a token to authenticate, and to get a token it needs to make a network request. This is a chicken-and-egg loop that the draft doesn't resolve. DHCP solves a similar problem only because the request is a Layer 2 broadcast that doesn't require routing or authentication. Putting OAuth2 below the layer where authentication has historically lived breaks the bootstrap path for every new device on the network. There are partial fixes (pre-shared tokens, out-of-band provisioning), but none of them are in the spec, and all of them re-introduce the management complexity that Layer 3 auth was supposed to eliminate.
+### The OAuth2 bootstrapping problem
 
-**Mandating Cisco PVRST.** The draft specifies Cisco's Per-VLAN Rapid Spanning Tree as a required element. IETF standards have to be implementable from open specifications without proprietary dependencies. This single requirement disqualifies the draft from advancing in its current form. Either it gets removed, or the draft does.
+Mandatory OAuth2 JWT at Layer 3 means every host needs a token to authenticate, and to get a token it needs to make a network request. This is a chicken-and-egg loop that the draft doesn't resolve. DHCP solves a similar problem only because the request is a Layer 2 broadcast that doesn't require routing or authentication. Putting OAuth2 below the layer where authentication has historically lived breaks the bootstrap path for every new device on the network. There are partial fixes (pre-shared tokens, out-of-band provisioning), but none of them are in the spec, and all of them re-introduce the management complexity that Layer 3 auth was supposed to eliminate.
 
-**The /16 minimum prefix kills traffic engineering.** Modern BGP relies heavily on deaggregation. Anycast services (root DNS, CDN edges) announce more-specific prefixes to influence which path traffic takes. Load balancers split traffic by announcing different /24s from different peers. DDoS mitigation routes attack traffic to scrubbing centers by announcing temporary more-specifics. A mandatory /16 minimum eliminates all of this. The structural fix to BGP table growth comes at the cost of every traffic engineering tool the modern internet relies on.
+### Mandating Cisco PVRST
 
-**Conflating routing with identity breaks multihoming.** If your routing prefix is derived from your ASN, you can't easily multihome through two providers, you can't switch ISPs without renumbering, and your identity is permanently tied to your routing. This is the same problem IPv6 wrestled with for years before settling on Provider-Independent address space. IPv8's design appears to make PI addressing structurally impossible.
+The draft specifies Cisco's Per-VLAN Rapid Spanning Tree as a required element. IETF standards have to be implementable from open specifications without proprietary dependencies. This single requirement disqualifies the draft from advancing in its current form. Either it gets removed, or the draft does.
 
-**64-bit addresses re-introduce a problem IPv6 already solved.** IPv6 chose 128-bit addresses specifically because 64-bit was considered marginal at the scale of an internet that includes IoT, cellular, and possibly interplanetary networking. IPv8's 64-bit space gives you about 18.4 quintillion addresses, which sounds like a lot until you remember that's only 4 billion times the IPv4 space — perfectly fine until it isn't. Designing a successor protocol to land in roughly the same address-space neighborhood your predecessor explicitly rejected is a hard sell.
+### The /16 minimum prefix kills traffic engineering
+
+Modern BGP relies heavily on deaggregation. Anycast services (root DNS, CDN edges) announce more-specific prefixes to influence which path traffic takes. Load balancers split traffic by announcing different /24s from different peers. DDoS mitigation routes attack traffic to scrubbing centers by announcing temporary more-specifics. A mandatory /16 minimum eliminates all of this. The structural fix to BGP table growth comes at the cost of every traffic engineering tool the modern internet relies on.
+
+### Conflating routing with identity breaks multihoming
+
+If your routing prefix is derived from your ASN, you can't easily multihome through two providers, you can't switch ISPs without renumbering, and your identity is permanently tied to your routing. This is the same problem IPv6 wrestled with for years before settling on Provider-Independent address space. IPv8's design appears to make PI addressing structurally impossible.
+
+### 64-bit addresses re-introduce a problem IPv6 already solved
+
+IPv6 chose 128-bit addresses specifically because 64-bit was considered marginal at the scale of an internet that includes IoT, cellular, and possibly interplanetary networking. IPv8's 64-bit space gives you about 18.4 quintillion addresses, which sounds like a lot until you remember that's only 4 billion times the IPv4 space — perfectly fine until it isn't. Designing a successor protocol to land in roughly the same address-space neighborhood your predecessor explicitly rejected is a hard sell.
 
 <figure style="margin: 2.5rem 0; overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; font-size: 0.92rem;">
@@ -199,7 +209,9 @@ The Hacker News thread on IPv8 ran 111 comments, most of them critical, and the 
 <figcaption style="font-size: 0.85rem; color: #9ca3af; margin-top: 0.5rem; text-align: center;">Sources: RFC 791, RFC 8200, draft-thain-ipv8-02. *Deployment % from <a href="https://pulse.internetsociety.org/en/blog/2026/04/18-years-later-ipv6-reaches-majority/" style="color: #5eead4;">Internet Society Pulse</a>, <a href="https://stats.labs.apnic.net/ipv6/" style="color: #5eead4;">APNIC Labs</a>, and <a href="https://www.theregister.com/2026/04/17/ipv6_50_percent_google/" style="color: #5eead4;">The Register</a> (April 2026); IPv4 share derived as the inverse of IPv6 measurements across the same sources.</figcaption>
 </figure>
 
-**Centralized Zone Servers re-introduce single points of failure.** Distributed systems have spent 30 years moving away from centralized management planes for a reason. The Zone Server concept solves coordination problems by introducing a coordinator. That coordinator becomes the new failure mode.
+### Centralized Zone Servers re-introduce single points of failure
+
+Distributed systems have spent 30 years moving away from centralized management planes for a reason. The Zone Server concept solves coordination problems by introducing a coordinator. That coordinator becomes the new failure mode.
 
 And then there's the AI-generation question. Cybernews ran the draft through GPTZero and reported a 76% overall probability that it was AI-generated ([Cybernews](https://cybernews.com/tech/ipv8-proposal-slammed-by-tech-professionals/), 2026; also discussed by [CellStream](https://www.cellstream.com/2026/05/02/ip-version-clarification-and-ipv8/)). I want to be careful here: probabilistic detectors are not proof, and even if the prose was AI-assisted, the ideas can still be evaluated on their merits. But the surface-knowledgeable / depth-thin pattern that several HN reviewers noted lines up with what AI-assisted drafts often look like. Real protocol work has the texture of a thousand hours of operational experience pressed into a spec. This draft reads like a thoughtful first pass by someone who has read about the problems but hasn't lived inside them long enough to know which trade-offs are load-bearing.
 
@@ -209,13 +221,13 @@ That texture matters for IETF adoption. Working groups don't take drafts serious
 
 ## Will IPv8 suffer the same fate as IPv6?
 
-The honest answer is that IPv8 will probably suffer a worse fate than IPv6, because IPv6 at least made it onto the standards track with full IETF backing, multi-vendor implementation, and OS-level support. IPv8 has none of that. The path from individual draft to deployed RFC runs through working group adoption, IETF Last Call, RFC Editor processing, and years of multi-organization implementation work. Without a working group, IPv8 doesn't have a vehicle. The draft expires in October 2026 unless someone picks it up.
+IPv8 will probably fare worse than IPv6. IPv6 at least made it onto the standards track with full IETF backing, multi-vendor implementation, and OS-level support. IPv8 has none of that. The path from individual draft to deployed RFC runs through working group adoption, IETF Last Call, RFC Editor processing, and years of multi-organization implementation work. Without a working group, IPv8 doesn't have a vehicle. The draft expires in October 2026 unless someone picks it up.
 
 But the question worth asking isn't "will IPv8 succeed?" It's "could *any* IP-layer successor protocol succeed right now?"
 
 I don't think one could. Here's why.
 
-For a new IP protocol to gain traction past IPv6's current trajectory, five conditions appear to be necessary. A genuine IETF working group with multi-organization participation. Major OS vendors (Linux kernel, Windows, macOS, mobile platforms) committed to implementation. At least one major cloud provider running production traffic. Migration tooling that doesn't require a flag day. And — most critically — an economic forcing function that NAT and CGNAT do not eliminate.
+For a new IP protocol to displace IPv6, five things need to be in place. A genuine IETF working group with multi-organization buy-in. Major OS vendors — Linux kernel, Windows, macOS, mobile — committed to implementation before the standard is finalized. At least one major cloud provider running production traffic. Migration tooling with no flag day. And, most critically, an economic forcing function that CGNAT can't defuse.
 
 The first four are hard but not impossible. The fifth is where every successor protocol breaks. IPv4 exhaustion was supposed to be the forcing function for IPv6. NAT defused it. Today, with CGNAT widespread and IPv4 addresses commoditized in a working secondary market, there is no equivalent crisis waiting to drive a third transition. IPv8 doesn't solve a crisis. It improves on IPv6 in ways that don't create urgency.
 
@@ -261,7 +273,7 @@ The first four are hard but not impossible. The fifth is where every successor p
 <figcaption style="font-size: 0.85rem; color: #9ca3af; margin-top: 0.5rem;">Source: <a href="https://www.ipxo.com/" style="color: #5eead4;">ipxo.com</a> — industry estimates aggregated from secondary-market reports (2025). The price climb is the failed forcing function.</figcaption>
 </figure>
 
-That last paragraph is the contrarian read I want to leave you with. **IPv6 didn't fail. NAT succeeded.** The crisis IPv6 was designed to solve got resolved by a workaround that turned out to be operationally cheaper than the official transition path. IPv6 deployment then ran on the slower clock of organic adoption, vendor enablement, and infrastructure refresh — and that clock runs in decades, not years.
+That last paragraph is the contrarian read I want to leave you with. IPv6 didn't fail. NAT succeeded. The crisis IPv6 was designed to solve got resolved by a workaround that turned out to be operationally cheaper than the official transition path. IPv6 deployment then ran on the slower clock of organic adoption, vendor enablement, and infrastructure refresh — and that clock runs in decades, not years.
 
 IPv8 is showing up at the bottom of the same trough. There is no exhaustion crisis to ride. There is no vendor coalition pushing it. The economic case for re-plumbing the internet for a 13× routing table reduction and unified DHCP/DNS isn't there. It's a nice-to-have technical improvement in a market that doesn't reward nice-to-have technical improvements at the IP layer.
 
@@ -271,7 +283,7 @@ IPv8 is showing up at the bottom of the same trough. There is no exhaustion cris
 
 If I were trying to build the protocol that *does* eventually replace IPv6 — and I'm not, but if I were — I'd start by accepting that the problem isn't technical. It's the coalition.
 
-The protocol would need a multi-vendor working group attached before the spec was even drafted. The working group would need at least one major cloud provider committed to running production traffic on it within 24 months of standardization. It would need to ship in the Linux kernel, Windows, and the major mobile OSes simultaneously, by prior agreement. It would need a migration story that doesn't require a flag day, doesn't require dual-stack, and doesn't break existing tooling. And it would need to either solve a problem severe enough that operators have no choice (a security crisis, a routing collapse, a regulatory mandate), or piggyback on a hardware refresh cycle that operators were going to do anyway.
+The working group would need to exist before the spec was finalized. At least one major cloud provider would have to commit to running production traffic within 24 months of standardization. The Linux kernel, Windows, and the major mobile OSes would all need to ship it simultaneously, by prior agreement. The migration story would need no flag day, no required dual-stack period, no broken tooling. And the forcing function would have to be something CGNAT can't defuse — a security crisis, a routing collapse, a regulatory mandate, or at minimum a hardware refresh cycle operators were already planning to run.
 
 That's the bar IPv6 met partially and IPv8 meets not at all.
 
@@ -306,8 +318,6 @@ IPv5 was assigned to the Internet Stream Protocol (ST and ST-II), an experimenta
 ---
 
 ## The takeaway
-
-A few things to leave with:
 
 - IPv8 is one engineer's draft, not an adopted IETF standard. Treat it as a thought experiment, not a roadmap.
 - The IPv8 *diagnosis* is partly right — backward compatibility and unbounded BGP growth are real problems IPv6 didn't solve well.
