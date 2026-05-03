@@ -73,39 +73,30 @@ That's a 50-year ramp for a protocol that was supposed to save the internet from
   <text x="20" y="22" class="title">IPv6 adoption by country/region (April 2026)</text>
   <line x1="160" y1="50" x2="160" y2="320" class="axis"/>
   <line x1="160" y1="320" x2="580" y2="320" class="axis"/>
-
   <text x="155" y="74" text-anchor="end" class="label-bold">France</text>
   <rect x="160" y="62" width="328" height="18" class="bar"/>
   <text x="492" y="76" class="pct">78%</text>
-
   <text x="155" y="104" text-anchor="end" class="label-bold">Germany</text>
   <rect x="160" y="92" width="319" height="18" class="bar"/>
   <text x="483" y="106" class="pct">76%</text>
-
   <text x="155" y="134" text-anchor="end" class="label-bold">India</text>
   <rect x="160" y="122" width="315" height="18" class="bar"/>
   <text x="479" y="136" class="pct">75%</text>
-
   <text x="155" y="164" text-anchor="end" class="label-bold">United States</text>
   <rect x="160" y="152" width="218" height="18" class="bar"/>
   <text x="382" y="166" class="pct">52%</text>
-
   <text x="155" y="194" text-anchor="end" class="label-bold">APNIC region</text>
   <rect x="160" y="182" width="210" height="18" class="bar"/>
   <text x="374" y="196" class="pct">50%</text>
-
   <text x="155" y="224" text-anchor="end" class="label-bold">LACNIC region</text>
   <rect x="160" y="212" width="164" height="18" class="bar-low"/>
   <text x="328" y="226" class="pct">39%</text>
-
   <text x="155" y="254" text-anchor="end" class="label-bold">RIPE NCC region</text>
   <rect x="160" y="242" width="118" height="18" class="bar-low"/>
   <text x="282" y="256" class="pct">28%</text>
-
   <text x="155" y="284" text-anchor="end" class="label-bold">AFRINIC region</text>
   <rect x="160" y="272" width="17" height="18" class="bar-low"/>
   <text x="181" y="286" class="pct">4%</text>
-
   <text x="160" y="340" class="label">0%</text>
   <text x="265" y="340" class="label">25%</text>
   <text x="370" y="340" class="label">50%</text>
@@ -249,18 +240,15 @@ The first four are hard but not impossible. The fifth is where every successor p
   <line x1="60" y1="100" x2="580" y2="100" class="grid2"/>
   <line x1="60" y1="153" x2="580" y2="153" class="grid2"/>
   <line x1="60" y1="207" x2="580" y2="207" class="grid2"/>
-
   <text x="50" y="105" text-anchor="end" class="label2">$60</text>
   <text x="50" y="158" text-anchor="end" class="label2">$40</text>
   <text x="50" y="212" text-anchor="end" class="label2">$20</text>
   <text x="50" y="265" text-anchor="end" class="label2">$0</text>
-
   <polyline class="line2" points="100,247 230,180 360,113 490,100"/>
   <circle cx="100" cy="247" r="5" class="dot2"/>
   <circle cx="230" cy="180" r="5" class="dot2"/>
   <circle cx="360" cy="113" r="5" class="dot2"/>
   <circle cx="490" cy="100" r="5" class="dot2"/>
-
   <text x="100" y="285" text-anchor="middle" class="label2-bold">2011</text>
   <text x="100" y="237" text-anchor="middle" class="pct2">$5</text>
   <text x="230" y="285" text-anchor="middle" class="label2-bold">2019</text>
