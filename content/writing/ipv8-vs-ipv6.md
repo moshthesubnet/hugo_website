@@ -75,41 +75,41 @@ That's a 50-year ramp for a protocol that was supposed to save the internet from
   <line x1="160" y1="320" x2="580" y2="320" class="axis"/>
 
   <text x="155" y="74" text-anchor="end" class="label-bold">France</text>
-  <rect x="160" y="62" width="312" height="18" class="bar"/>
-  <text x="478" y="76" class="pct">78%</text>
+  <rect x="160" y="62" width="328" height="18" class="bar"/>
+  <text x="492" y="76" class="pct">78%</text>
 
   <text x="155" y="104" text-anchor="end" class="label-bold">Germany</text>
-  <rect x="160" y="92" width="304" height="18" class="bar"/>
-  <text x="470" y="106" class="pct">76%</text>
+  <rect x="160" y="92" width="319" height="18" class="bar"/>
+  <text x="483" y="106" class="pct">76%</text>
 
   <text x="155" y="134" text-anchor="end" class="label-bold">India</text>
-  <rect x="160" y="122" width="300" height="18" class="bar"/>
-  <text x="466" y="136" class="pct">75%</text>
+  <rect x="160" y="122" width="315" height="18" class="bar"/>
+  <text x="479" y="136" class="pct">75%</text>
 
   <text x="155" y="164" text-anchor="end" class="label-bold">United States</text>
-  <rect x="160" y="152" width="208" height="18" class="bar"/>
-  <text x="374" y="166" class="pct">52%</text>
+  <rect x="160" y="152" width="218" height="18" class="bar"/>
+  <text x="382" y="166" class="pct">52%</text>
 
   <text x="155" y="194" text-anchor="end" class="label-bold">APNIC region</text>
-  <rect x="160" y="182" width="200" height="18" class="bar"/>
-  <text x="366" y="196" class="pct">50%</text>
+  <rect x="160" y="182" width="210" height="18" class="bar"/>
+  <text x="374" y="196" class="pct">50%</text>
 
   <text x="155" y="224" text-anchor="end" class="label-bold">LACNIC region</text>
-  <rect x="160" y="212" width="156" height="18" class="bar-low"/>
-  <text x="322" y="226" class="pct">39%</text>
+  <rect x="160" y="212" width="164" height="18" class="bar-low"/>
+  <text x="328" y="226" class="pct">39%</text>
 
   <text x="155" y="254" text-anchor="end" class="label-bold">RIPE NCC region</text>
-  <rect x="160" y="242" width="112" height="18" class="bar-low"/>
-  <text x="278" y="256" class="pct">28%</text>
+  <rect x="160" y="242" width="118" height="18" class="bar-low"/>
+  <text x="282" y="256" class="pct">28%</text>
 
   <text x="155" y="284" text-anchor="end" class="label-bold">AFRINIC region</text>
-  <rect x="160" y="272" width="16" height="18" class="bar-low"/>
-  <text x="182" y="286" class="pct">4%</text>
+  <rect x="160" y="272" width="17" height="18" class="bar-low"/>
+  <text x="181" y="286" class="pct">4%</text>
 
   <text x="160" y="340" class="label">0%</text>
-  <text x="296" y="340" class="label">25%</text>
-  <text x="432" y="340" class="label">50%</text>
-  <text x="568" y="340" class="label">75%</text>
+  <text x="265" y="340" class="label">25%</text>
+  <text x="370" y="340" class="label">50%</text>
+  <text x="475" y="340" class="label">75%</text>
 </svg>
 <figcaption style="font-size: 0.85rem; color: #9ca3af; margin-top: 0.5rem;">Source: <a href="https://stats.labs.apnic.net/ipv6/" style="color: #5eead4;">APNIC Labs IPv6 Measurement</a> and <a href="https://pulse.internetsociety.org/en/blog/2026/04/18-years-later-ipv6-reaches-majority/" style="color: #5eead4;">Internet Society Pulse</a> (April 2026)</figcaption>
 </figure>
@@ -186,7 +186,7 @@ If your routing prefix is derived from your ASN, you can't easily multihome thro
 
 IPv6 chose 128-bit addresses specifically because 64-bit was considered marginal at the scale of an internet that includes IoT, cellular, and possibly interplanetary networking. IPv8's 64-bit space gives you about 18.4 quintillion addresses, which sounds like a lot until you remember that's only 4 billion times the IPv4 space — perfectly fine until it isn't. Designing a successor protocol to land in roughly the same address-space neighborhood your predecessor explicitly rejected is a hard sell.
 
-<figure style="margin: 2.5rem 0; overflow-x: auto;">
+<div style="margin: 2.5rem 0; overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; font-size: 0.92rem;">
 <thead>
 <tr style="border-bottom: 2px solid #5eead4;">
@@ -206,8 +206,8 @@ IPv6 chose 128-bit addresses specifically because 64-bit was considered marginal
 <tr><td style="padding: 0.5rem;">BGP routing</td><td style="padding: 0.5rem;">Unbounded</td><td style="padding: 0.5rem;">Unbounded</td><td style="padding: 0.5rem;">~1 entry per ASN</td></tr>
 </tbody>
 </table>
-<figcaption style="font-size: 0.85rem; color: #9ca3af; margin-top: 0.5rem; text-align: center;">Sources: RFC 791, RFC 8200, draft-thain-ipv8-02. *Deployment % from <a href="https://pulse.internetsociety.org/en/blog/2026/04/18-years-later-ipv6-reaches-majority/" style="color: #5eead4;">Internet Society Pulse</a>, <a href="https://stats.labs.apnic.net/ipv6/" style="color: #5eead4;">APNIC Labs</a>, and <a href="https://www.theregister.com/2026/04/17/ipv6_50_percent_google/" style="color: #5eead4;">The Register</a> (April 2026); IPv4 share derived as the inverse of IPv6 measurements across the same sources.</figcaption>
-</figure>
+<p style="font-size: 0.85rem; color: #9ca3af; margin-top: 0.5rem; text-align: center;">Sources: RFC 791, RFC 8200, draft-thain-ipv8-02. *Deployment % from <a href="https://pulse.internetsociety.org/en/blog/2026/04/18-years-later-ipv6-reaches-majority/" style="color: #5eead4;">Internet Society Pulse</a>, <a href="https://stats.labs.apnic.net/ipv6/" style="color: #5eead4;">APNIC Labs</a>, and <a href="https://www.theregister.com/2026/04/17/ipv6_50_percent_google/" style="color: #5eead4;">The Register</a> (April 2026); IPv4 share derived as the inverse of IPv6 measurements across the same sources.</p>
+</div>
 
 ### Centralized Zone Servers re-introduce single points of failure
 
@@ -247,28 +247,28 @@ The first four are hard but not impossible. The fifth is where every successor p
   <line x1="60" y1="50" x2="60" y2="260" class="axis2"/>
   <line x1="60" y1="260" x2="580" y2="260" class="axis2"/>
   <line x1="60" y1="100" x2="580" y2="100" class="grid2"/>
-  <line x1="60" y1="155" x2="580" y2="155" class="grid2"/>
-  <line x1="60" y1="210" x2="580" y2="210" class="grid2"/>
+  <line x1="60" y1="153" x2="580" y2="153" class="grid2"/>
+  <line x1="60" y1="207" x2="580" y2="207" class="grid2"/>
 
   <text x="50" y="105" text-anchor="end" class="label2">$60</text>
-  <text x="50" y="160" text-anchor="end" class="label2">$40</text>
-  <text x="50" y="215" text-anchor="end" class="label2">$20</text>
+  <text x="50" y="158" text-anchor="end" class="label2">$40</text>
+  <text x="50" y="212" text-anchor="end" class="label2">$20</text>
   <text x="50" y="265" text-anchor="end" class="label2">$0</text>
 
-  <polyline class="line2" points="100,250 230,182 360,142 490,108"/>
-  <circle cx="100" cy="250" r="5" class="dot2"/>
-  <circle cx="230" cy="182" r="5" class="dot2"/>
-  <circle cx="360" cy="142" r="5" class="dot2"/>
-  <circle cx="490" cy="108" r="5" class="dot2"/>
+  <polyline class="line2" points="100,247 230,180 360,113 490,100"/>
+  <circle cx="100" cy="247" r="5" class="dot2"/>
+  <circle cx="230" cy="180" r="5" class="dot2"/>
+  <circle cx="360" cy="113" r="5" class="dot2"/>
+  <circle cx="490" cy="100" r="5" class="dot2"/>
 
   <text x="100" y="285" text-anchor="middle" class="label2-bold">2011</text>
-  <text x="100" y="240" text-anchor="middle" class="pct2">$5</text>
+  <text x="100" y="237" text-anchor="middle" class="pct2">$5</text>
   <text x="230" y="285" text-anchor="middle" class="label2-bold">2019</text>
-  <text x="230" y="172" text-anchor="middle" class="pct2">$30</text>
+  <text x="230" y="170" text-anchor="middle" class="pct2">$30</text>
   <text x="360" y="285" text-anchor="middle" class="label2-bold">2024</text>
-  <text x="360" y="132" text-anchor="middle" class="pct2">$55</text>
+  <text x="360" y="103" text-anchor="middle" class="pct2">$55</text>
   <text x="490" y="285" text-anchor="middle" class="label2-bold">2025</text>
-  <text x="490" y="98" text-anchor="middle" class="pct2">$60</text>
+  <text x="490" y="90" text-anchor="middle" class="pct2">$60</text>
 </svg>
 <figcaption style="font-size: 0.85rem; color: #9ca3af; margin-top: 0.5rem;">Source: <a href="https://www.ipxo.com/" style="color: #5eead4;">ipxo.com</a> — industry estimates aggregated from secondary-market reports (2025). The price climb is the failed forcing function.</figcaption>
 </figure>
