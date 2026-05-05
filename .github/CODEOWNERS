@@ -1,0 +1,5 @@
+# Default owner for everything
+* @moshthesubnet
+
+# Require explicit approval for CI/CD changes
+.github/ @moshthesubnet
