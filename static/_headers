@@ -1,26 +1,12 @@
-# Per-path overrides FIRST (Cloudflare Pages applies first match)
-
-# Babel-in-the-browser pages need 'unsafe-eval' for JSX compilation at runtime.
-# Long-term: precompile these to plain JS and remove this exception.
-/projects/homelab-topology.html
-  X-Frame-Options: DENY
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: strict-origin-when-cross-origin
-  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-eval' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'
-
-/projects/network-topology-diagram.html
-  X-Frame-Options: DENY
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: strict-origin-when-cross-origin
-  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-eval' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'
-
-# Default headers for everything else
 /*
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://unpkg.com https://*.formspree.io https://cdn.credly.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.formspree.io https://www.credly.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://*.formspree.io
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-eval' https://unpkg.com https://*.formspree.io https://cdn.credly.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.formspree.io https://www.credly.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://*.formspree.io
+
+# 'unsafe-eval' is required by /projects/homelab-topology.html and
+# /projects/network-topology-diagram.html, which compile JSX in the browser via
+# @babel/standalone. Long-term fix: precompile those pages to plain JS and
+# remove 'unsafe-eval' from script-src.
