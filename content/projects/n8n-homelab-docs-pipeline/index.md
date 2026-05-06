@@ -13,7 +13,7 @@ tags:
   - opnsense
   - obsidian
   - infrastructure-as-code
-images: ["/img/projects/n8n-homelab-docs-pipeline-og.png"]
+images: ["/projects/n8n-homelab-docs-pipeline/feature.png"]
 draft: false
 mermaid: true
 weight: 3

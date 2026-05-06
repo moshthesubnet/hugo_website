@@ -17,7 +17,7 @@ tags:
   - obsidian
   - truenas
   - documentation
-images: ["/img/posts/homelab-docs-automation-n8n-claude-og.png"]
+images: ["/writing/homelab-docs-automation-n8n-claude/feature.png"]
 ---
 
 *By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
