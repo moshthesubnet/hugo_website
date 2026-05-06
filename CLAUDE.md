@@ -11,20 +11,6 @@ Hugo static site using the [Congo](https://github.com/jpanther/congo) theme, mig
 - **Content**: Markdown files in `content/`
 - **Deploy target**: Cloudflare Pages (build output: `public/`)
 
-## Migration
-
-`migrate.py` migrates content from the MkDocs source repo (`moshthesubnet/my-lab-docs`) into this Hugo project.
-
-```bash
-# Clone from GitHub and migrate (default)
-python3 migrate.py
-
-# Use an existing local clone
-python3 migrate.py --source /path/to/my-lab-docs
-```
-
-Requires PyYAML (`python3 -m pip install pyyaml`). The script handles admonitions, tabs, internal links, icons, image paths, front matter, assets, and AOS scripts. See the end-of-run summary for manual follow-up items (custom CSS selectors, home page layout, material icons).
-
 ## Commands
 
 ```bash
@@ -37,8 +23,11 @@ hugo server -D
 # Production build
 hugo --minify
 
-# New content page
-hugo new content docs/my-page.md
+# New writing post
+hugo new content writing/my-post.md
+
+# New project page
+hugo new content projects/my-project.md
 ```
 
 `make serve` auto-detects the host IP via `hostname -I` and binds to all interfaces, so the site is reachable from other devices on the network at `http://<host-ip>:1313/`.
@@ -49,11 +38,12 @@ hugo new content docs/my-page.md
 
 Content lives in `content/` and maps directly to URL paths:
 
-- `content/_index.md` — home page
-- `content/docs/` — documentation section (sidebar auto-generated from directory structure)
-- Add new sections by creating `content/<section>/_index.md`
+- `content/_index.md` — home page (feed shows `writing/` only; controlled by `mainSections` in `params.toml`)
+- `content/writing/` — blog posts; narrative/storytelling angle, linked from home feed
+- `content/projects/` — technical spec deep-dives; linked from `/projects/` in the nav
+- `content/about/` — about page
 
-Sidebar navigation is **automatically generated** from the `content/docs/` directory hierarchy. Control ordering with `weight` frontmatter. Use `_index.md` files to title sections.
+Add new sections by creating `content/<section>/_index.md`. Control nav links in `config/_default/menus.en.toml`.
 
 ### Configuration
 
@@ -99,7 +89,7 @@ Congo v2.13.0 has a bug with Hugo 0.157.0: `_partials/functions/warnings.html` c
 ## Stack
 - Hugo with Congo theme
 - Deployed on Cloudflare Pages via GitHub Actions / Wrangler CLI
-- Pushes to main trigger automatic deployment
+- Pushes to `main` trigger production deployment; PRs get a `*.pages.dev` preview URL posted as a comment
 
 ## Content
 - Blog posts live in content/writing/ as markdown files
