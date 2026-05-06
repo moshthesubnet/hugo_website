@@ -55,7 +55,7 @@ Layer 3  Network       ← Layer 3 VPN (WireGuard — virtual IP, full subnet ro
 Neither is more secure in the abstract. They solve different access problems, for different users, with different risk profiles.
 
 {{< figure
-  src="/img/posts/diagram-01-hook.png"
+  src="diagram-01-hook.png"
   alt="Two side-by-side boxes on a dark background: Layer 3 labeled WireGuard in green and Layer 4 labeled TwinGate in blue"
   caption="Same word. Different layer. Different access scope."
 >}}
@@ -93,13 +93,13 @@ When I connect from a coffee shop, my laptop gets `10.0.0.2` and could reach som
 But think about what that config hands to a contractor. They're inside your `/24`. Everything that answers is reachable from their machine. WireGuard authenticated them; your firewall rules determine what they can actually do with that access — and if the rules are incomplete, missing, or wrong, the whole subnet is open.
 
 {{< figure
-  src="/img/posts/diagram-02-wireguard-tunnel.png"
+  src="diagram-02-wireguard-tunnel.png"
   alt="Diagram showing a laptop connecting via an encrypted WireGuard dashed tunnel to a peer node, with wg0 interface label and IP address 10.0.0.2 shown below the client"
   caption="WireGuard drops a virtual interface on the connecting device. The client is on the network."
 >}}
 
 {{< figure
-  src="/img/posts/diagram-03-wireguard-subnet.png"
+  src="diagram-03-wireguard-subnet.png"
   alt="Expanded network diagram showing a WireGuard client with tunnel access into a red-bordered subnet containing six labeled hosts, all marked as reachable"
   caption="A peer with AllowedIPs = 10.0.0.0/24. Every host in the /24 is reachable from the client. That's the point — and the risk."
 >}}
@@ -125,7 +125,7 @@ They can connect to port 5432. They cannot ping `10.0.0.1`. They cannot reach an
 The first time I configured TwinGate, I tried to SSH to the host running the Postgres connector to verify it was working. Couldn't connect. Not a firewall issue, not a routing problem — the connector only proxies resources explicitly defined in the admin panel. I hadn't defined `host:22`. That was disorienting for about sixty seconds, then it was the clearest architectural lesson any tool has given me. Not a bug. That's the whole point.
 
 {{< figure
-  src="/img/posts/diagram-04-twingate-layer4.png"
+  src="diagram-04-twingate-layer4.png"
   alt="Architecture diagram showing a remote user connecting through TwinGate cloud broker to a connector inside a dashed network boundary, with only a Postgres resource visible and other hosts absent"
   caption="TwinGate's connector model. The client never touches the network. The network topology is invisible."
 >}}
@@ -185,7 +185,7 @@ The blast radius column is where the decision actually lives:
 Compromised credentials are the leading initial access vector — present in over a third of all data breaches, according to the [Verizon 2024 Data Breach Investigations Report](https://www.verizon.com/business/resources/reports/dbir/) (Verizon DBIR, 2024). The architectural difference between a Layer 3 VPN and a Layer 4 ZTNA solution is a direct answer to that number: if a WireGuard credential leaks, the attacker has the same `/24` access as the legitimate user. If a TwinGate credential leaks, the attacker has access to one port on one host. The layer you choose determines what you're handing over.
 
 {{< figure
-  src="/img/posts/diagram-05-comparison.png"
+  src="diagram-05-comparison.png"
   alt="Side-by-side comparison: left panel shows WireGuard with a full green subnet containing four labeled hosts, right panel shows TwinGate with only one lit blue Postgres resource and two greyed-out inaccessible hosts"
   caption="Same user, same destination. The layer determines the blast radius."
 >}}
