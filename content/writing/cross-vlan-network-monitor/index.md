@@ -16,7 +16,7 @@ tags:
   - proxmox
   - docker
   - automation
-images: ["/img/posts/cross-vlan-network-monitor-og.png"]
+images: ["/writing/cross-vlan-network-monitor/feature.png"]
 ---
 
 *By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*

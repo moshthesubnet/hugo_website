@@ -11,7 +11,7 @@ tags:
   - proxmox
   - ollama
   - self-hosted
-images: ["/img/projects/local-ai-coding-agent-og.png"]
+images: ["/projects/local-ai-coding-agent/feature.png"]
 draft: false
 weight: 4
 ---
