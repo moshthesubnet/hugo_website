@@ -11,7 +11,7 @@ tags: ["vpn", "wireguard", "ztna", "twingate", "networking", "homelab", "securit
 images: ["/writing/layer3-vs-layer4-vpn-wireguard-twingate/feature.png"]
 ---
 
-*By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
+*By [Skyler King](/docs/bio/), CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
 
 {{< figure
   src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&h=630&fit=crop&q=80"
@@ -20,12 +20,12 @@ images: ["/writing/layer3-vs-layer4-vpn-wireguard-twingate/feature.png"]
 >}}
 
 {{< alert >}}
-**TL;DR — The one-line version:**
+**TL;DR: The one-line version:**
 
 | | WireGuard (Layer 3) | TwinGate (Layer 4) |
 |---|---|---|
-| **OSI Layer** | 3 — Network | 4 — Transport |
-| **Virtual Interface** | Yes — `wg0` | No |
+| **OSI Layer** | 3 (Network) | 4 (Transport) |
+| **Virtual Interface** | Yes (`wg0`) | No |
 | **IP Assigned** | Yes | No |
 | **What You Can Reach** | Full subnet (`AllowedIPs`) | Defined resources only |
 | **Access Control** | Firewall rules (external) | Connector policy (built-in) |
@@ -138,8 +138,8 @@ Same user. Same destination network. WireGuard puts them inside the `/24`. TwinG
 
 | Dimension | WireGuard (Layer 3) | TwinGate (Layer 4 / ZTNA) |
 |-----------|---------------------|--------------------------|
-| OSI Layer | 3 — Network | 4 — Transport |
-| Virtual Interface Created | Yes — `wg0` | No |
+| OSI Layer | 3 (Network) | 4 (Transport) |
+| Virtual Interface Created | Yes (`wg0`) | No |
 | IP Assigned to Client | Yes | No |
 | Access Scope | Full subnet (`AllowedIPs`) | Defined resources only |
 | Network Topology Visible to Client | Yes | No |
@@ -151,7 +151,7 @@ The blast radius column is where the decision actually lives:
 
 <figure>
 <svg viewBox="0 0 580 145" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Horizontal bar chart comparing blast radius: WireGuard Layer 3 exposes 254 hosts, TwinGate Layer 4 exposes 1 resource" style="width:100%;max-width:580px;background:transparent">
-  <title>Blast Radius by Access Model — Compromised Credential</title>
+  <title>Blast Radius by Access Model: Compromised Credential</title>
   <style>
     .brl { font: 13px 'Fira Code', monospace; fill: #a0aec0; }
     .brv { font: 12px 'Fira Code', monospace; fill: #e2e8f0; }

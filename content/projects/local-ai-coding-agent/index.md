@@ -3,7 +3,7 @@ title: Local AI Coding Agent (Ollama + Aider)
 aliases: ["/docs/projects/local_ai_coding_agent/"]
 date: 2025-12-01
 description: "Deployment and configuration of a fully localized AI coding assistant using Ollama and Aider on Proxmox."
-summary: "Ollama running Qwen2.5-Coder inside a Proxmox Ubuntu VM, fronted by Aider as the CLI agent — a fully air-gappable coding assistant with no API keys and no data leaving the lab."
+summary: "Ollama running Qwen2.5-Coder inside a Proxmox Ubuntu VM, fronted by Aider as the CLI agent: a fully air-gappable coding assistant with no API keys and no data leaving the lab."
 tags:
   - ai
   - homelab
@@ -72,7 +72,7 @@ The original development workflow relied on external APIs, presenting several co
 | OpenAI / Claude | External Network | Pay-per-token costs, potential rate limits |
 | Web UI Chatbots | Manual Copy/Paste | Context switching, disjointed workflow, lack of Git integration |
 
-**Key Issues Identified:**
+**Issues:**
 
 - Proprietary or sensitive code leaving the local network
 - Unpredictable billing based on token usage during heavy refactoring

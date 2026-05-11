@@ -2,7 +2,7 @@
 title: Cross-VLAN Network Monitor
 aliases: ["/docs/projects/cross_vlan_network_monitor/"]
 date: 2026-03-09
-description: "A unified 'God View' of every device on the homelab — bare metal, VMs, LXCs, and containers — discovered via authenticated APIs instead of raw sockets."
+description: "A unified 'God View' of every device on the homelab (bare metal, VMs, LXCs, and containers) discovered via authenticated APIs instead of raw sockets."
 summary: "ARP broadcast hits one VLAN and sees nothing else. OPNsense REST API gives the full ARP table across every VLAN. Proxmox and Docker APIs layer in VM names and container state. One FastAPI app, no root required."
 tags:
   - python
@@ -17,7 +17,7 @@ draft: false
 weight: 2
 ---
 
-*Cross-VLAN device inventory via authenticated APIs — the router and hypervisor already know everything, so just ask them.*
+*Cross-VLAN device inventory via authenticated APIs: the router and hypervisor already know everything, so just ask them.*
 
 ---
 
@@ -35,7 +35,7 @@ Standard ARP scanners are blind across VLAN boundaries. This app skips the scann
 
 Standard network scanners rely on layer-2 ARP broadcasts. This approach has a fundamental flaw in segmented networks: **ARP does not cross VLAN boundaries**. A scanner on VLAN 30 is completely blind to devices on VLANs 10, 20, and 99 without a dedicated probe on each segment.
 
-The common workarounds — one scanner per VLAN, promiscuous-mode capture, flooding every segment — all require root privileges, raw sockets, or brittle host-level configuration. In a homelab with 5+ VLANs, dozens of VMs, and multiple Docker hosts, none of these scale cleanly.
+The common workarounds (one scanner per VLAN, promiscuous-mode capture, flooding every segment) all require root privileges, raw sockets, or brittle host-level configuration. In a homelab with 5+ VLANs, dozens of VMs, and multiple Docker hosts, none of these scale cleanly.
 
 Layer-2 scanning alone also can't answer: *Is that IP a VM or a container? Which Proxmox node is it on? What's its power state?* Resolving those questions requires querying something that actually knows — the hypervisor.
 
@@ -153,7 +153,7 @@ Each scan cycle fetches active DHCP leases from OPNsense's dnsmasq API and uses 
 
 ---
 
-## Key Features
+## Features
 
 - OPNsense provides the global ARP table (IPv4) and NDP neighbour table (IPv6) in a single API call, covering every VLAN it routes. Devices that only appear in NDP — IPv6-only endpoints with no ARP entry — get their own row with a null IPv4 field.
 - Proxmox nodes are polled concurrently with per-node API tokens. The QEMU Guest Agent provides a live IP for running VMs before ARP resolves; offline VMs stay in the inventory with their last-known IP and a `stopped` badge rather than dropping off when the lease expires.
@@ -228,25 +228,25 @@ The included `docker-compose.yml` uses `network_mode: host`, which is the recomm
 
 Six development phases, each triggered by a specific limitation hitting production.
 
-### Phase 1 — ARP Prototype
+### Phase 1: ARP Prototype
 Started with `scapy.srp()` wrapped in `run_in_executor`, a MAC OUI vendor lookup, and a CLI entrypoint. Saw exactly one VLAN. Required root. No persistence, no UI.
 
-### Phase 2 — Docker & Proxmox Enrichment
+### Phase 2: Docker & Proxmox Enrichment
 Added `DockerInfo` and `ProxmoxInfo` dataclasses. Docker queried over TCP sockets with Unix socket fallback. Proxmox authenticated via `proxmoxer` API tokens — regex patterns extract MACs from Proxmox net config strings (`virtio`, `e1000`, `hwaddr=`). All nodes and hosts queried concurrently via `asyncio.gather` + `run_in_executor`.
 
-### Phase 3 — Service, Persistence & Syslog
+### Phase 3: Service, Persistence & Syslog
 The project became a running service: SQLite schema with `upsert_device()` (alias excluded from upsert so manual labels survive), FastAPI background scan loop via `lifespan`, and the async UDP syslog receiver. RFC 3164, RFC 5424, and OPNsense `filterlog` CSV all handled. rsyslog relay support: when UDP source is `127.0.0.1`, the HOSTNAME field from the message is used as the real source IP.
 
-### P1 Audit — Schema Migrations & OPNsense Module
+### P1 Audit: Schema Migrations & OPNsense Module
 Idempotent `_migrate_add_columns()` added `ipv6`, `custom_type`, `disappearance_count`, `notes`, `scan_count`, and `syslog_ip` to existing databases without breaking them. OPNsense queries extracted into `src/opnsense.py`. Both ARP and NDP response envelope formats handled (`list` or `{"arp": [...]}`). Multicast, broadcast, and incomplete entries filtered. NDP link-local (`fe80:`) addresses skipped.
 
-### P2 Audit — Scapy Removed, 7-Source Merge
+### P2 Audit: Scapy Removed, 7-Source Merge
 `scapy.srp()` was pulled from the main discovery loop and replaced by `query_opnsense()`. Seven sources now run concurrently. Merge priority: OPNsense ARP → nmap/SNMP (MACs not in ARP only) → Proxmox enrichment (or offline upsert) → NDP-only rows → Docker upserts independent.
 
-### P3/P4 — Enriched Discovery & Dashboard Overhaul
+### P3/P4: Enriched Discovery & Dashboard Overhaul
 Added nmap (`-sn -oX -`, XML parse, 120s timeout) and SNMP (`ipNetToMediaPhysAddress` MIB walk via `snmpwalk` subprocess). New API endpoints for notes, type overrides, secondary syslog IP, global log search, inventory export, and source health. Frontend rebuilt with per-type count chips, per-source health indicator dots, bulk checkbox actions, and a slide-in detail panel with inline editors for alias, type, notes, and syslog IP — plus a colour-coded syslog viewer per device.
 
-### P5 — Host-Network Container Fix & Docker Host Attribution
+### P5: Host-Network Container Fix & Docker Host Attribution
 
 #### Problem: Host-Network Containers Overwriting Docker Host Identity
 Containers running with `--network host` share the daemon host's MAC address and IP — no independent network identity. The previous merge logic upserted these containers directly onto the host device record, overwriting its `device_type` with `docker-container` and `vendor` with `"Docker"`. If multiple host-network containers ran on the same host (e.g. rustdesk alongside logspout), the last container processed each scan cycle would clobber all prior metadata.
@@ -322,7 +322,7 @@ start.sh            Bare-metal startup wrapper (configures HOST_IP, PORT, SYSLOG
 
 - TLS for Docker sockets: the TCP connections currently rely on firewall rules for access control. Mutual TLS would be a cleaner boundary.
 - LLDP/CDP ingestion from managed switches via SNMP to map physical port topology alongside the IP inventory.
-- Historical device presence graphing — `disappearance_count` tracks absence but doesn't record when a device came back. A time-series table would close that gap.
+- Historical device presence graphing: `disappearance_count` tracks absence but doesn't record when a device came back. A time-series table would close that gap.
 - Docker Compose packaging with a health check and restart policy.
 
 ---
@@ -349,5 +349,5 @@ start.sh            Bare-metal startup wrapper (configures HOST_IP, PORT, SYSLOG
 
 ## Related
 
-- [GitHub: moshthesubnet/netcensus](https://github.com/moshthesubnet/netcensus) — source code
-- [Blog post: My Router Already Knew. I Just Wasn't Asking.](/writing/cross-vlan-network-monitor/) — the full writeup with reasoning and lessons learned
+- [GitHub: moshthesubnet/netcensus](https://github.com/moshthesubnet/netcensus) (source code)
+- [Blog post: My Router Already Knew. I Just Wasn't Asking.](/writing/cross-vlan-network-monitor/), the full writeup with reasoning and lessons learned

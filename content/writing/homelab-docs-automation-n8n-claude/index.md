@@ -20,7 +20,7 @@ tags:
 images: ["/writing/homelab-docs-automation-n8n-claude/feature.png"]
 ---
 
-*By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
+*By [Skyler King](/docs/bio/), CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
 
 ![Green binary code and data streams cascading on dark background representing automation pipelines and data flow](https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&h=630&fit=crop&q=80&fm=webp)
 *Photo by Taylor Vick on Unsplash*
@@ -33,7 +33,7 @@ Homelab documentation has a half-life. You write it once, it's accurate for mayb
 
 [Jump to download ↓](#how-to-import-this-workflow)
 
-My setup is a seven-VLAN OPNsense network — Lab, Servers, IoT, Home, MGMT, Malware analysis, and WireGuard for remote access — and the state changes constantly. The fix I wanted: documentation that updates itself.
+My setup is a seven-VLAN OPNsense network (Lab, Servers, IoT, Home, MGMT, Malware analysis, and WireGuard for remote access), and the state changes constantly. The fix I wanted: documentation that updates itself.
 
 ## How It Works
 
@@ -114,7 +114,7 @@ for (const section of sections) {
 return [{ json: { has_changes: changes.length > 0, changes } }];
 ```
 
-`Read Previous State` is a separate Code node that reads the saved JSON snapshot from the vault via `fs.readFileSync`. State saving happens at the end of the pipeline via SSH — see gotcha three.
+`Read Previous State` is a separate Code node that reads the saved JSON snapshot from the vault via `fs.readFileSync`. State saving happens at the end of the pipeline via SSH; see gotcha three.
 
 If `has_changes` is true, the IF node routes to SSH execution. If not, the workflow ends quietly.
 
@@ -165,13 +165,13 @@ The instinct is to mount the vault on DockerHost1 too. Don't. It means two NFS c
 
 Since `Buffer` isn't available in n8n expression evaluators — only in Code nodes — you can't base64-encode in the SSH command expression directly. The pattern that works:
 
-1. **Code node** — parse Claude's output, pre-encode each file as base64 and attach it to the item JSON:
+1. **Code node**: parse Claude's output, pre-encode each file as base64 and attach it to the item JSON:
 ```javascript
 const base64Content = Buffer.from(markdownOutput).toString('base64');
 return [{ json: { filename: 'opnsense.md', base64Content } }];
 ```
 
-2. **SSH node** — decode on the target host using the pre-encoded value:
+2. **SSH node**: decode on the target host using the pre-encoded value:
 ```bash
 echo '{{ $json.base64Content }}' | base64 -d > /mnt/vault1337/homelab/topology/devices/opnsense.md
 ```
@@ -227,7 +227,7 @@ The Obsidian Markdown output reads like a network diagram in prose: a table of c
 
 ## How to Import This Workflow
 
-Ready to set up your own Homelab Topology Pipeline? Grab the template below. Once downloaded, importing it into your n8n workspace takes just a few seconds:
+Download the template below and import it into your n8n workspace:
 
 1. Click the button below to download the `.json` file.
 2. Open your n8n instance and create a New Workflow.
@@ -255,7 +255,7 @@ That's the whole thing. A weekly cron, four API calls, a string comparison, and 
 
 ---
 
-*Running OPNsense 26.1.3, n8n 2.10.3 on Docker, TrueNAS SCALE 24.10.2, and Claude Code on Ubuntu 24.04. The NFS mount is persistent across reboots and the n8n workflow runs without manual intervention. Until it doesn't — at which point I'll write about that too.*
+*Running OPNsense 26.1.3, n8n 2.10.3 on Docker, TrueNAS SCALE 24.10.2, and Claude Code on Ubuntu 24.04. The NFS mount is persistent across reboots and the n8n workflow runs without manual intervention. Until it doesn't, at which point I'll write about that too.*
 
 ## Frequently Asked Questions
 
