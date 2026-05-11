@@ -218,9 +218,9 @@ But the question worth asking isn't "will IPv8 succeed?" It's "could *any* IP-la
 
 I don't think one could. Here's why.
 
-For a new IP protocol to displace IPv6, five things need to be in place. A genuine IETF working group with multi-organization buy-in. Major OS vendors — Linux kernel, Windows, macOS, mobile — committed to implementation before the standard is finalized. At least one major cloud provider running production traffic. Migration tooling with no flag day. And, most critically, an economic forcing function that CGNAT can't defuse.
+For a new IP protocol to displace IPv6, you need a working group with genuine multi-vendor buy-in, OS support committed before the standard is finalized, at least one major cloud provider running production traffic, and migration tooling with no flag day. Those four are hard but not impossible.
 
-The first four are hard but not impossible. The fifth is where every successor protocol breaks. IPv4 exhaustion was supposed to be the forcing function for IPv6. NAT defused it. Today, with CGNAT widespread and IPv4 addresses commoditized in a working secondary market, there is no equivalent crisis waiting to drive a third transition. IPv8 doesn't solve a crisis. It improves on IPv6 in ways that don't create urgency.
+The fifth is where every successor protocol breaks: an economic forcing function that CGNAT can't defuse. IPv4 exhaustion was supposed to be the forcing function for IPv6. NAT defused it. Today, with CGNAT widespread and IPv4 addresses commoditized in a working secondary market, there is no equivalent crisis waiting to drive a third transition. IPv8 doesn't solve a crisis. It improves on IPv6 in ways that don't create urgency.
 
 <figure style="margin: 2.5rem 0; text-align: center;">
 <svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; height: auto;">
@@ -271,7 +271,7 @@ IPv8 is showing up at the bottom of the same trough. There is no exhaustion cris
 
 If I were trying to build the protocol that *does* eventually replace IPv6 — and I'm not, but if I were — I'd start by accepting that the problem isn't technical. It's the coalition.
 
-The working group would need to exist before the spec was finalized. At least one major cloud provider would have to commit to running production traffic within 24 months of standardization. The Linux kernel, Windows, and the major mobile OSes would all need to ship it simultaneously, by prior agreement. The migration story would need no flag day, no required dual-stack period, no broken tooling. And the forcing function would have to be something CGNAT can't defuse — a security crisis, a routing collapse, a regulatory mandate, or at minimum a hardware refresh cycle operators were already planning to run.
+The working group has to exist before the spec is final. At least one major cloud provider commits to production traffic within 24 months of standardization. Linux, Windows, and the major mobile OSes all ship it simultaneously, by prior agreement. No flag day. No required dual-stack period. No broken tooling. And the forcing function has to be something CGNAT can't defuse — a security crisis, a routing collapse, a regulatory mandate, or a hardware refresh cycle operators were already planning.
 
 That's the bar IPv6 met partially and IPv8 meets not at all.
 
@@ -293,7 +293,7 @@ No. IPv8 exists as an individual IETF draft, not an adopted standard. There is n
 
 ### Will IPv8 replace IPv6?
 
-Almost certainly not in its current form. IPv8 has no IETF working group, no vendor commitments, and architectural problems (Layer 3 OAuth2 bootstrapping, Cisco PVRST mandate, /16 minimum killing traffic engineering) that would block standardization. IPv6 took 28 years to reach 50% of Google's traffic with full IETF backing. IPv8 starts with none of that backing, so even a successful version would face a steeper climb.
+Almost certainly not. IPv8 has no IETF working group, no vendor commitments, and architectural problems (Layer 3 OAuth2 bootstrapping, Cisco PVRST mandate, /16 minimum killing traffic engineering) that would block standardization. IPv6 took 28 years to reach 50% of Google's traffic with full IETF backing. IPv8 starts with none of that backing, so even a successful version would face a steeper climb.
 
 ### Why has IPv6 adoption been so slow?
 
@@ -307,11 +307,11 @@ IPv5 was assigned to the Internet Stream Protocol (ST and ST-II), an experimenta
 
 ## The takeaway
 
-- IPv8 is one engineer's draft, not an adopted IETF standard. Treat it as a thought experiment, not a roadmap.
-- The IPv8 *diagnosis* is partly right — backward compatibility and unbounded BGP growth are real problems IPv6 didn't solve well.
-- The IPv8 *treatment* has at least six architectural problems severe enough to block standardization in its current form.
-- IPv6 didn't fail. NAT succeeded at delaying the exhaustion crisis long enough that organic adoption could run on its slower clock.
-- Without an economic forcing function, no IP successor — IPv8 or anything else — has a viable path right now.
+- IPv8 is one engineer's draft, not a standard. Treat it as a thought experiment.
+- The diagnosis is partly right — backward compatibility and unbounded BGP growth are real problems IPv6 never solved cleanly.
+- The treatment has at least six architectural problems serious enough to block standardization as written.
+- IPv6 didn't fail. NAT succeeded. The exhaustion crisis got patched by something operationally cheaper than the fix.
+- Without a forcing function CGNAT can't defuse, no IP successor — IPv8 or otherwise — goes anywhere.
 
 The internet upgrades its plumbing on geologic time. IPv6 took 28 years to reach majority on a single day. Any serious IPv8 conversation should be scheduled for around 2055 — and the thing that finally replaces IPv6 will probably look more like an IPv6 extension than a new IP version.
 
