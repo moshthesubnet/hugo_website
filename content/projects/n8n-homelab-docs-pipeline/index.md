@@ -4,7 +4,7 @@ aliases: ["/docs/projects/n8n-homelab-docs-pipeline/"]
 date: 2026-02-28
 lastmod: 2026-03-23
 description: "Automated homelab documentation pipeline. n8n pulls live state from OPNsense, diffs it, and triggers Claude Code over SSH to regenerate Obsidian Markdown and NetBox YAML on every change."
-summary: "An n8n workflow that keeps homelab docs honest — polling OPNsense weekly, detecting drift, and invoking Claude Code via SSH to rewrite topology docs automatically."
+summary: "An n8n workflow that keeps homelab docs honest, polling OPNsense weekly, detecting drift, and invoking Claude Code via SSH to rewrite topology docs automatically."
 tags:
   - homelab
   - n8n
@@ -23,7 +23,7 @@ weight: 3
 
 Homelab documentation rots. You add a VLAN, rename an alias, spin up a new VM, and the docs are immediately wrong. This pipeline treats the live network as the source of truth and keeps the docs in sync automatically.
 
-A weekly n8n workflow pulls current state from four OPNsense REST API endpoints, diffs it against the last known state, and — if anything changed — SSHs into a dedicated Claude Code VM to regenerate two documentation artifacts: a NetBox-compatible YAML topology file and an Obsidian Markdown doc with frontmatter, tables, wiki-links, and a changelog entry. Both files land on a TrueNAS NFS share that Syncthing propagates to every device.
+A weekly n8n workflow pulls current state from four OPNsense REST API endpoints, diffs it against the last known state, and, if anything changed, SSHs into a dedicated Claude Code VM to regenerate two documentation artifacts: a NetBox-compatible YAML topology file and an Obsidian Markdown doc with frontmatter, tables, wiki-links, and a changelog entry. Both files land on a TrueNAS NFS share that Syncthing propagates to every device.
 
 Zero manual steps. The docs update themselves.
 
@@ -233,9 +233,9 @@ flowchart LR
 
 | Component | Role |
 |-----------|------|
-| **n8n 2.10.3** | Workflow orchestration — scheduling, HTTP, SSH, diffing, state management |
-| **OPNsense 26.1** | Network state source — interfaces, aliases, routes, DHCP leases |
-| **Claude Code** | Documentation generation — runs `claude -p` non-interactively over SSH |
+| **n8n 2.10.3** | Workflow orchestration: scheduling, HTTP, SSH, diffing, state management |
+| **OPNsense 26.1** | Network state source: interfaces, aliases, routes, DHCP leases |
+| **Claude Code** | Documentation generation: runs `claude -p` non-interactively over SSH |
 | **TrueNAS** | NFS share hosting the Obsidian vault |
 | **Syncthing** | Vault replication to all devices |
 | **Obsidian** | Documentation consumption |
@@ -334,11 +334,11 @@ flowchart TD
     class SKIP skip
 {{< /mermaid >}}
 
-### Stage 1 — Triggers
+### Stage 1: Triggers
 
 Both the weekly schedule (Monday, 6am) and the manual trigger fan out simultaneously to all four HTTP Request nodes. There's no ordering between them — n8n fires all four in parallel.
 
-### Stage 2 — API Collection
+### Stage 2: API Collection
 
 Four HTTP Request nodes hit the OPNsense REST API with Basic auth using a dedicated read-only API key. All four run in parallel:
 
@@ -349,15 +349,15 @@ Four HTTP Request nodes hit the OPNsense REST API with Basic auth using a dedica
 | Get Routes | `/api/routes/routes/searchroute` |
 | Get DHCP Leases | `/api/dnsmasq/leases/search` |
 
-### Stage 3 — Merge Chain
+### Stage 3: Merge Chain
 
 Merge nodes accept exactly two inputs, so the four responses are consolidated with a binary tree: Interfaces + Aliases → Merge1, Routes + DHCP → Merge2, then Merge1 + Merge2 → Merge3.
 
-### Stage 4 — State & Diff
+### Stage 4: State & Diff
 
 `Build State Object` assembles a single JSON document with a `collected_at` timestamp and all four data sections, then fans out to two nodes simultaneously: it triggers `Read Previous State` (a Code node using `fs.readFileSync` to load `opnsense-state.json` from `/mnt/vault1337/homelab/topology/devices/`, `continueOnFail: true` to handle the first run) and feeds `Diff: Detect Changes` directly. Both paths converge at the Diff node, which compares each section independently — interfaces, aliases, routes, and DHCP leases — and produces a `has_changes` boolean and a human-readable `changes` array.
 
-### Stage 5 — Claude Pipeline
+### Stage 5: Claude Pipeline
 
 If changes are detected, `Build Claude Prompt` constructs the full prompt with the current state JSON and the changes list. A dedicated SSH node (`SSH: Write to tmp file`) writes the prompt to `/tmp/doc-prompt.txt` on the Claude Code VM first — avoiding shell escaping issues with large JSON payloads embedded in command strings. A second SSH node then runs Claude:
 
@@ -370,12 +370,12 @@ If changes are detected, `Build Claude Prompt` constructs the full prompt with t
 
 Claude is instructed to return two outputs separated by `===SPLIT===`: a NetBox-compatible YAML file first, then the Obsidian Markdown doc. `Parse Claude Response` splits on that delimiter, strips any code fences Claude adds, and pre-encodes both outputs as base64 for the SSH write nodes downstream.
 
-### Stage 6 — Output (parallel)
+### Stage 6: Output (parallel)
 
 `Parse Claude Response` fans out to three branches simultaneously, all writing to the vault host via SSH using base64-encoded content (`echo '...' | base64 -d > /path`):
-- **SSH: Write to Vault** — writes `opnsense.yml` and `opnsense.md` to `/mnt/vault1337/homelab/topology/devices/`
-- **Build Changelog Entry → SSH: Append Changelog** — formats a timestamped markdown entry, base64-encodes it, and appends it to `/mnt/vault1337/homelab/topology/changelog.md`
-- **Prepare State → SSH: Save Current State** — a Code node base64-encodes the current state JSON; the SSH node overwrites `opnsense-state.json` so the next diff has a baseline
+- **SSH: Write to Vault**: writes `opnsense.yml` and `opnsense.md` to `/mnt/vault1337/homelab/topology/devices/`
+- **Build Changelog Entry → SSH: Append Changelog**: formats a timestamped markdown entry, base64-encodes it, and appends it to `/mnt/vault1337/homelab/topology/changelog.md`
+- **Prepare State → SSH: Save Current State**: a Code node base64-encodes the current state JSON; the SSH node overwrites `opnsense-state.json` so the next diff has a baseline
 
 ---
 
@@ -486,13 +486,13 @@ DHCP ────┘
 
 ## Planned Additions
 
-- Proxmox API integration — VM inventory, container states, storage pool usage from Pve1 and Pve3
-- Pi-hole integration — DNS record list and query stats from both Pi-hole instances on the Servers VLAN
-- NetBox push — auto-import the generated YAML via the NetBox REST API instead of leaving it as reference material
-- Vault graph queries — cross-reference DHCP leases against VM inventory; surface hosts with no DNS entry
+- Proxmox API integration: VM inventory, container states, storage pool usage from Pve1 and Pve3
+- Pi-hole integration: DNS record list and query stats from both Pi-hole instances on the Servers VLAN
+- NetBox push: auto-import the generated YAML via the NetBox REST API instead of leaving it as reference material
+- Vault graph queries: cross-reference DHCP leases against VM inventory; surface hosts with no DNS entry
 
 ---
 
 ## Related
 
-- [Blog post: Automating Homelab Documentation with n8n and Claude Code](/writing/homelab-docs-automation-n8n-claude/) — the full writeup with gotchas and reasoning
+- [Blog post: Automating Homelab Documentation with n8n and Claude Code](/writing/homelab-docs-automation-n8n-claude/), the full writeup with gotchas and reasoning

@@ -4,7 +4,7 @@ aliases: ["/posts/opnsense-backup-incident/"]
 date: 2026-03-04
 lastUpdated: "2026-03-11"
 draft: false
-description: "My OPNsense VM froze during a 3am vzdump snapshot, severed all VLAN routing, and trapped Proxmox in a circular dependency. Here's how a 30-line bash script replaced a full VM backup — and why that was the right call."
+description: "My OPNsense VM froze during a 3am vzdump snapshot, severed all VLAN routing, and trapped Proxmox in a circular dependency. Here's how a 30-line bash script replaced a full VM backup, and why that was the right call."
 summary: "Scheduled vzdump backup → OPNsense snapshot freeze → VLAN routing severed → Proxmox can't reach backup storage. A circular dependency baked into my infrastructure. This is how I broke the loop."
 coverImage: "https://images.unsplash.com/photo-1718241905495-01e4e42c3eef?w=1200&h=630&fit=crop&q=80&fm=webp"
 coverImageAlt: "Dark server room with rows of rack-mounted servers illuminated by LED indicators in a data center"
@@ -19,11 +19,11 @@ tags:
 images: ["/writing/opnsense-backup-incident/feature.png"]
 ---
 
-*By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
+*By [Skyler King](/docs/bio/), CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
 
 At 3am on a Tuesday, my scheduled Proxmox backup job killed my network. Not in the dramatic "something exploded" sense — more like it quietly held a pillow over its face until everything went still. The kind of failure you only find out about in the morning when you notice the timestamps stopped.
 
-> **TL;DR:** A vzdump snapshot froze my OPNsense VM, severing the cross-VLAN route the backup job needed to reach storage. The backup was destroying the infrastructure it depended on. I removed OPNsense from the backup job and replaced it with a 30-line bash script that pulls the config XML via the OPNsense REST API — no snapshot, no freeze, no loop. A [Unitrends 2025 report](https://www.unitrends.com/blog/the-state-of-backup-and-recovery-2025-trends-and-challenges/) found that 60% of organizations believe they can recover within hours; only 35% actually can. This post is a close-up of how that gap happens.
+> **TL;DR:** A vzdump snapshot froze my OPNsense VM, severing the cross-VLAN route the backup job needed to reach storage. The backup was destroying the infrastructure it depended on. I removed OPNsense from the backup job and replaced it with a 30-line bash script that pulls the config XML via the OPNsense REST API: no snapshot, no freeze, no loop. A [Unitrends 2025 report](https://www.unitrends.com/blog/the-state-of-backup-and-recovery-2025-trends-and-challenges/) found that 60% of organizations believe they can recover within hours; only 35% actually can. This post is a close-up of how that gap happens.
 
 ## What Happened
 
@@ -141,7 +141,7 @@ Config is now backed up to two places:
 |---|---|---|---|
 | Google Drive | Every config change | Yes | Yes (to push) |
 | Proxmox local | Daily at 2am | No | No (API only) |
-| ~~VM disk image~~ | ~~Never~~ | — | — |
+| ~~VM disk image~~ | ~~Never~~ | N/A | N/A |
 
 <figure>
 <svg role="img" aria-label="Backup Recovery: Expectation vs. Reality. 60% of organizations believe they can recover within hours; only 35% actually can. Source: Unitrends State of Backup and Recovery Report 2025, n=3,000+" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 252" style="max-width:600px;width:100%;background:transparent;">
@@ -196,7 +196,7 @@ The script validates its own output: if the file doesn't start with `<?xml`, it 
       "@type": "BlogPosting",
       "@id": "https://moshthesubnet.com/writing/opnsense-backup-incident/#article",
       "headline": "The Backup That Ate My Network",
-      "description": "My OPNsense VM froze during a 3am vzdump snapshot, severed all VLAN routing, and trapped Proxmox in a circular dependency. Here's how a 30-line bash script replaced a full VM backup — and why that was the right call.",
+      "description": "My OPNsense VM froze during a 3am vzdump snapshot, severed all VLAN routing, and trapped Proxmox in a circular dependency. Here's how a 30-line bash script replaced a full VM backup, and why that was the right call.",
       "datePublished": "2026-03-04T00:00:00Z",
       "dateModified": "2026-03-11T00:00:00Z",
       "author": {
@@ -267,7 +267,7 @@ The script validates its own output: if the file doesn't start with `<?xml`, it 
           "name": "Does the OPNsense API backup capture everything?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The /api/core/backup/download/this endpoint returns the OPNsense config XML — firewall rules, VLAN configuration, DHCP settings, user accounts, and all interface config. It doesn't capture installed packages or custom scripts outside the standard config paths. For a typical homelab install those are reproducible. If you've modified files outside /conf/, document those separately."
+            "text": "The /api/core/backup/download/this endpoint returns the OPNsense config XML: firewall rules, VLAN configuration, DHCP settings, user accounts, and all interface config. It doesn't capture installed packages or custom scripts outside the standard config paths. For a typical homelab install those are reproducible. If you've modified files outside /conf/, document those separately."
           }
         },
         {
@@ -275,7 +275,7 @@ The script validates its own output: if the file doesn't start with `<?xml`, it 
           "name": "Why schedule the OPNsense config pull before vzdump, not after?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "If vzdump causes a network disruption — even a brief one — the API call running after it might fail. Scheduling the pull an hour before the vzdump window means the local backup is already done before anything touches VM 150. The safety net goes in before the juggling starts."
+            "text": "If vzdump causes a network disruption, even a brief one, the API call running after it might fail. Scheduling the pull an hour before the vzdump window means the local backup is already done before anything touches VM 150. The safety net goes in before the juggling starts."
           }
         },
         {

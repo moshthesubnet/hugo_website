@@ -38,10 +38,10 @@ The lab consisted of the following nodes, all running within CML Free Tier:
 
 | Link | Subnet | OSPF Area |
 |------|--------|-----------|
-| R1 E0/0 — R2 E0/0 | 10.10.0.0/31 | Area 1 |
-| R2 E0/1 — R3 E0/0 | 10.20.0.0/31 | Area 0 (Backbone) |
-| R3 E0/1 — R4 E0/0 | 10.30.0.0/31 | Area 0 (Backbone) |
-| R1 E0/1 — SW-1 — Desktop | 10.0.0.0/24 | Area 1 |
+| R1 E0/0 to R2 E0/0 | 10.10.0.0/31 | Area 1 |
+| R2 E0/1 to R3 E0/0 | 10.20.0.0/31 | Area 0 (Backbone) |
+| R3 E0/1 to R4 E0/0 | 10.30.0.0/31 | Area 0 (Backbone) |
+| R1 E0/1 to SW-1 to Desktop | 10.0.0.0/24 | Area 1 |
 
 ---
 
@@ -52,13 +52,13 @@ The lab was designed around two OSPF areas:
 - **Area 0 (Backbone):** Connects R2, R3, and R4. All inter-area traffic must traverse this area.
 - **Area 1:** Connects R1 and the Alpine Linux end host back to R2, which acts as the Area Border Router (ABR).
 
-R2 serves as the ABR — it maintains interfaces in both Area 1 and Area 0 and is responsible for generating Type 3 Summary LSAs that allow routers in Area 1 to learn about Area 0 prefixes, and vice versa.
+R2 is the ABR. It maintains interfaces in both Area 1 and Area 0 and is responsible for generating Type 3 Summary LSAs that allow routers in Area 1 to learn about Area 0 prefixes, and vice versa.
 
 ---
 
-## Key Configurations
+## Configurations
 
-### OSPF — R1 (Area 1)
+### OSPF: R1 (Area 1)
 
 ```
 router ospf 1
@@ -66,7 +66,7 @@ router ospf 1
  network 10.0.0.0 0.0.0.255 area 1
 ```
 
-### OSPF — R2 (ABR)
+### OSPF: R2 (ABR)
 
 ```
 router ospf 1
@@ -74,7 +74,7 @@ router ospf 1
  network 10.20.0.0 0.0.0.0 area 0
 ```
 
-### OSPF — R3 (Area 0)
+### OSPF: R3 (Area 0)
 
 ```
 router ospf 1
@@ -82,14 +82,14 @@ router ospf 1
  network 10.30.0.0 0.0.0.0 area 0
 ```
 
-### OSPF — R4 (Area 0)
+### OSPF: R4 (Area 0)
 
 ```
 router ospf 1
  network 10.30.0.1 0.0.0.0 area 0
 ```
 
-### DHCP — R1 (serving the Alpine Linux host)
+### DHCP: R1 (serving the Alpine Linux host)
 
 ```
 ip dhcp excluded-address 10.0.0.1
@@ -111,7 +111,7 @@ Several real-world troubleshooting scenarios arose during the lab:
 
 - **DHCP on wrong interface:** The Alpine Linux machine was connected via SW-1 to R1's E0/1, which mapped to `eth1` (not `eth0`) inside the VM. Running `udhcpc -i eth1` instead of `eth0` resolved the DHCP failure.
 
-- **ABR configuration:** R2 required separate network statements for each area — the R1-facing interface in Area 1 and the R3-facing interface in Area 0. Misconfiguring both into the same area would have broken inter-area routing.
+- **ABR configuration:** R2 required separate network statements for each area: the R1-facing interface in Area 1 and the R3-facing interface in Area 0. Misconfiguring both into the same area would have broken inter-area routing.
 
 ---
 
@@ -143,6 +143,6 @@ The following commands were used to confirm successful lab completion:
 
 ## Conclusion
 
-The /31 subnet mismatch was the most interesting failure — it's the kind of thing that looks right until you do the math on paper. Everything else was a config typo that `show ip interface brief` cleaned up fast. DHCP on the wrong interface was just forgetting that Alpine's eth numbering doesn't match CML's port labels.
+The /31 subnet mismatch was the most interesting failure. It's the kind of thing that looks right until you do the math on paper. Everything else was a config typo that `show ip interface brief` cleaned up fast. DHCP on the wrong interface was just forgetting that Alpine's eth numbering doesn't match CML's port labels.
 
-Multi-area OSPF clicks differently once you've debugged it. The ABR configuration especially — seeing why R2 needs separate network statements for each area is easier to understand after you've broken it.
+Multi-area OSPF clicks differently once you've debugged it. The ABR configuration especially: seeing why R2 needs separate network statements for each area is easier to understand after you've broken it.

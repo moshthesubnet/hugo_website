@@ -55,7 +55,7 @@ The original network configuration had several security concerns:
 | 40 | SERVERS | 10.30.X.0/28 | Production servers |
 | 50 | IoT | 10.30.X.0/24 | Internet of Things devices |
 
-**Key Issues Identified:**
+**Issues identified:**
 
 - Using VLAN 1 as the native VLAN (security vulnerability)
 - VLAN 1 carrying user traffic (against best practices)
@@ -407,7 +407,7 @@ All network changes follow this process:
 
 ## Conclusion
 
-The management VLAN lockout risk was real — keeping a console cable connected during the changeover saved me at least once. The native VLAN mismatch on trunk links also caused an outage that `show interfaces trunk` diagnosed in about 30 seconds once I knew what to look for.
+The management VLAN lockout risk was real. Keeping a console cable connected during the changeover saved me at least once. The native VLAN mismatch on trunk links also caused an outage that `show interfaces trunk` diagnosed in about 30 seconds once I knew what to look for.
 
 The malware VLAN having zero access to anything is the part I'm most satisfied with. Fully isolated, no route out, firewall drops everything. That one was deliberate from the start.
 

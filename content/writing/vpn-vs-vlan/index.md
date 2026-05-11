@@ -3,22 +3,22 @@ title: "VPN vs VLAN: The Difference That Actually Matters"
 aliases: ["/posts/vpn-vs-vlan/"]
 date: 2026-03-12
 draft: false
-description: "VPN vs VLAN explained at the OSI layer level — what each protects, what each can't do, and how to run both in a homelab. With a real 7-VLAN + WireGuard setup."
+description: "VPN vs VLAN explained at the OSI layer level: what each protects, what each can't do, and how to run both in a homelab. With a real 7-VLAN + WireGuard setup."
 summary: "VPN and VLAN share two words but solve completely different problems. Here's what each one does, why you can't swap one for the other, and how I run both in my homelab."
 tags: ["networking", "vpn", "vlan", "wireguard", "opnsense", "homelab", "ccna", "security"]
 images: ["/writing/vpn-vs-vlan/feature.png"]
 ---
 
-*By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
+*By [Skyler King](/docs/bio/), CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
 
 {{< figure
   src="https://images.unsplash.com/photo-1681101378971-5f5dc4e5000e?w=1200&h=630&fit=crop&q=80&fm=webp"
-  alt="Abstract glowing network of vibrant connections against a dark background representing network topology and security"
+  alt="Abstract glowing network of connections against a dark background representing network topology and security"
   caption="Two acronyms. Four matching letters. Completely different jobs."
 >}}
 
 {{< alert >}}
-**TL;DR — The one-line version:**
+**TL;DR: The one-line version:**
 
 | | VLAN | VPN |
 |---|---|---|
@@ -30,7 +30,7 @@ images: ["/writing/vpn-vs-vlan/feature.png"]
 | **Replaces the other?** | No | No |
 {{< /alert >}}
 
-The VPN vs VLAN confusion is in the names. Both start with "Virtual." Both end with "Network." That's where the similarity stops. A VLAN and a VPN operate at different layers of the network stack and protect against completely different threats. You can't substitute one for the other — and in a well-designed network, you're running both.
+The VPN vs VLAN confusion is in the names. Both start with "Virtual." Both end with "Network." That's where the similarity stops. A VLAN and a VPN operate at different layers of the network stack and protect against completely different threats. You can't substitute one for the other, and in a well-designed network, you're running both.
 
 This post is the long-form version of [a reel I made](https://www.instagram.com/p/DVzS9a6Rtwv/) on exactly this question. I'm CCNA certified and run a homelab with 7 VLANs and WireGuard in daily use — this isn't theoretical. If you're here from the reel, this is the depth behind the 45 seconds.
 
@@ -77,9 +77,9 @@ My lab runs 7 VLANs on one UniFi switch:
 
 | VLAN ID | Name | Subnet | Access Policy |
 |---------|------|--------|---------------|
-| 999 | Native | None | No IP addressing — VLAN hopping prevention |
+| 999 | Native | None | No IP addressing (VLAN hopping prevention) |
 | 10 | Home | 10.10.0.0/24 | Trusted user devices; can reach VLAN 40 on specific ports |
-| 20 | Malware | 10.20.0.0/24 | Fully isolated — no outbound, no inter-VLAN |
+| 20 | Malware | 10.20.0.0/24 | Fully isolated: no outbound, no inter-VLAN |
 | 30 | Homelab | 10.30.0.0/24 | Lab/testing; can reach VLAN 40 for testing |
 | 40 | Servers | 10.40.0.0/28 | Production; controlled inbound only |
 | 50 | IoT | 10.50.0.0/24 | Internet-only (ports 80, 443, 53); no inter-VLAN |
@@ -175,7 +175,7 @@ There are two fundamentally different VPN architectures worth knowing:
 
 As for protocol, three are worth knowing:
 
-- **WireGuard** — modern, fast, small codebase (~4,000 lines vs OpenVPN's ~600,000). Handles key exchange with Curve25519. In benchmark testing on a Protectli VP6670 running OPNsense 25.7, WireGuard sustained 5,010 Mbps versus OpenVPN's 1,050 Mbps — a nearly 5x throughput advantage, with IPsec landing at 4,300 Mbps in between. *(Protectli Knowledge Base, September 2025, iPerf3 methodology)*
+- **WireGuard** — modern, fast, small codebase (~4,000 lines vs OpenVPN's ~600,000). Handles key exchange with Curve25519. In benchmark testing on a Protectli VP6670 running OPNsense 25.7, WireGuard sustained 5,010 Mbps versus OpenVPN's 1,050 Mbps, a nearly 5x throughput advantage, with IPsec landing at 4,300 Mbps in between. *(Protectli Knowledge Base, September 2025, iPerf3 methodology)*
 - **IPsec** — battle-tested, widely supported, slightly more complex to configure. High performance when using hardware offload. This is what enterprise site-to-site tunnels typically run.
 - **OpenVPN** — slower, but runs over TCP if needed, which makes it firewall-friendly. Useful when you're behind a restrictive network that blocks UDP.
 
@@ -239,7 +239,7 @@ They're not competing. They protect against different threats:
 | Complexity | Low–medium | Medium |
 | What it can't do | Encrypt traffic, protect remote access | Isolate broadcast domains, segment internal traffic |
 
-The mistake I see: *"I put my IoT devices on their own VLAN — they're secure."* Secure from what, exactly?
+The mistake I see: *"I put my IoT devices on their own VLAN. They're secure."* Secure from what, exactly?
 
 VLAN isolation means your smart bulb on VLAN 50 can't initiate a connection to your server on VLAN 40. That's real protection. But if that bulb has a vulnerability and gets compromised, its traffic to the internet is still unencrypted. An attacker who's already on your network and can sniff VLAN 50's egress traffic sees it in plaintext. VLAN doesn't help you there.
 
