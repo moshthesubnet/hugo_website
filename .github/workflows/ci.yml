@@ -29,6 +29,7 @@ jobs:
           args: >-
             --base ./public
             --exclude-mail
+            --exclude '^#'
             --exclude 'https://fonts.googleapis.com'
             --exclude 'https://fonts.gstatic.com'
             --exclude 'https://unpkg.com'
