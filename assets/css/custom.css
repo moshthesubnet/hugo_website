@@ -482,7 +482,8 @@ article .tag:hover,
   margin-bottom: 1.75rem;
 }
 
-.list-entry-title {
+.list-entry-title,
+.list-entry-title:visited {
   color: #5eead4;
   font-size: 1rem;
   font-weight: 500;

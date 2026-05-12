@@ -56,9 +56,7 @@
         {{ end }}
         <div class="home-card-body">
           <div class="home-card-num">{{ printf "%02d" (add $i 1) }}</div>
-          <div class="home-card-title">{{ $post.Title }}</div>
           <div class="home-card-date">{{ $post.Date.Format "Jan 2006" }}</div>
-          <div class="home-card-desc">{{ $post.Description }}</div>
           {{ with $post.Params.tags }}
           <div class="home-card-tags">
             {{ range first 3 . }}<span class="home-card-tag">{{ . }}</span>{{ end }}
@@ -88,9 +86,7 @@
         {{ end }}
         <div class="home-card-body">
           <div class="home-card-num">{{ printf "%02d" (add $i 1) }}</div>
-          <div class="home-card-title">{{ $project.Title }}</div>
           <div class="home-card-date">{{ $project.Date.Format "Jan 2006" }}</div>
-          <div class="home-card-desc">{{ $project.Description }}</div>
           {{ with $project.Params.tags }}
           <div class="home-card-tags">
             {{ range first 3 . }}<span class="home-card-tag">{{ . }}</span>{{ end }}
