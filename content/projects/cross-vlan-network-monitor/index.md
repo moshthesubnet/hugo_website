@@ -1,5 +1,5 @@
 ---
-title: Cross-VLAN Network Monitor
+title: "netcensus, a cross-vlan network monitor"
 aliases: ["/docs/projects/cross_vlan_network_monitor/"]
 date: 2026-03-09
 description: "A unified 'God View' of every device on the homelab (bare metal, VMs, LXCs, and containers) discovered via authenticated APIs instead of raw sockets."
