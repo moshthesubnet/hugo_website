@@ -1,0 +1,3 @@
+# Writing section was renamed to Blog (2026-06). 301 old paths.
+/writing/        /blog/            301
+/writing/*       /blog/:splat      301
