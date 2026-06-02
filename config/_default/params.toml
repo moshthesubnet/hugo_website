@@ -4,7 +4,7 @@ defaultAppearance = "dark"
 autoSwitchAppearance = false
 enableSearch = true
 enableCodeCopy = true
-mainSections = ["writing"]
+mainSections = ["blog"]
 
 [header]
   layout = "basic"

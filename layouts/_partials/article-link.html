@@ -4,7 +4,7 @@
   {{ with $page.Description }}
     <div class="list-entry-desc">{{ . }}</div>
   {{ end }}
-  {{ if eq $page.Section "writing" }}
+  {{ if eq $page.Section "blog" }}
     {{ if not $page.Date.IsZero }}
       <div class="list-entry-meta">{{ $page.Date.Format "January 2006" }}</div>
     {{ end }}

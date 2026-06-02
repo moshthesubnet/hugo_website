@@ -16,7 +16,7 @@ tags:
   - proxmox
   - docker
   - automation
-images: ["/writing/cross-vlan-network-monitor/feature.png"]
+images: ["/blog/cross-vlan-network-monitor/feature.png"]
 ---
 
 *By [Skyler King](/docs/bio/), CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
@@ -103,7 +103,7 @@ GET /api/diagnostics/interface/getArp   # IPv4
 GET /api/diagnostics/interface/getNdp   # IPv6
 ```
 
-Auth is HTTP Basic with an API key and secret, same model as [the OPNsense config backup API](/writing/opnsense-backup-incident/). The response is a flat list of IP/MAC/interface tuples. The interface field tells you which VLAN that device belongs to.
+Auth is HTTP Basic with an API key and secret, same model as [the OPNsense config backup API](/blog/opnsense-backup-incident/). The response is a flat list of IP/MAC/interface tuples. The interface field tells you which VLAN that device belongs to.
 
 A separate call pulls DHCP leases:
 
@@ -288,7 +288,7 @@ Microsoft's 2024 Digital Defense Report found over 90% of ransomware attacks inv
   "@graph": [
     {
       "@type": "BlogPosting",
-      "@id": "https://moshthesubnet.com/writing/cross-vlan-network-monitor/#article",
+      "@id": "https://moshthesubnet.com/blog/cross-vlan-network-monitor/#article",
       "headline": "My Router Already Knew. I Just Wasn't Asking.",
       "description": "Standard ARP scanners are blind across VLAN boundaries. I built a FastAPI app that skips the scanning entirely and queries OPNsense, Proxmox, and Docker directly for a cross-VLAN device inventory.",
       "datePublished": "2026-03-09T00:00:00Z",
@@ -314,7 +314,7 @@ Microsoft's 2024 Digital Defense Report found over 90% of ransomware attacks inv
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "https://moshthesubnet.com/writing/cross-vlan-network-monitor/"
+        "@id": "https://moshthesubnet.com/blog/cross-vlan-network-monitor/"
       },
       "articleSection": "Homelab",
       "keywords": ["homelab", "network monitoring", "VLAN", "OPNsense", "Proxmox", "Docker", "FastAPI", "Python", "ARP", "cross-VLAN"],
@@ -322,7 +322,7 @@ Microsoft's 2024 Digital Defense Report found over 90% of ransomware attacks inv
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://moshthesubnet.com/writing/cross-vlan-network-monitor/#breadcrumb",
+      "@id": "https://moshthesubnet.com/blog/cross-vlan-network-monitor/#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
@@ -334,19 +334,19 @@ Microsoft's 2024 Digital Defense Report found over 90% of ransomware attacks inv
           "@type": "ListItem",
           "position": 2,
           "name": "Posts",
-          "item": "https://moshthesubnet.com/writing/"
+          "item": "https://moshthesubnet.com/blog/"
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": "My Router Already Knew. I Just Wasn't Asking.",
-          "item": "https://moshthesubnet.com/writing/cross-vlan-network-monitor/"
+          "item": "https://moshthesubnet.com/blog/cross-vlan-network-monitor/"
         }
       ]
     },
     {
       "@type": "FAQPage",
-      "@id": "https://moshthesubnet.com/writing/cross-vlan-network-monitor/#faq",
+      "@id": "https://moshthesubnet.com/blog/cross-vlan-network-monitor/#faq",
       "mainEntity": [
         {
           "@type": "Question",

@@ -38,8 +38,8 @@ hugo new content projects/my-project.md
 
 Content lives in `content/` and maps directly to URL paths:
 
-- `content/_index.md` — home page (feed shows `writing/` only; controlled by `mainSections` in `params.toml`)
-- `content/writing/` — blog posts; narrative/storytelling angle, linked from home feed
+- `content/_index.md` — home page (feed shows `blog/` only; controlled by `mainSections` in `params.toml`)
+- `content/blog/` — blog posts; narrative/storytelling angle, linked from home feed
 - `content/projects/` — technical spec deep-dives; linked from `/projects/` in the nav
 - `content/about/` — about page
 
@@ -92,7 +92,7 @@ Congo v2.13.0 has a bug with Hugo 0.157.0: `_partials/functions/warnings.html` c
 - Pushes to `main` trigger production deployment; PRs get a `*.pages.dev` preview URL posted as a comment
 
 ## Content
-- Blog posts live in content/writing/ as markdown files
+- Blog posts live in content/blog/ as markdown files
 - Project docs live in content/projects/ as markdown files
 - About page at content/about/_index.md
 - Front matter follows Congo conventions (title, date, draft, tags, description, summary)
