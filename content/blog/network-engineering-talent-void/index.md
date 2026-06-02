@@ -13,7 +13,7 @@ tags:
   - career
   - netdevops
   - automation
-images: ["/writing/network-engineering-talent-void/feature.png"]
+images: ["/blog/network-engineering-talent-void/feature.png"]
 ---
 
 *By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
@@ -99,7 +99,7 @@ Organizations that haven't started structured knowledge transfer programs are al
 
 The practical consequence is that when a senior engineer retires or leaves, the first 12-18 months for their replacement are often spent discovering problems their predecessor would have caught in minutes. That's not a knowledge gap. That's a risk gap.
 
-Automating the documentation process — so it stays current rather than rotting in a wiki — is one practical step toward closing that gap. [Here's one approach using n8n and Claude Code](/writing/homelab-docs-automation-n8n-claude/).
+Automating the documentation process — so it stays current rather than rotting in a wiki — is one practical step toward closing that gap. [Here's one approach using n8n and Claude Code](/blog/homelab-docs-automation-n8n-claude/).
 
 ---
 
@@ -151,7 +151,7 @@ The "missing middle" describes the 5-10 year experienced engineer who bridges ta
 
 When automation handles the tasks that used to occupy a junior engineer's first three years, those engineers never build the hands-on depth that makes them a mid-level specialist. Without that middle tier, organizations face a binary choice: hire senior architects at $170K-$200K+ or go without. Neither works at scale.
 
-For a practical look at API-driven network monitoring built without enterprise tooling, see [how I built a cross-VLAN device inventory with Python and OPNsense](/writing/cross-vlan-network-monitor/) — the same principle at homelab scale.
+For a practical look at API-driven network monitoring built without enterprise tooling, see [how I built a cross-VLAN device inventory with Python and OPNsense](/blog/cross-vlan-network-monitor/) — the same principle at homelab scale.
 
 ---
 
@@ -387,7 +387,7 @@ Yes, and the trajectory is clear. The retirement wave accelerates through the la
 
 No. AI automates tasks, not the discipline. Configuration, monitoring, and fault detection are increasingly automated, but architecture, security design, vendor negotiation, and complex troubleshooting still require human judgment. The engineers at risk are those who only do tasks those tools can replicate.
 
-For a ground-level look at AI-assisted network automation, see [how I automated homelab documentation with n8n and Claude Code](/writing/homelab-docs-automation-n8n-claude/) — the same pattern enterprises are now scaling up.
+For a ground-level look at AI-assisted network automation, see [how I automated homelab documentation with n8n and Claude Code](/blog/homelab-docs-automation-n8n-claude/) — the same pattern enterprises are now scaling up.
 
 ### What is the most in-demand network engineering skill right now?
 

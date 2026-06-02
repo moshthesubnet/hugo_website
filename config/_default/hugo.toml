@@ -20,4 +20,4 @@ enableInlineShortcodes = true
     title = true
 
 [permalinks]
-  writing = "/writing/:contentbasename/"
+  blog = "/blog/:contentbasename/"

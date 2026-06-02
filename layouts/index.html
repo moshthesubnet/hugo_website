@@ -42,10 +42,10 @@
   <hr class="home-divider">
 
   {{/* ── Recent Writing ────────────────────────────────────── */}}
-  {{ $posts := first 3 (where .Site.RegularPages "Section" "writing") }}
+  {{ $posts := first 3 (where .Site.RegularPages "Section" "blog") }}
   {{ if $posts }}
   <section class="home-section">
-    <h2 class="home-section-label">WRITING</h2>
+    <h2 class="home-section-label">BLOG</h2>
     <div class="home-card-grid">
       {{ range $i, $post := $posts }}
       <a href="{{ $post.Permalink }}" class="home-card">

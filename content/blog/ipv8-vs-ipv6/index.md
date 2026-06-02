@@ -16,7 +16,7 @@ tags:
   - protocols
   - bgp
   - ccna
-images: ["/writing/ipv8-vs-ipv6/feature.png"]
+images: ["/blog/ipv8-vs-ipv6/feature.png"]
 ---
 
 *By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
@@ -111,7 +111,7 @@ The real story is NAT. IPv6 was designed to solve IPv4 address exhaustion. By th
 
 Once the burning platform stopped burning, the rest of the friction had time to compound. Enterprise application owners discovered that most of their stack was still IPv4-only and would stay that way through the next refresh cycle. Hardware refresh cycles take 10 to 20 years in serious infrastructure. Dual-stack deployment doubled operational complexity, and most teams ran both protocols indefinitely rather than ever completing the cutover. IPv4 addresses that traded for around $5 in 2011 now sell in the $50–60 range — a working secondary market that pays holders to sit on them, not migrate ([ipxo.com](https://www.ipxo.com/), 2025).
 
-There's geography on top of all that. Mobile carriers — building greenfield networks on a tight timeline — lead the curve, sitting well above the global average. Enterprises lag well below it. France and Germany are above 75%. Africa averages 4%. There is no single "IPv6 adoption rate." There are dozens of curves moving at different speeds, and the network engineers managing them are doing it on top of [a workforce crisis](/writing/network-engineering-talent-void/) that's pulling institutional knowledge out the door faster than it's coming in.
+There's geography on top of all that. Mobile carriers — building greenfield networks on a tight timeline — lead the curve, sitting well above the global average. Enterprises lag well below it. France and Germany are above 75%. Africa averages 4%. There is no single "IPv6 adoption rate." There are dozens of curves moving at different speeds, and the network engineers managing them are doing it on top of [a workforce crisis](/blog/network-engineering-talent-void/) that's pulling institutional knowledge out the door faster than it's coming in.
 
 This is the context IPv8 walks into. The technical critique of IPv6 is largely correct. The economic critique of IPv6 is what actually matters. IPv8 has very little to say about the economic critique.
 
@@ -145,7 +145,7 @@ The bounded routing table is also a real structural fix. Today's BGP table sits 
   caption="The unbounded BGP routing table is the kind of problem you only notice when you try to fit it on a router."
 >}}
 
-The Zone Server concept — collapsing DHCP, DNS, NTP, OAuth, WHOIS, ACL, and logging into a single managed plane — makes operational sense. Anyone who's built [a homelab inventory by stitching together OPNsense, Proxmox, and Docker APIs](/writing/cross-vlan-network-monitor/) has felt the pain of fragmented network management. Unifying those services isn't crazy. It's how every cloud provider already runs their internal network plane. The draft is just proposing to standardize that pattern as part of the IP suite itself.
+The Zone Server concept — collapsing DHCP, DNS, NTP, OAuth, WHOIS, ACL, and logging into a single managed plane — makes operational sense. Anyone who's built [a homelab inventory by stitching together OPNsense, Proxmox, and Docker APIs](/blog/cross-vlan-network-monitor/) has felt the pain of fragmented network management. Unifying those services isn't crazy. It's how every cloud provider already runs their internal network plane. The draft is just proposing to standardize that pattern as part of the IP suite itself.
 
 The 8to4 tunneling story is also more honest than IPv6's. There is no flag day. There is no required dual-stack period. Whether the implementation actually delivers on that is a different question, but the framing is correct.
 
@@ -317,4 +317,4 @@ The internet upgrades its plumbing on geologic time. IPv6 took 28 years to reach
 
 If you're a network engineer wrestling with where to put your time: IPv6 is still the answer. The dual-stack tax is real, but it's the tax you have to pay. IPv8 is interesting reading. It is not, yet, infrastructure.
 
-If you want the broader context for why this transition is hitting now, my piece on [the coming network engineering talent void](/writing/network-engineering-talent-void/) covers the workforce side of the problem — the people who would have to migrate the next protocol are retiring, and the apprenticeship pipeline that taught them isn't producing replacements at scale. That's the slower crisis, and it'll shape what any successor protocol can realistically do.
+If you want the broader context for why this transition is hitting now, my piece on [the coming network engineering talent void](/blog/network-engineering-talent-void/) covers the workforce side of the problem — the people who would have to migrate the next protocol are retiring, and the apprenticeship pipeline that taught them isn't producing replacements at scale. That's the slower crisis, and it'll shape what any successor protocol can realistically do.

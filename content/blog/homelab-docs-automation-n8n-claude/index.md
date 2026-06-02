@@ -17,7 +17,7 @@ tags:
   - obsidian
   - truenas
   - documentation
-images: ["/writing/homelab-docs-automation-n8n-claude/feature.png"]
+images: ["/blog/homelab-docs-automation-n8n-claude/feature.png"]
 ---
 
 *By [Skyler King](/docs/bio/), CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
@@ -73,7 +73,7 @@ Weekly cadence fits a homelab where the network topology doesn't change daily. I
 
 ## Setting Up the OPNsense API
 
-The OPNsense REST API is accessible at `https://10.0.99.X/api/` — via the MGMT VLAN gateway, which is where infrastructure management traffic belongs. If you haven't worked with the OPNsense API before, I covered the auth model and endpoint basics in [my earlier post on OPNsense config backups](/writing/opnsense-backup-incident/).
+The OPNsense REST API is accessible at `https://10.0.99.X/api/` — via the MGMT VLAN gateway, which is where infrastructure management traffic belongs. If you haven't worked with the OPNsense API before, I covered the auth model and endpoint basics in [my earlier post on OPNsense config backups](/blog/opnsense-backup-incident/).
 
 Create a dedicated read-only API user: **System → Access → Users**, add a user, generate an API key. Under privileges, assign only what you need — I used `status` and `firewall` read permissions. No write access, no admin.
 
@@ -285,7 +285,7 @@ Yes, it's a persistent Ubuntu 24.04 VM on Proxmox in the Lab VLAN — 2 vCPUs, 4
   "@graph": [
     {
       "@type": "BlogPosting",
-      "@id": "https://moshthesubnet.com/writing/homelab-docs-automation-n8n-claude/#article",
+      "@id": "https://moshthesubnet.com/blog/homelab-docs-automation-n8n-claude/#article",
       "headline": "Automating Homelab Documentation with n8n and Claude Code",
       "description": "Homelab docs go stale fast. My n8n pipeline polls OPNsense weekly, diffs state, and triggers Claude Code via SSH to rewrite docs automatically. Five gotchas that cost real time.",
       "datePublished": "2026-03-05T00:00:00Z",
@@ -311,7 +311,7 @@ Yes, it's a persistent Ubuntu 24.04 VM on Proxmox in the Lab VLAN — 2 vCPUs, 4
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "https://moshthesubnet.com/writing/homelab-docs-automation-n8n-claude/"
+        "@id": "https://moshthesubnet.com/blog/homelab-docs-automation-n8n-claude/"
       },
       "articleSection": "Homelab",
       "keywords": ["homelab", "n8n", "automation", "OPNsense", "Claude Code", "documentation", "networking", "TrueNAS", "Obsidian"],
@@ -319,7 +319,7 @@ Yes, it's a persistent Ubuntu 24.04 VM on Proxmox in the Lab VLAN — 2 vCPUs, 4
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://moshthesubnet.com/writing/homelab-docs-automation-n8n-claude/#breadcrumb",
+      "@id": "https://moshthesubnet.com/blog/homelab-docs-automation-n8n-claude/#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
@@ -331,19 +331,19 @@ Yes, it's a persistent Ubuntu 24.04 VM on Proxmox in the Lab VLAN — 2 vCPUs, 4
           "@type": "ListItem",
           "position": 2,
           "name": "Posts",
-          "item": "https://moshthesubnet.com/writing/"
+          "item": "https://moshthesubnet.com/blog/"
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": "Automating Homelab Documentation with n8n and Claude Code",
-          "item": "https://moshthesubnet.com/writing/homelab-docs-automation-n8n-claude/"
+          "item": "https://moshthesubnet.com/blog/homelab-docs-automation-n8n-claude/"
         }
       ]
     },
     {
       "@type": "FAQPage",
-      "@id": "https://moshthesubnet.com/writing/homelab-docs-automation-n8n-claude/#faq",
+      "@id": "https://moshthesubnet.com/blog/homelab-docs-automation-n8n-claude/#faq",
       "mainEntity": [
         {
           "@type": "Question",
