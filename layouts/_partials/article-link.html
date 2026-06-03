@@ -1,16 +1,18 @@
 {{- $page := . -}}
-<div class="list-entry">
-  <a href="{{ $page.Permalink }}" class="list-entry-title">{{ $page.Title }}</a>
-  {{ with $page.Description }}
-    <div class="list-entry-desc">{{ . }}</div>
-  {{ end }}
-  {{ if eq $page.Section "blog" }}
-    {{ if not $page.Date.IsZero }}
-      <div class="list-entry-meta">{{ $page.Date.Format "January 2006" }}</div>
-    {{ end }}
-  {{ else if eq $page.Section "projects" }}
-    {{ with $page.Params.stack }}
-      <div class="list-entry-meta">{{ . }}</div>
-    {{ end }}
-  {{ end }}
-</div>
+<a href="{{ $page.Permalink }}" class="entry-card">
+  <span class="entry-card-icon" aria-hidden="true">
+    {{- if eq $page.Section "projects" -}}
+      <svg viewBox="0 0 24 24"><path d="M8 9l-3 3 3 3"/><path d="M16 9l3 3-3 3"/><path d="M13.5 7l-3 10"/></svg>
+    {{- else -}}
+      <svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13H6z"/><path d="M15 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
+    {{- end -}}
+  </span>
+  <span class="entry-card-text">
+    <span class="entry-card-title">{{ $page.Title }}</span>
+    {{ with $page.Description }}<span class="entry-card-desc">{{ . }}</span>{{ end }}
+    <span class="entry-card-meta">
+      {{- if not $page.Date.IsZero }}<span class="entry-card-date">{{ $page.Date.Format "Jan 2, 2006" }}</span>{{ end -}}
+      <span class="entry-card-rt"> · {{ $page.ReadingTime }} min read</span>
+    </span>
+  </span>
+</a>

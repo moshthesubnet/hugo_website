@@ -32,14 +32,18 @@
             {{ .Key }}
           </h2>
           <hr class="w-36 border-dotted border-neutral-400" />
-          {{ range .Pages }}
-            {{ partial "article-link.html" . }}
-          {{ end }}
+          <div class="entry-list">
+            {{ range .Pages }}
+              {{ partial "article-link.html" . }}
+            {{ end }}
+          </div>
         {{ end }}
       {{ else }}
-        {{ range (.Paginate .Pages).Pages }}
-          {{ partial "article-link.html" . }}
-        {{ end }}
+        <div class="entry-list">
+          {{ range (.Paginate .Pages).Pages }}
+            {{ partial "article-link.html" . }}
+          {{ end }}
+        </div>
       {{ end }}
     </section>
     {{ partial "pagination.html" . }}
