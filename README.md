@@ -35,8 +35,8 @@ The goal is to apply a "documentation-first" engineering mindset: if it's runnin
 
 | Layer | Technology |
 |-------|-----------|
-| Static site generator | Hugo 0.157.0 Extended |
-| Theme | Congo v2.13.0 |
+| Static site generator | Hugo 0.162.1 Extended |
+| Theme | Congo v2.14.0 |
 | Deployment | Cloudflare Pages |
 | Version control | Git |
 | Diagrams | Mermaid (via Congo shortcode) |
@@ -63,7 +63,7 @@ hugo server -D
 hugo --minify
 ```
 
-> Hugo 0.157.0 Extended is required. The extended build is needed for Congo's CSS processing.
+> Hugo 0.162.1 Extended is required. The extended build is needed for Congo's CSS processing.
 
 ---
 
@@ -80,7 +80,7 @@ The theme was migrated from Hextra to Congo to gain native Mermaid diagram suppo
 - Converting raw mermaid code fences to `{{< mermaid >}}` shortcodes
 - Splitting the monolithic `hugo.toml` into `config/_default/{hugo,languages.en,menus.en,params}.toml`
 - Rewriting `assets/css/custom.css` to target Congo's DOM (`article`, `main`) instead of MkDocs selectors
-- Fixing a Congo v2.13.0 / Hugo 0.157.0 incompatibility in `_partials/functions/warnings.html`
+- Fixing a Congo v2.13.0 / Hugo 0.157.0 incompatibility in `_partials/functions/warnings.html` (resolved in Congo v2.14.0)
 
 ---
 
@@ -103,9 +103,7 @@ The theme was migrated from Hextra to Congo to gain native Mermaid diagram suppo
 │   └── js/                 # AOS library + custom scroll animation init
 ├── layouts/_partials/      # Congo partial overrides
 │   ├── extend-head.html    # Injects AOS scripts into <head>
-│   ├── favicons.html       # Custom favicon override
-│   └── functions/
-│       └── warnings.html   # Compatibility fix for Congo + Hugo 0.157.0
+│   └── favicons.html       # Custom favicon override
 ├── migrate.py              # MkDocs → Hugo content migration script
 ├── Makefile                # Dev shortcuts (make serve, make build, make preview)
 ├── .env                    # Local secrets — NOT committed (in .gitignore)
@@ -135,7 +133,7 @@ Pushes to `main` trigger the GitHub Actions workflow at `.github/workflows/deplo
 |---------|-------|
 | Build command | `hugo --minify` |
 | Output directory | `public` |
-| Hugo version | `0.157.0 Extended` |
+| Hugo version | `0.162.1 Extended` |
 | Cloudflare Pages project | `professional-website` |
 | Production URL | `https://professional-website-6zy.pages.dev` |
 
@@ -232,7 +230,7 @@ wrangler pages project create professional-website --production-branch main
 The workflow file at `.github/workflows/deploy.yml` handles CI/CD. Key points:
 
 - Uses `actions/checkout@v4` with `submodules: true` — required because the Congo theme is a git submodule. Without this the Hugo build will fail with a missing theme error.
-- Uses `peaceiris/actions-hugo@v3` with `hugo-version: '0.157.0'` and `extended: true` — Congo requires the extended Hugo build for CSS processing. Specifying the version prevents build failures if the default Hugo version changes.
+- Uses `peaceiris/actions-hugo@v3` with `hugo-version: '0.162.1'` and `extended: true` — Congo requires the extended Hugo build for CSS processing. Specifying the version prevents build failures if the default Hugo version changes.
 - Uses `cloudflare/wrangler-action@v3` to deploy, passing `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` from repository secrets.
 
 If the workflow fails at the deploy step with a `10001` auth error, verify:
