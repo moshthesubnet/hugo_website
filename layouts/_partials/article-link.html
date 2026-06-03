@@ -1,5 +1,5 @@
 {{- $page := . -}}
-<a href="{{ $page.Permalink }}" class="entry-card">
+<a href="{{ $page.Permalink }}" class="entry-card" aria-label="{{ $page.Title }}">
   <span class="entry-card-icon" aria-hidden="true">
     {{- if eq $page.Section "projects" -}}
       <svg viewBox="0 0 24 24"><path d="M8 9l-3 3 3 3"/><path d="M16 9l3 3-3 3"/><path d="M13.5 7l-3 10"/></svg>
@@ -11,8 +11,12 @@
     <span class="entry-card-title">{{ $page.Title }}</span>
     {{ with $page.Description }}<span class="entry-card-desc">{{ . }}</span>{{ end }}
     <span class="entry-card-meta">
-      {{- if not $page.Date.IsZero }}<span class="entry-card-date">{{ $page.Date.Format "Jan 2, 2006" }}</span>{{ end -}}
+      {{- if not $page.Date.IsZero -}}
+      <span class="entry-card-date">{{ $page.Date.Format "Jan 2, 2006" }}</span>
       <span class="entry-card-rt"> · {{ $page.ReadingTime }} min read</span>
+      {{- else -}}
+      <span class="entry-card-rt">{{ $page.ReadingTime }} min read</span>
+      {{- end -}}
     </span>
   </span>
 </a>
