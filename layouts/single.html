@@ -1,63 +1,22 @@
 {{ define "main" }}
-  {{- $images := .Resources.ByType "image" }}
-  {{- $cover := $images.GetMatch (.Params.cover | default "*cover*") }}
-  {{- $feature := $images.GetMatch (.Params.feature | default "*feature*") | default $cover }}
   <article>
     <header class="max-w-prose article-header">
       {{ if .Params.showBreadcrumbs | default (.Site.Params.article.showBreadcrumbs | default false) }}
         {{ partial "breadcrumbs.html" . }}
       {{ end }}
 
-      {{/* Date or label */}}
-      {{ if eq .Section "projects" }}
-        <div class="article-label">Project</div>
-      {{ else }}
-        {{ if not .Date.IsZero }}
-          <div class="article-date">{{ .Date.Format "January 2006" }}</div>
-        {{ end }}
-      {{ end }}
-
       <h1>{{ .Title | emojify }}</h1>
 
-      {{ with .Description }}
-        <p class="article-summary">{{ . }}</p>
-      {{ end }}
-
-      {{/* Project metadata row */}}
-      {{ with .Params.stack }}
-      <div class="article-meta">
-        {{ with $.Params.stack }}
-        <div>
-          <div class="article-meta-label">Stack</div>
-          <div class="article-meta-value">{{ . }}</div>
-        </div>
-        {{ end }}
-        {{ with $.Params.integrations }}
-        <div>
-          <div class="article-meta-label">Integrations</div>
-          <div class="article-meta-value">{{ . }}</div>
-        </div>
-        {{ end }}
-        {{ with $.Params.source }}
-        <div>
-          <div class="article-meta-label">Source</div>
-          <div class="article-meta-value"><a href="{{ . }}">GitHub →</a></div>
-        </div>
-        {{ end }}
+      {{/* Metadata strip */}}
+      <div class="article-meta-strip">
+        {{- if eq .Section "projects" -}}
+          Project
+          {{- with .Params.stack }} · {{ . }}{{ end -}}
+          {{- with .Params.source }} · <a href="{{ . }}">GitHub →</a>{{ end -}}
+        {{- else -}}
+          Blog{{ if not .Date.IsZero }} · {{ .Date.Format "January 2006" }}{{ end }} · {{ .ReadingTime }} min read
+        {{- end -}}
       </div>
-      {{ end }}
-
-      {{ with $feature }}
-        <div class="prose">
-          {{ $altText := $.Params.featureAlt | default $.Params.coverAlt | default "" }}
-          {{ $class := "mb-6 rounded-md" }}
-          {{ $webp := $.Page.Site.Params.enableImageWebp | default true }}
-          {{ partial "picture.html" (dict "img" . "alt" $altText "class" $class "lazy" false "webp" $webp) }}
-          {{ with $.Params.coverCaption }}
-            <figcaption class="-mt-3 mb-6 text-center">{{ . | markdownify }}</figcaption>
-          {{ end }}
-        </div>
-      {{ end }}
     </header>
 
     {{/* Divider between header and body */}}
