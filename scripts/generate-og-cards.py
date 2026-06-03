@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 """
-Generate OG-style thumbnail cards for writing posts, matching the project card style:
-dark bg · teal left accent · bold serif title · description · tags · url watermark
+Generate OG-style feature cards for blog post bundles, matching the project
+card style: dark bg · teal left accent · bold serif title · description ·
+tags · url watermark · "BLOG" label.
+
+Writes content/blog/<slug>/feature.png (referenced by each post's images:
+frontmatter for og:image / twitter:image).
 
 Usage:
     python3 scripts/generate-og-cards.py
-    python3 scripts/generate-og-cards.py --dry-run   # preview without writing files
+    python3 scripts/generate-og-cards.py --dry-run   # don't write files
 """
 
 import argparse
@@ -20,7 +24,7 @@ except ImportError:
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 ROOT         = Path(__file__).parent.parent
-CONTENT_DIR  = ROOT / "content" / "writing"
+CONTENT_DIR  = ROOT / "content" / "blog"
 OUTPUT_DIR   = ROOT / "static" / "img" / "posts"
 
 FONT_SERIF_BOLD = "/usr/share/fonts/truetype/liberation/LiberationSerif-Bold.ttf"
@@ -82,8 +86,8 @@ def generate_card(title, description, tags, output_path, dry_run=False):
     f_tag      = ImageFont.truetype(FONT_SANS, 21)
     f_url      = ImageFont.truetype(FONT_SANS, 21)
 
-    # "WRITING" label — top right
-    label      = "WRITING"
+    # "BLOG" label — top right
+    label      = "BLOG"
     label_w    = draw.textbbox((0, 0), label, font=f_label)[2]
     draw.text((W - MARGIN_R - label_w, 48), label, font=f_label, fill=GRAY_LABEL)
 
@@ -195,30 +199,28 @@ def inject_images_field(text, img_path):
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate writing post OG cards")
+    parser = argparse.ArgumentParser(description="Generate blog post OG cards")
     parser.add_argument("--dry-run", action="store_true", help="Skip writing files")
     args = parser.parse_args()
 
-    posts = sorted(p for p in CONTENT_DIR.glob("*.md") if p.name != "_index.md")
+    posts = sorted(CONTENT_DIR.glob("*/index.md"))
     if not posts:
-        sys.exit(f"No posts found in {CONTENT_DIR}")
+        sys.exit(f"No post bundles found in {CONTENT_DIR}")
 
-    print(f"Generating {len(posts)} cards → {OUTPUT_DIR}\n")
+    print(f"Generating {len(posts)} cards into content/blog/<slug>/feature.png\n")
 
     for post_path in posts:
         text = post_path.read_text()
         fm   = parse_frontmatter(text)
 
         if not fm.get("title"):
-            print(f"  SKIP  {post_path.name} — no title in frontmatter")
+            print(f"  SKIP  {post_path.parent.name} — no title in frontmatter")
             continue
 
-        slug        = post_path.stem
-        output_path = OUTPUT_DIR / f"{slug}-og.png"
-        hugo_path   = f"/img/posts/{slug}-og.png"
+        slug        = post_path.parent.name
+        output_path = post_path.parent / "feature.png"
 
-        print(f"  {'[dry]' if args.dry_run else ''}  {post_path.name}")
-        print(f"         → {output_path.name}")
+        print(f"  {'[dry]' if args.dry_run else ''}  {slug} → feature.png")
 
         generate_card(
             title=fm["title"],
@@ -227,11 +229,6 @@ def main():
             output_path=output_path,
             dry_run=args.dry_run,
         )
-
-        if not args.dry_run:
-            updated = inject_images_field(text, hugo_path)
-            post_path.write_text(updated)
-            print(f"         ✓ frontmatter updated")
 
     print(f"\n{'Dry run — no files written.' if args.dry_run else 'Done.'}")
 
