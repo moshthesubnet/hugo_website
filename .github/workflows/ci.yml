@@ -28,7 +28,6 @@ jobs:
         with:
           args: >-
             --base ./public
-            --exclude-mail
             --exclude '^#'
             --exclude 'https://fonts.googleapis.com'
             --exclude 'https://fonts.gstatic.com'
