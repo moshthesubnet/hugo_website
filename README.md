@@ -1,6 +1,6 @@
-# Mosh The Subnet — Personal Documentation Site
+# Mosh The Subnet — Personal Blog & Portfolio
 
-Personal documentation site for Skyler King — Network Engineering and Security student (Cisco Track), homelab enthusiast. Built with [Hugo](https://gohugo.io/) and the [Congo](https://github.com/jpanther/congo) theme, deployed on [Cloudflare Pages](https://pages.cloudflare.com/).
+Personal blog and portfolio for Skyler King — Network Engineering and Security student (Cisco Track), homelab enthusiast. Built with [Hugo](https://gohugo.io/) and the [Congo](https://github.com/jpanther/congo) theme, deployed on [Cloudflare Pages](https://pages.cloudflare.com/).
 
 **Live site:** [moshthesubnet.com](https://moshthesubnet.com)
 
@@ -8,33 +8,29 @@ Personal documentation site for Skyler King — Network Engineering and Security
 
 ## Purpose
 
-This repository serves as the source of truth for my homelab and networking work. It documents:
+Personal blog and portfolio. The site covers:
 
-- **Homelab infrastructure** — hardware inventory, Proxmox setup, VLAN architecture, and network topology
-- **Project documentation** — detailed write-ups of completed networking, security, and automation projects with configurations, lessons learned, and verification steps
-- **Guides** — step-by-step deployment guides for self-hosted services (Pi-hole, containers, etc.)
-- **Professional profile** — certifications, accomplishments, and technical competencies
-
-The goal is to apply a "documentation-first" engineering mindset: if it's running in the lab, it's documented here.
+- **Blog** — technical write-ups, networking concepts, and homelab incident post-mortems
+- **Projects** — deep-dive documentation of completed networking, security, and automation projects
+- **About** — certifications, competencies, and contact
 
 ---
 
 ## Content
 
 | Section | Description |
-|---------|-------------|
-| `content/docs/lab/` | Homelab overview, hardware specs, Proxmox virtualization environment |
-| `content/docs/projects/` | VLAN segmentation hardening, local AI coding agent (Ollama + Aider), 2-area OSPF lab |
-| `content/docs/guides/` | Deployment guides (Pi-hole LXC, etc.) |
-| `content/docs/bio.md` | About page — professional accomplishments, certifications, and core competencies |
-| `content/_index.md` | Home page — intro, recent wins, certifications table, featured projects |
+| --- | --- |
+| `content/blog/` | Blog posts — technical write-ups, homelab incidents, networking concepts |
+| `content/projects/` | Project deep-dives — VLAN hardening, cross-VLAN monitor, OSPF lab, AI coding agent, n8n pipeline |
+| `content/about/` | About page — bio, certifications, and competencies |
+| `content/_index.md` | Home page — hero, featured projects, and contact form |
 
 ---
 
 ## Stack
 
 | Layer | Technology |
-|-------|-----------|
+| --- | --- |
 | Static site generator | Hugo 0.162.1 Extended |
 | Theme | Congo v2.14.0 |
 | Deployment | Cloudflare Pages |
@@ -76,27 +72,29 @@ The original documentation was written in MkDocs Material. A custom `migrate.py`
 
 **Phase 2 — Hextra → Congo**
 The theme was migrated from Hextra to Congo to gain native Mermaid diagram support, a cleaner split-config structure, and a better profile/portfolio layout. This involved:
+
 - Replacing all `{{< callout >}}` shortcodes with Congo's `{{< alert >}}`
 - Converting raw mermaid code fences to `{{< mermaid >}}` shortcodes
 - Splitting the monolithic `hugo.toml` into `config/_default/{hugo,languages.en,menus.en,params}.toml`
 - Rewriting `assets/css/custom.css` to target Congo's DOM (`article`, `main`) instead of MkDocs selectors
-- Fixing a Congo v2.13.0 / Hugo 0.157.0 incompatibility in `_partials/functions/warnings.html` (resolved in Congo v2.14.0)
 
 ---
 
 ## Repository Structure
 
-```
+```text
 .
 ├── config/_default/        # Hugo + Congo config (split by concern)
 │   ├── hugo.toml           # Base URL, markup, outputs
 │   ├── languages.en.toml   # Title, author block, description
-│   ├── menus.en.toml       # Navbar links (Docs, GitHub, LinkedIn, Instagram)
+│   ├── menus.en.toml       # Navbar links (Blog, Projects, GitHub, LinkedIn)
 │   └── params.toml         # Theme appearance, article/list display options
 ├── content/                # All site content (Markdown)
 │   ├── _index.md           # Home page
-│   └── docs/               # Documentation section
-├── assets/css/custom.css   # Custom styles (Bebas Neue, dark palette, AOS, tables)
+│   ├── blog/               # Blog posts (page bundles)
+│   ├── projects/           # Project write-ups (page bundles)
+│   └── about/              # About page
+├── assets/css/custom.css   # Custom styles (dark palette, AOS, tables)
 ├── static/
 │   ├── assets/             # Images and SVGs
 │   ├── css/aos.css         # Animate On Scroll library
@@ -104,9 +102,10 @@ The theme was migrated from Hextra to Congo to gain native Mermaid diagram suppo
 ├── layouts/_partials/      # Congo partial overrides
 │   ├── extend-head.html    # Injects AOS scripts into <head>
 │   └── favicons.html       # Custom favicon override
-├── migrate.py              # MkDocs → Hugo content migration script
+├── scripts/                # Utility scripts
+│   ├── generate-og-cards.py  # OG image generator for blog/project pages
+│   └── generate-favicon.py   # Favicon generator
 ├── Makefile                # Dev shortcuts (make serve, make build, make preview)
-├── .env                    # Local secrets — NOT committed (in .gitignore)
 └── themes/congo/           # Congo theme (git submodule, stable branch)
 ```
 
@@ -125,12 +124,15 @@ make preview
 
 ---
 
-## Deployment
+## CI / Deployment
 
-Pushes to `main` trigger the GitHub Actions workflow at `.github/workflows/deploy.yml`, which builds the Hugo site and deploys to Cloudflare Pages via Wrangler.
+Two GitHub Actions workflows handle CI and deployment:
+
+- **`.github/workflows/ci.yml`** — runs on every PR: builds the site and checks all links with [lychee](https://github.com/lycheeverse/lychee). Skipped for Dependabot PRs on the deploy step only; link check still runs.
+- **`.github/workflows/deploy.yml`** — runs on push to `main` and on PRs (non-Dependabot): builds the site and deploys to Cloudflare Pages via Wrangler. Dependabot PRs skip the deploy step because repository secrets are not available to them.
 
 | Setting | Value |
-|---------|-------|
+| --- | --- |
 | Build command | `hugo --minify` |
 | Output directory | `public` |
 | Hugo version | `0.162.1 Extended` |
@@ -142,7 +144,7 @@ Pushes to `main` trigger the GitHub Actions workflow at `.github/workflows/deplo
 Set these under **Settings → Secrets and variables → Actions** in the GitHub repo:
 
 | Secret | Description |
-|--------|-------------|
+| --- | --- |
 | `CLOUDFLARE_API_TOKEN` | Cloudflare API token with **Cloudflare Pages: Edit** permission |
 | `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID (visible in the Cloudflare dashboard URL or via `wrangler whoami`) |
 
@@ -157,6 +159,7 @@ This section documents the issues encountered when setting up Cloudflare Pages d
 Cloudflare's dashboard offers a GitHub OAuth integration that links your repo directly to a Pages project. In practice this involves authorising the Cloudflare Pages GitHub App via OAuth in the Cloudflare dashboard (**Pages → Create a project → Connect to Git**). This approach was bypassed in favour of the Wrangler CLI + GitHub Actions method, which gives more explicit control over the build and deploy steps.
 
 The Wrangler approach (used here) works as follows:
+
 1. A Cloudflare API token authenticates Wrangler.
 2. GitHub Actions runs `wrangler pages deploy` on every push to `main`.
 3. No OAuth app or Cloudflare dashboard Git connection is required.
@@ -189,7 +192,7 @@ source .env   # load into current shell session before running wrangler
 
 **Symptom:** `wrangler whoami` returns your account details, but `wrangler pages project create` (or `wrangler pages deploy`) fails with:
 
-```
+```text
 A request to the Cloudflare API (/memberships) failed.
 Unable to authenticate request [code: 10001]
 ```
@@ -215,7 +218,7 @@ Your account ID is visible in the Cloudflare dashboard URL and in the output of 
 
 **Symptom:** Running `wrangler pages project create <name>` (with account ID set) fails with:
 
-```
+```text
 Must specify a production branch.
 ```
 
@@ -227,13 +230,15 @@ wrangler pages project create professional-website --production-branch main
 
 ### 5. GitHub Actions Workflow Setup
 
-The workflow file at `.github/workflows/deploy.yml` handles CI/CD. Key points:
+The workflow files at `.github/workflows/ci.yml` and `.github/workflows/deploy.yml` handle CI/CD. Key points:
 
-- Uses `actions/checkout@v4` with `submodules: true` — required because the Congo theme is a git submodule. Without this the Hugo build will fail with a missing theme error.
+- Uses `actions/checkout@v6` with `submodules: true` — required because the Congo theme is a git submodule. Without this the Hugo build will fail with a missing theme error.
 - Uses `peaceiris/actions-hugo@v3` with `hugo-version: '0.162.1'` and `extended: true` — Congo requires the extended Hugo build for CSS processing. Specifying the version prevents build failures if the default Hugo version changes.
-- Uses `cloudflare/wrangler-action@v3` to deploy, passing `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` from repository secrets.
+- Uses `cloudflare/wrangler-action@v4` to deploy, passing `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` from repository secrets.
+- The deploy job is skipped for Dependabot PRs (`if: github.actor != 'dependabot[bot]'`) because GitHub does not expose repository secrets to Dependabot-triggered `pull_request` workflows.
 
 If the workflow fails at the deploy step with a `10001` auth error, verify:
+
 1. The `CLOUDFLARE_API_TOKEN` secret is set and has **Cloudflare Pages: Edit** permission.
 2. The `CLOUDFLARE_ACCOUNT_ID` secret is set correctly.
 3. The token has not been revoked.
@@ -242,7 +247,7 @@ If the workflow fails at the deploy step with a `10001` auth error, verify:
 
 If a token is compromised or needs rotation:
 
-1. Go to **dash.cloudflare.com → Profile → API Tokens**
+1. Go to [dash.cloudflare.com](https://dash.cloudflare.com) → **Profile → API Tokens**
 2. Find the token and click **Revoke** (or **Roll** to rotate in place)
 3. Generate a new token following the steps in section 2 above
 4. Update the `CLOUDFLARE_API_TOKEN` GitHub secret
