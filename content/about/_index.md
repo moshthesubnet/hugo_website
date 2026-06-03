@@ -26,7 +26,7 @@ I use it to test everything I'm learning — from OSPF adjacencies to automated 
 
 ## Off the clock
 
-I write tutorials and tech-news commentary on networking, the CCNA, and homelab work under **@moshthesubnet** on Instagram, Facebook, and LinkedIn, with YouTube Shorts on deck. If something I learned saved me hours, it usually ends up there.
+I write tutorials and tech-news commentary on networking, the CCNA, and homelab work under **@moshthesubnet** on Instagram, Facebook, and LinkedIn under Skyler King, with YouTube Shorts on deck. If something I learned saved me hours, it usually ends up there.
 
 ## Certifications
 
