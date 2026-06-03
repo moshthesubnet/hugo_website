@@ -6,8 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Hugo static site using the [Congo](https://github.com/jpanther/congo) theme, migrated from MkDocs Material. Deployed on Cloudflare Pages.
 
-- **Hugo version**: 0.157.0 Extended (required — Congo needs the extended build for CSS processing)
-- **Theme**: Congo v2.13.0, added as a git submodule at `themes/congo/`
+- **Hugo version**: 0.162.1 Extended (required — Congo needs the extended build for CSS processing)
+- **Theme**: Congo v2.14.0, added as a git submodule at `themes/congo/`
 - **Content**: Markdown files in `content/`
 - **Deploy target**: Cloudflare Pages (build output: `public/`)
 
@@ -58,7 +58,7 @@ Config is split into `config/_default/`:
 `wrangler.toml` specifies the project name and build output dir. In the Cloudflare Pages dashboard (or CI), set:
 - **Build command**: `hugo --minify`
 - **Build output directory**: `public`
-- **Environment variable**: `HUGO_VERSION = 0.157.0`
+- **Environment variable**: `HUGO_VERSION = 0.162.1`
 
 ### Congo Shortcodes
 
@@ -79,10 +79,6 @@ Congo provides shortcodes for common documentation patterns — use these instea
 - Congo uses `_partials/` and `_shortcodes/` (underscore prefix, Hugo 0.126+ convention)
 - Add custom CSS in `assets/css/custom.css` — Congo bundles it automatically
 - Extend the `<head>` via `layouts/_partials/extend-head.html`
-
-### Known Compatibility Issue
-
-Congo v2.13.0 has a bug with Hugo 0.157.0: `_partials/functions/warnings.html` calls `{{ if .Author }}` on the site object, which panics because `.Site.Author` was removed in Hugo 0.124+. This is worked around by overriding that partial at `layouts/_partials/functions/warnings.html`.
 
 # moshthesubnet.com
 
