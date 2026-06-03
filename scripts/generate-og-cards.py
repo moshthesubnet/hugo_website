@@ -25,8 +25,6 @@ except ImportError:
 # ── Paths ─────────────────────────────────────────────────────────────────────
 ROOT         = Path(__file__).parent.parent
 CONTENT_DIR  = ROOT / "content" / "blog"
-OUTPUT_DIR   = ROOT / "static" / "img" / "posts"
-
 FONT_SERIF_BOLD = "/usr/share/fonts/truetype/liberation/LiberationSerif-Bold.ttf"
 FONT_SANS       = "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"
 
@@ -163,37 +161,6 @@ def parse_frontmatter(text):
     out["tags"] = tags
 
     return out
-
-
-def has_local_images(text):
-    """Return True if frontmatter already has a local images: entry."""
-    end = text.find("---", 3)
-    fm = text[3:end] if end != -1 else ""
-    m = re.search(r'^images:\s*\[', fm, re.MULTILINE)
-    if m:
-        val = m.group(0) + fm[m.end():]
-        first_url = re.search(r'["\'](.+?)["\']', val)
-        if first_url and not first_url.group(1).startswith("http"):
-            return True
-    return False
-
-
-def inject_images_field(text, img_path):
-    """Add/replace images: field in frontmatter with the local path."""
-    end = text.find("---", 3)
-    if end == -1:
-        return text
-    fm   = text[3:end]
-    body = text[end:]
-
-    # Remove existing images: block (single or multi-line)
-    fm = re.sub(r'^images:.*?\n(?:\s+-.*?\n)*', '', fm, flags=re.MULTILINE)
-    # Remove existing cover: line
-    fm = re.sub(r'^cover:.*?\n', '', fm, flags=re.MULTILINE)
-    fm = re.sub(r'^ogImage:.*?\n', '', fm, flags=re.MULTILINE)
-
-    fm = fm.rstrip('\n') + f'\nimages: ["{img_path}"]\n'
-    return "---" + fm + body
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────

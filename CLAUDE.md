@@ -23,8 +23,8 @@ hugo server -D
 # Production build
 hugo --minify
 
-# New writing post
-hugo new content writing/my-post.md
+# New blog post
+hugo new content blog/my-post.md
 
 # New project page
 hugo new content projects/my-project.md
