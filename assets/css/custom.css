@@ -429,50 +429,26 @@ article .tag:hover,
   margin-bottom: 2rem;
 }
 
-.article-header .article-date {
-  color: #525252;
-  font-size: 0.8125rem;
-  margin-bottom: 0.75rem;
-}
-
-.article-header .article-label {
-  color: #525252;
-  font-size: 0.8125rem;
-  margin-bottom: 0.75rem;
-}
-
 .article-header h1 {
   color: #fafafa;
   font-size: 1.75rem;
   line-height: 1.3;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
-.article-header .article-summary {
-  color: #737373;
-  font-size: 0.875rem;
-  line-height: 1.6;
-}
-
-/* Project metadata row */
-.article-meta {
-  display: flex;
-  gap: 2rem;
+.article-meta-strip {
   font-size: 0.8125rem;
-  padding-bottom: 2rem;
-}
-
-.article-meta-label {
   color: #525252;
-  margin-bottom: 0.25rem;
+  margin-top: 0.75rem;
 }
 
-.article-meta-value {
-  color: #a3a3a3;
-}
-
-.article-meta-value a {
+.article-meta-strip a {
   color: #5eead4;
+  text-decoration: none;
+}
+
+.article-meta-strip a:hover {
+  text-decoration: underline;
 }
 
 /* Back link on project pages */
@@ -531,10 +507,7 @@ article .tag:hover,
     font-size: 1.375rem;
   }
 
-  .article-meta {
-    flex-direction: column;
-    gap: 1rem;
-  }
+
 }
 
 /* ---------------------------------------------------------
