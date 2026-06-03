@@ -46,24 +46,9 @@
   {{ if $posts }}
   <section class="home-section">
     <h2 class="home-section-label">BLOG</h2>
-    <div class="home-card-grid">
-      {{ range $i, $post := $posts }}
-      <a href="{{ $post.Permalink }}" class="home-card">
-        {{ with $post.Params.images }}
-        <div class="home-card-thumb">
-          <img src="{{ index . 0 }}" alt="{{ $post.Title }}" loading="lazy">
-        </div>
-        {{ end }}
-        <div class="home-card-body">
-          <div class="home-card-num">{{ printf "%02d" (add $i 1) }}</div>
-          <div class="home-card-date">{{ $post.Date.Format "Jan 2006" }}</div>
-          {{ with $post.Params.tags }}
-          <div class="home-card-tags">
-            {{ range first 3 . }}<span class="home-card-tag">{{ . }}</span>{{ end }}
-          </div>
-          {{ end }}
-        </div>
-      </a>
+    <div class="entry-list">
+      {{ range $posts }}
+      {{ partial "article-link.html" . }}
       {{ end }}
     </div>
   </section>
@@ -76,24 +61,9 @@
   {{ if $projects }}
   <section class="home-section">
     <h2 class="home-section-label">PROJECTS</h2>
-    <div class="home-card-grid">
-      {{ range $i, $project := first 3 $projects }}
-      <a href="{{ $project.Permalink }}" class="home-card">
-        {{ with $project.Params.images }}
-        <div class="home-card-thumb">
-          <img src="{{ index . 0 }}" alt="{{ $project.Title }}" loading="lazy">
-        </div>
-        {{ end }}
-        <div class="home-card-body">
-          <div class="home-card-num">{{ printf "%02d" (add $i 1) }}</div>
-          <div class="home-card-date">{{ $project.Date.Format "Jan 2006" }}</div>
-          {{ with $project.Params.tags }}
-          <div class="home-card-tags">
-            {{ range first 3 . }}<span class="home-card-tag">{{ . }}</span>{{ end }}
-          </div>
-          {{ end }}
-        </div>
-      </a>
+    <div class="entry-list">
+      {{ range first 3 $projects }}
+      {{ partial "article-link.html" . }}
       {{ end }}
     </div>
   </section>
