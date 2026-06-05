@@ -187,56 +187,56 @@ const NetworkTopology = () => {
   }, /*#__PURE__*/React.createElement("div", {
     className: "legend-color",
     style: {
-      backgroundColor: '#ff5252'
+      backgroundColor: '#f87171'
     }
   }), /*#__PURE__*/React.createElement("span", null, "VLAN 1 - Default (Removed)")), /*#__PURE__*/React.createElement("div", {
     className: "legend-item"
   }, /*#__PURE__*/React.createElement("div", {
     className: "legend-color",
     style: {
-      backgroundColor: '#7b61ff'
+      backgroundColor: '#818cf8'
     }
   }), /*#__PURE__*/React.createElement("span", null, "VLAN 999 - Native")), /*#__PURE__*/React.createElement("div", {
     className: "legend-item"
   }, /*#__PURE__*/React.createElement("div", {
     className: "legend-color",
     style: {
-      backgroundColor: '#00d9ff'
+      backgroundColor: '#5eead4'
     }
   }), /*#__PURE__*/React.createElement("span", null, "VLAN 10 - Home")), /*#__PURE__*/React.createElement("div", {
     className: "legend-item"
   }, /*#__PURE__*/React.createElement("div", {
     className: "legend-color",
     style: {
-      backgroundColor: '#ff3d71'
+      backgroundColor: '#f87171'
     }
   }), /*#__PURE__*/React.createElement("span", null, "VLAN 20 - Malware")), /*#__PURE__*/React.createElement("div", {
     className: "legend-item"
   }, /*#__PURE__*/React.createElement("div", {
     className: "legend-color",
     style: {
-      backgroundColor: '#ffa41b'
+      backgroundColor: '#fbbf24'
     }
   }), /*#__PURE__*/React.createElement("span", null, "VLAN 30 - Lab")), /*#__PURE__*/React.createElement("div", {
     className: "legend-item"
   }, /*#__PURE__*/React.createElement("div", {
     className: "legend-color",
     style: {
-      backgroundColor: '#4caf50'
+      backgroundColor: '#4ade80'
     }
   }), /*#__PURE__*/React.createElement("span", null, "VLAN 40 - Servers")), /*#__PURE__*/React.createElement("div", {
     className: "legend-item"
   }, /*#__PURE__*/React.createElement("div", {
     className: "legend-color",
     style: {
-      backgroundColor: '#9c27b0'
+      backgroundColor: '#c084fc'
     }
   }), /*#__PURE__*/React.createElement("span", null, "VLAN 50 - IoT")), /*#__PURE__*/React.createElement("div", {
     className: "legend-item"
   }, /*#__PURE__*/React.createElement("div", {
     className: "legend-color",
     style: {
-      backgroundColor: '#00ff9d'
+      backgroundColor: '#34d399'
     }
   }), /*#__PURE__*/React.createElement("span", null, "VLAN 99 - Management")))));
 };
