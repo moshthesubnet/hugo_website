@@ -34,33 +34,33 @@ const NetworkTopology = () => {
     note: 'Secure Native VLAN'
   }, {
     id: 10,
-    name: 'Home',
-    subnet: '10.10.X.0/24',
+    name: 'HOME',
+    subnet: '10.10.0.0/24',
     vlanClass: 'vlan-10'
   }, {
     id: 20,
     name: 'MALWARE',
-    subnet: '10.0.X.0/24',
+    subnet: '10.20.0.0/24',
     vlanClass: 'vlan-20'
   }, {
     id: 30,
-    name: 'HOMELAB',
-    subnet: '10.30.X.0/24',
+    name: 'LAB',
+    subnet: '10.30.0.0/24',
     vlanClass: 'vlan-30'
   }, {
     id: 40,
     name: 'SERVERS',
-    subnet: '10.30.X.0/28',
+    subnet: '10.40.0.0/28',
     vlanClass: 'vlan-40'
   }, {
     id: 50,
     name: 'IoT',
-    subnet: '10.30.X.0/24',
+    subnet: '10.50.0.0/24',
     vlanClass: 'vlan-50'
   }, {
     id: 99,
     name: 'MGMT',
-    subnet: '10.0.X.0/24',
+    subnet: '10.99.0.0/24',
     vlanClass: 'vlan-99',
     note: 'Management Network'
   }];
@@ -217,7 +217,7 @@ const NetworkTopology = () => {
     style: {
       backgroundColor: '#ffa41b'
     }
-  }), /*#__PURE__*/React.createElement("span", null, "VLAN 30 - Homelab")), /*#__PURE__*/React.createElement("div", {
+  }), /*#__PURE__*/React.createElement("span", null, "VLAN 30 - Lab")), /*#__PURE__*/React.createElement("div", {
     className: "legend-item"
   }, /*#__PURE__*/React.createElement("div", {
     className: "legend-color",
