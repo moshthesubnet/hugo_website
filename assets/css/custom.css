@@ -834,6 +834,13 @@ article .tag:hover,
   margin-top: 0.125rem;
 }
 
+.home-contact-privacy {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.625rem;
+  margin-bottom: 0;
+}
+
 @media (max-width: 640px) {
   .home-contact-card {
     padding: 1.25rem;
