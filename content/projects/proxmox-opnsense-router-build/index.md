@@ -74,7 +74,7 @@ The dual-port 2.5G NIC fits cleanly: two ports at 2.5G each is 5 Gbps combined, 
 {{< figure
   src="rear-panel.jpg"
   alt="Rear of the node showing dual 2.5G RJ45 ports with green link LEDs active on both interfaces"
-  caption="Both ports active — green LEDs on both interfaces. Left port is WAN, right port trunks to the switch."
+  caption="Both ports active — green LEDs on both interfaces. Top port trunks to the switch (LAN), bottom port is WAN."
 >}}
 
 {{< alert >}}
