@@ -66,3 +66,25 @@ Here's what concrete looks like at this stage:
 3. **If you have a warm contact at the company, use them.** A direct introduction to the hiring manager bypasses the ATS entirely. It's not about gaming the system — it's about getting your resume read by a human before the filter decides. A warm introduction after an ATS rejection beats a cold reapplication every time.
 
 4. **Log it.** One line: what you applied for, what you changed, what you'll try next. Patterns only appear when you're tracking them. The goal isn't a perfect record — it's enough data to tell you whether your changes are moving the needle or you're running the same play and expecting different results.
+
+## Stage 2: The Early Interview Rejection
+
+Early interview rejection hits differently than ATS silence because someone actually looked at you and said no. A meta-analysis of 13 longitudinal studies (n=1,527) found that candidates who actively sought feedback after rejection showed measurably better performance in subsequent interview rounds compared to those who didn't ([Cambridge Core](https://www.cambridge.org/core/journals/spanish-journal-of-psychology/article/abs/feedbackseeking-behavior-in-organizations-a-metaanalysis-and-systematical-review-of-longitudinal-studies/6FFDC8E5984077B6AD8C5BF8292A0A63)). Most candidates skip that step entirely.
+
+That's not laziness. There's a documented reason people avoid seeking feedback after rejection, and it has a name: rejection sensitivity. A 2024 study in MDPI found that candidates with high rejection sensitivity consistently avoided asking for feedback after being turned down — which meant they never got the information required to correct their approach ([MDPI](https://www.mdpi.com/2813-9844/8/1/5)). No feedback, no calibration, same mistakes repeated. It's a self-defeating loop, and it's easy to miss because avoiding the feedback feels like self-protection in the moment.
+
+The trap is subtle. Rejection at the ATS stage is impersonal — you applied into a system and the system said no. But early interview rejection had a human on the other side. There was a screening call, or a first-round conversation, and that person decided not to move you forward. That specific dynamic is where rejection sensitivity starts functioning as a career liability. The discomfort of knowing someone evaluated you and passed is precisely what makes people want to close the browser tab and never follow up.
+
+That impulse is exactly what costs you the improvement loop.
+
+The evidence on how to break that pattern is unusually specific. A randomized controlled trial called the JOBS program (Vinokur et al., 1995, n=1,122) found that participants who anticipated rejection, pre-planned their response, and built a 24–48 hour buffer before making any decisions had significantly higher reemployment rates and lower depression rates two years later compared to the control group ([DOL CLEAR](https://clear.dol.gov/Study/Jobs-I-Preventive-Intervention-Unemployed-Individuals-Short-and-long-term-effects)). The buffer isn't avoidance. It's the mechanism that keeps you from making reactive decisions while the sting is still fresh.
+
+Here's what this stage requires:
+
+1. **Wait 24–48 hours before responding to anything or making decisions.** This is the single most evidence-backed step in the entire framework. Don't email back the same day. Don't start applying to other roles in a panic. Let the emotional intensity drop before you act.
+
+2. **Send a brief, gracious reply to the interviewer.** Keep it short — three sentences is enough. Thank them for their time, wish the team well, and leave the relationship intact. Roughly 15% of rejected candidates get hired by the same company within 12 months. That door closes the moment you disappear.
+
+3. **Ask for specific feedback.** Frame it as wanting to improve, not as questioning their call. "I'd appreciate any feedback on where I fell short relative to what you were looking for" is clean and direct. Some interviewers won't respond. The ones who do give you something you can actually use.
+
+4. **Extract one concrete lesson in writing before your next application.** Not a feeling — a fact. "My answer to the conflict resolution question was too vague. Next time, structure it with STAR." One specific thing, written down. That's what breaks the loop.
