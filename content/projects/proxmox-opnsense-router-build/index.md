@@ -122,3 +122,13 @@ Prices at build are from Amazon order history. Current prices checked at time of
 {{< alert "warning" >}}
 **Building this today?** The biggest price swings are in RAM (+$96) and the SSD (+$199). The Crucial P3 is a Gen3 NVMe — now that Gen4 drives dominate the market, Gen3 stock has thinned out and prices have climbed. The N100M's M.2 slot runs at Gen3x2 speeds regardless of drive generation, so a Gen4 1TB NVMe (~$136 as of this writing) is the smarter buy for a new build — same speed at the slot, lower price.
 {{< /alert >}}
+
+## In the Rack
+
+{{< figure
+  src="in-rack.jpg"
+  alt="Proxmox node 2 installed in the rack alongside other lab equipment"
+  caption="Replace with real in-rack photo showing node position relative to other gear."
+>}}
+
+The node occupies 2U in the rack. Add a sentence here describing its position relative to other gear (e.g., above/below the switch, NAS, etc.) once the rack photo is taken.
