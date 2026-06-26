@@ -31,7 +31,7 @@ This page documents the exact hardware used to build the second Proxmox node in 
 
 ## Hardware
 
-All six components sourced from Amazon. The board came used-listed but was verified new; everything else was new.
+All six components sourced from Amazon.
 
 | Component | Model | Paid |
 |-----------|-------|------|
@@ -83,7 +83,7 @@ The dual-port 2.5G NIC fits cleanly: two ports at 2.5G each is 5 Gbps combined, 
 
 ## Services Running
 
-Both services have been up for 106 days without intervention as of this writing.
+Both services have been running for over a year without intervention.
 
 ### OPNsense (VM)
 
@@ -137,4 +137,4 @@ Prices at build are from Amazon order history. Current prices verified June 2026
   caption="Node 2 in context. Patch panel above, switched PDU below."
 >}}
 
-The node sits directly below the patch panel in the rack, above the switched PDU. It's the only thing in the rack that's routing your traffic and blocking ads at the same time.
+The node sits directly below the patch panel in the rack, above the switched PDU. It's the only thing in my rack doing double duty — routing all my traffic and blocking ads at the same time.
