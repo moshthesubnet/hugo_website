@@ -32,11 +32,6 @@ This post covers exactly what broke, the one mistake that costs an extra hour du
 **TL;DR:** Immich 2.6 forces a mandatory Postgres 15 → 18 upgrade, but the new pgvecto image dropped the PG15 binaries `pg_upgrade` needs. Your data is safe: the migration fails before touching anything. Fix: spin up a temp PG15 container, `pg_dump`, move the PG15 dir *completely out* of the `pgData` mount (renaming inside it doesn't work), let Immich initialize fresh PG18, then `pg_restore`.
 {{< /alert >}}
 
-{{< figure
-  src="https://images.unsplash.com/photo-1597852074816-d933c7d2b988?w=1200&h=630&fit=crop&q=80&fm=webp"
-  alt="Multiple hard drive disks from a network attached storage array, the kind of storage Immich depends on in a TrueNAS homelab"
->}}
-
 ## What Caused the Immich 2.6 Update to Break on TrueNAS?
 
 Immich runs on **41.2% of all self-hosted homelab setups** (fourth overall in the 2024 Self-Hosted Survey, n=2,181, behind only Home Assistant, Sonarr, and Jellyfin) ([Self-Hosted Survey 2024](https://selfhosted-survey-2024.deployn.de/)). That adoption makes this a widespread incident, not a niche edge case. The 2.6.x release enforced a mandatory Postgres major version upgrade from 15 to 18, a change that had been building for months while a prior bug was silently letting installations skip it.

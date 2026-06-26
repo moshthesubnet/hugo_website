@@ -11,12 +11,6 @@ images: ["/blog/vpn-vs-vlan/feature.png"]
 
 *By [Skyler King](/docs/bio/), CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
 
-{{< figure
-  src="https://images.unsplash.com/photo-1681101378971-5f5dc4e5000e?w=1200&h=630&fit=crop&q=80&fm=webp"
-  alt="Abstract glowing network of connections against a dark background representing network topology and security"
-  caption="Two acronyms. Four matching letters. Completely different jobs."
->}}
-
 {{< alert >}}
 **TL;DR: The one-line version:**
 

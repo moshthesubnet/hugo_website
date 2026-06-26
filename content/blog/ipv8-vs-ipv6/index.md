@@ -21,12 +21,6 @@ images: ["/blog/ipv8-vs-ipv6/feature.png"]
 
 *By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
 
-{{< figure
-  src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80"
-  alt="Server room rack filled with glowing network cables and blinking port indicators in a data center"
-  caption="The infrastructure IPv6 took 28 years to fully reach. IPv8 wants to start over."
->}}
-
 On March 28, 2026, IPv6 carried more than 50% of Google's measured internet traffic for the first time. Twenty-eight years after RFC 2460. The next day, it slipped back below the line.
 
 Two weeks later, a solo engineer at a Bermuda company filed a 10-document IETF draft proposing an entirely new IP version. IPv8. It hit the Hacker News front page with 134 upvotes and 111 mostly skeptical comments. GPTZero flagged the draft itself at 76% probability of being AI-generated ([Cybernews](https://cybernews.com/tech/ipv8-proposal-slammed-by-tech-professionals/), 2026).
