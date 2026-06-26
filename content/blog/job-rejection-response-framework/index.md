@@ -46,3 +46,23 @@ The healthcare plus IT combination genuinely is a differentiator — but differe
 The Springer study distinguishes between rejection sensitivity as a trait and rejection as an event. Most career advice addresses the event. The trait is what determines whether a pattern of rejection becomes a pattern of withdrawal.
 
 The research draws a consistent line between rejection that *informs* and rejection that *derails*. The difference isn't the rejection itself — it's the response. That's what the rest of this post is about.
+
+## Stage 1: The Resume/ATS Rejection
+
+Resume rejections are the highest-volume rejections most candidates face, and the easiest to misread. A 2019 study (n=138) found that fast rejections — not silence — actually preserve reapplication intent and candidate respect for the organization; it's the slow or absent response that damages how candidates perceive the employer going forward ([PMC, 2019](https://pmc.ncbi.nlm.nih.gov/articles/PMC6826967/)). The damage from this stage isn't any single rejection. It's what accumulates when you can't locate the failure.
+
+That's what makes ATS rejections structurally different from every other stage. The emotional investment per rejection is low — you applied, you got a form email, that's it. But volume accumulates fast, and silence at scale does something specific to your sense of competence. When you send thirty applications and hear nothing, the natural interpretation is that something is fundamentally wrong with you. That interpretation is almost always wrong. What's more likely is a keyword mismatch, a formatting quirk that confuses the parser, or a job description requirement you technically met but didn't frame the right way.
+
+That distinction matters more than most candidates realize. Rejection at the ATS stage isn't a judgment on your skills. It's a signal that your document didn't clear a filter designed to sort by textual pattern-matching. The frustration is legitimate. But the conclusion has to stay technical, not personal.
+
+A meta-analysis of 13 longitudinal studies (n=1,527) found that candidates who treated rejection as data — as feedback to seek and act on — consistently outperformed those who treated rejection as a verdict at every subsequent stage ([Cambridge Core](https://www.cambridge.org/core/journals/spanish-journal-of-psychology/article/abs/feedbackseeking-behavior-in-organizations-a-metaanalysis-and-systematical-review-of-longitudinal-studies/6FFDC8E5984077B6AD8C5BF8292A0A63)). The difference wasn't attitude. It was behavior: specifically, whether they did something concrete with the information. That's where Stage 1 either compounds into a losing pattern or builds into something useful.
+
+Here's what concrete looks like at this stage:
+
+1. **Don't personalize it — treat the resume as a debugging problem.** Audit your resume against the job description the way you'd audit a config file against a spec. You're looking for keyword gaps, missing terminology, and requirements you met but buried three bullets down. This isn't a self-evaluation. It's a diff.
+
+2. **Identify one specific gap and fix it before the next application.** One change per rejection. If you try to overhaul everything at once, you lose the ability to attribute what's working. Keep the iterations small and trackable.
+
+3. **If you have a warm contact at the company, use them.** A direct introduction to the hiring manager bypasses the ATS entirely. It's not about gaming the system — it's about getting your resume read by a human before the filter decides. A warm introduction after an ATS rejection beats a cold reapplication every time.
+
+4. **Log it.** One line: what you applied for, what you changed, what you'll try next. Patterns only appear when you're tracking them. The goal isn't a perfect record — it's enough data to tell you whether your changes are moving the needle or you're running the same play and expecting different results.
