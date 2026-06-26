@@ -74,3 +74,33 @@ The dual-port 2.5G NIC fits cleanly: two ports at 2.5G each is 5 Gbps combined, 
 {{< alert >}}
 **Reader note:** If you want to skip the trunk port and assign a physical interface per VLAN instead, a **quad-port 2.5G NIC** (4 × 2.5G = 10 Gbps) still fits under the ~16 Gbps PCIe budget and gives you four ports to work with.
 {{< /alert >}}
+
+## Services Running
+
+Both services have been up for 106 days without intervention as of this writing.
+
+### OPNsense (VM)
+
+Primary firewall and inter-VLAN router for the entire lab. Every packet crossing a VLAN boundary routes through this VM. It's also the DHCP server for all VLANs, with Pi-hole set as the upstream DNS resolver.
+
+| Resource | Allocated |
+|----------|-----------|
+| vCPUs | 4 |
+| RAM | 12 GiB (dedicated; ~7 GiB in active use) |
+| Boot disk | 128 GiB |
+
+The 12 GiB RAM allocation is larger than OPNsense strictly needs — active usage sits around 7 GiB — but the headroom costs nothing on this node and avoids ever having to revisit it. For the full VLAN layout this VM routes, see the [VLAN segmentation project](/projects/vlan-segmentation/).
+
+### Pi-hole LXC (Pi-hole2)
+
+DNS ad-blocking across all VLANs. OPNsense's DHCP server hands out Pi-hole's IP as the DNS resolver for every subnet, so ad and tracker blocking applies network-wide without configuring anything on individual devices.
+
+| Resource | Allocated |
+|----------|-----------|
+| vCPUs | 2 |
+| RAM | 256 MiB |
+| Swap | 256 MiB |
+| Boot disk | 9.75 GiB |
+| Type | Unprivileged LXC (Ubuntu) |
+
+256 MiB is more than enough for Pi-hole; it's consistently using about 100 MiB under load.
