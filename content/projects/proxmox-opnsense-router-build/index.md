@@ -28,3 +28,23 @@ This page documents the exact hardware used to build the second Proxmox node in 
   alt="2U rackmount server chassis front panel"
   caption="The RackChoice 2U chassis. Replace this with front-of-chassis photo."
 >}}
+
+## Hardware
+
+All six components sourced from Amazon. The board came used-listed but was verified new; everything else was new.
+
+| Component | Model | Paid |
+|-----------|-------|------|
+| Motherboard | ASRock N100M Micro ATX | $129.00 |
+| NIC | 2.5G Dual Port PCIe (Intel I226) | $52.99 |
+| RAM | Crucial 16GB DDR4 3200MHz (CT16G4DFRA32A) | $27.54 |
+| PSU | Thermaltake Smart 500W 80+ White (PS-SPD-0500NPCWUS-W) | $39.95 |
+| Storage | Crucial P3 1TB NVMe M.2 (CT1000P3SSD8) | $64.90 |
+| Chassis | RackChoice 2U Micro ATX Compact Rackmount | $99.00 |
+| **Total** | | **$413.38** |
+
+{{< figure
+  src="internals.jpg"
+  alt="Inside the chassis showing motherboard, RAM, NVMe SSD, and PCIe NIC installed"
+  caption="Replace with real internals photo."
+>}}
