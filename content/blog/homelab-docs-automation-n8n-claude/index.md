@@ -22,9 +22,6 @@ images: ["/blog/homelab-docs-automation-n8n-claude/feature.png"]
 
 *By [Skyler King](/docs/bio/), CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
 
-![Green binary code and data streams cascading on dark background representing automation pipelines and data flow](https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&h=630&fit=crop&q=80&fm=webp)
-*Photo by Taylor Vick on Unsplash*
-
 Homelab documentation has a half-life. You write it once, it's accurate for maybe 48 hours, then you add a VLAN, rename a firewall alias, move a VM, and quietly close the Obsidian tab without updating anything. Six months of weekend tinkering later, you have a vault full of beautiful lies.
 
 {{< alert >}}
