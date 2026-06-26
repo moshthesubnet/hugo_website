@@ -116,3 +116,38 @@ Here's what to do with a final-round rejection:
 4. **Connect with the hiring manager and interviewers on LinkedIn as a professional peer.** A brief, warm connection request — no desperation, no relitigating the decision — keeps you on their radar. A daily diary study of 160 professionals found that networking behaviors after a setback produce measurable mood improvement through positive affect, even when the impulse to reach out feels counterintuitive ([PMC, 2018](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6243093/)). You're not angling for a second chance. You're staying in the professional ecosystem.
 
 5. **Do a structured written reflection before you move on.** One paragraph: one thing you'd do differently, one thing you did well. Growth mindset research is clear that the lesson only sticks when you extract it in writing, not just when you feel it. Don't let the debrief live entirely in your head — it won't stay there in a useful form.
+
+## The Reappraisal Framework — Rejection as Calibration
+
+Rejection is a calibration event. That's not a reframe designed to make you feel better — it's the actual mechanism the research describes. But calibration only happens if you process the event deliberately, and there's a documented window for doing that. A two-year follow-up on the JOBS program RCT found that participants who pre-planned their rejection response had higher reemployment rates, higher income, and lower depression rates compared to controls — two years later ([PubMed](https://pubmed.ncbi.nlm.nih.gov/10658883/), 1997).
+
+The window matters because avoidance kicks in fast. Once you move past the acute sting and settle into suppression — pushing the rejection aside and just moving on — you lose the activation energy to actually extract the lesson. You tell yourself you'll think about it later. Later doesn't come. The next application goes out with the same gaps, and the pattern repeats.
+
+The framework below collapses everything in this post into a six-step sequence. It's designed to happen within 72 hours. Not because the deadline is arbitrary, but because that's roughly the window before avoidance wins.
+
+{{< alert >}}
+**The 72-Hour Framework**
+
+1. **Take the buffer** (24–48 hrs minimum) — no responses, no decisions, no loops
+2. **Send the gracious reply** — keep the relationship intact
+3. **Request specific, actionable feedback** — frame it as improvement, not challenge
+4. **Make one network contact** — weak tie preferred (someone you know loosely in the field, not your closest friends)
+5. **Extract one lesson in writing** — a fact, not a feeling
+6. **Apply that lesson to your next application before sending it**
+{{< /alert >}}
+
+Step 4 deserves a closer look. The weak tie recommendation isn't intuitive — most people reach out to close friends after a setback, which makes emotional sense. But NBER research on social networks and labor market outcomes shows that weak ties outperform strong ties for surfacing new job opportunities, because they carry non-redundant information ([NBER](https://www.nber.org/system/files/working_papers/w18786/w18786.pdf)). Your close friends already know the same job market you do. They move in the same circles, follow the same companies, talk to the same people. A loose contact in a different corner of your field is far more likely to know about an opening you haven't heard of, or to offer a perspective on your candidacy you haven't considered.
+
+Six steps, 72 hours, one lesson extracted in writing and applied before the next application goes out. The habits compound. The rejection doesn't.
+
+## Conclusion
+
+After the final-round rejection from the hospital organization, I did what this framework describes. I waited a day, then sent a reply to the HR contact who notified me. I thanked them, asked specifically whether there was something about my experience or qualifications that made another candidate a stronger fit, and mentioned I'd keep an eye on future openings. The tone was exactly what I've laid out here — no bitterness, no pushing back on the decision, just a genuine ask for information and an open door.
+
+As of writing this, I haven't heard back. That's fine. That's how most of these go.
+
+The framework's value isn't contingent on getting a reply. It's in what the process does for your next attempt: you stay in the professional relationship, you ask the question worth asking, and you extract something concrete before you move on. You don't let the loss just sit there and become a story about your limitations.
+
+Rejection at the final round is real data. It's specific, it's recent, and it came from people who evaluated you closely. Use it.
+
+If this framework was useful, share it with someone in your network who's currently in the middle of a job search. They probably need it more than you did.
