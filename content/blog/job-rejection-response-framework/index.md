@@ -5,7 +5,8 @@ lastmod: 2026-06-26
 draft: false
 description: "From ATS filters to final-round losses, here's what peer-reviewed research actually says to do after a job rejection — and why the next 72 hours matter most."
 summary: "A resume rejection stings. A final-round rejection after you thought you nailed it is a different category of pain. Here's what 11 peer-reviewed studies say to do at each stage — and why the next 72 hours determine whether this rejection helps or hurts your next attempt."
-coverAlt: "Professional reviewing documents at a desk with a laptop and coffee"
+coverImage: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=1200&h=630&fit=crop&q=80&fm=webp"
+coverImageAlt: "Professional reviewing documents at a desk with a laptop and coffee"
 tags:
   - career
   - job-search
