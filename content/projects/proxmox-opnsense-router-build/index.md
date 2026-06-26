@@ -48,3 +48,29 @@ All six components sourced from Amazon. The board came used-listed but was verif
   alt="Inside the chassis showing motherboard, RAM, NVMe SSD, and PCIe NIC installed"
   caption="Replace with real internals photo."
 >}}
+
+## Build Notes
+
+### Motherboard and CPU
+
+The ASRock N100M ships with the Intel N100 already soldered on — no separate CPU purchase. The N100 is a quad-core chip running up to 3.4 GHz with a 6W TDP, which makes it a reasonable fit for a node that's on around the clock doing routing and DNS. The single DDR4 DIMM slot supports up to 32GB, so there's room to expand memory without touching anything else.
+
+### Chassis
+
+The 2U chassis was chosen over 1U primarily for airflow headroom and the option to add components later. That expansion never happened — the build has stayed the same since day one — but the extra space hasn't caused any problems either. If you're space-constrained in a shallow rack, a 1U would work fine with this board.
+
+### NIC — Working Within the PCIe Constraint
+
+This is the most consequential decision in the build. The N100M's x16 slot runs at **x2 electrical** — about 16 Gbps of PCIe 3.0 bandwidth. A dual-port 10G NIC would need up to 20 Gbps to saturate both ports simultaneously, which exceeds the slot's budget. 10G was off the table.
+
+The dual-port 2.5G NIC fits cleanly: two ports at 2.5G each is 5 Gbps combined, well under the ceiling. One port goes to WAN, one port goes to the LAN switch as a trunk. OPNsense handles VLAN tagging on the trunk port — the same configuration that was already running on the previous setup, so there was no new ground to break there.
+
+{{< figure
+  src="rear-panel.jpg"
+  alt="Rear panel of the 2U chassis showing dual 2.5G RJ45 ports and PSU"
+  caption="Replace with real rear panel photo."
+>}}
+
+{{< alert >}}
+**Reader note:** If you want to skip the trunk port and assign a physical interface per VLAN instead, a **quad-port 2.5G NIC** (4 × 2.5G = 10 Gbps) still fits under the ~16 Gbps PCIe budget and gives you four ports to work with.
+{{< /alert >}}
