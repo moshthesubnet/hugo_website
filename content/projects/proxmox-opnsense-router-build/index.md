@@ -104,3 +104,21 @@ DNS ad-blocking across all VLANs. OPNsense's DHCP server hands out Pi-hole's IP 
 | Type | Unprivileged LXC (Ubuntu) |
 
 256 MiB is more than enough for Pi-hole; it's consistently using about 100 MiB under load.
+
+## Cost: Then vs. Now
+
+Prices at build are from Amazon order history. Current prices checked at time of publish — fill in before setting `draft: false`.
+
+| Component | At Build | Current (Jun 2026) |
+|-----------|----------|--------------------|
+| ASRock N100M Micro ATX | $129.00 | $99.99 |
+| 2.5G Dual Port PCIe NIC (Intel I226) | $52.99 | $40.99 |
+| Crucial 16GB DDR4 3200MHz | $27.54 | $124.00 |
+| Thermaltake Smart 500W 80+ White PSU | $39.95 | $37.99 |
+| Crucial P3 1TB NVMe M.2 | $64.90 | $264.00 |
+| RackChoice 2U Micro ATX Chassis | $99.00 | $99.00 |
+| **Total** | **$413.38** | **$665.97** |
+
+{{< alert "warning" >}}
+**Building this today?** The biggest price swings are in RAM (+$96) and the SSD (+$199). The Crucial P3 is a Gen3 NVMe — now that Gen4 drives dominate the market, Gen3 stock has thinned out and prices have climbed. The N100M's M.2 slot runs at Gen3x2 speeds regardless of drive generation, so a Gen4 1TB NVMe (~$136 as of this writing) is the smarter buy for a new build — same speed at the slot, lower price.
+{{< /alert >}}
