@@ -17,8 +17,6 @@ images: ["/blog/job-rejection-response-framework/feature.png"]
 
 *By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
 
-[INTERNAL-LINK: job search advice → career strategy pillar content]
-
 I walked out of that final interview thinking I had it.
 
 The role was an associate IT position at a large regional hospital organization. I'd applied knowing I had something genuinely rare on paper: combined healthcare and IT experience. That combination doesn't come standard. Most candidates come in from one side or the other — I'd been on both. I expected that to mean something.
@@ -35,18 +33,16 @@ Here's the thing I've come to understand since then: that feeling is real, and i
 
 ## Why Job Rejection in IT Hits Different
 
-[INTERNAL-LINK: ATS and resume optimization → resume writing guide]
-
 Most IT job seekers deal with a specific rejection math that's harder to absorb than "I didn't get the job." A 2022 qualitative study found that candidates experience a recurring "cycle of hope and disappointment" — not just from individual rejections, but from the structural opacity of hiring pipelines that give no signal about where or why things went wrong ([PMC, 2022](https://pmc.ncbi.nlm.nih.gov/articles/PMC9797253/)). Three dynamics in IT amplify that cycle beyond the general job-seeker experience.
 
 **The ATS invisibility problem.** Most applications at large organizations never reach a human. Automated applicant tracking systems filter the majority of resumes before a recruiter opens a single file. When you're rejected at volume — applying to ten, twenty, thirty roles and hearing nothing — the silence isn't neutral. It erodes self-efficacy in a way that a single clear "no" doesn't, because you can't locate the failure. You start questioning everything: the resume, the keywords, the role fit, the field itself.
 
 **The expectation gap.** IT candidates who bring rare skill combinations — healthcare and IT, cloud and security, network and development — often internalize rejection as evidence that the market is broken rather than evidence that something specific needs to change. I did this. I had the combined background. I made it to the final round. And when the rejection came, my first instinct was to conclude the hiring process was irrational. That conclusion felt accurate. It wasn't useful.
 
-[PERSONAL EXPERIENCE] The healthcare plus IT combination genuinely is a differentiator — but differentiators don't automatically convert to offers. They can actually raise the bar, because hiring managers don't always know how to evaluate a non-standard profile. That gap between "rare skill set" and "clear fit" is something I didn't account for going in.
+The healthcare plus IT combination genuinely is a differentiator — but differentiators don't automatically convert to offers. They can actually raise the bar, because hiring managers don't always know how to evaluate a non-standard profile. That gap between "rare skill set" and "clear fit" is something I didn't account for going in.
 
 **Professional rejection sensitivity.** This is where the research gets specific. A 2025 study in *Current Psychology* identified professional rejection sensitivity as a measurable dispositional trait — one that doesn't just cause pain in the moment but compounds career damage over time when left unmanaged ([Springer, 2025](https://link.springer.com/article/10.1007/s12144-025-08609-x)). It affects how you pursue future opportunities, how you frame your own qualifications, and whether you apply at all. It's not a mindset problem you can think your way out of — it's a documented psychological pattern with documented behavioral consequences.
 
-[UNIQUE INSIGHT] The Springer study distinguishes between rejection sensitivity as a trait and rejection as an event. Most career advice addresses the event. The trait is what determines whether a pattern of rejection becomes a pattern of withdrawal.
+The Springer study distinguishes between rejection sensitivity as a trait and rejection as an event. Most career advice addresses the event. The trait is what determines whether a pattern of rejection becomes a pattern of withdrawal.
 
 The research draws a consistent line between rejection that *informs* and rejection that *derails*. The difference isn't the rejection itself — it's the response. That's what the rest of this post is about.
