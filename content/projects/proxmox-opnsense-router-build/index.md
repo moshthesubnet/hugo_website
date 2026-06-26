@@ -13,7 +13,7 @@ tags:
   - pihole
   - firewall
   - self-hosted
-images: ["/projects/proxmox-opnsense-router-build/feature.png"]
+images: ["/projects/proxmox-opnsense-router-build/feature.jpg"]
 weight: 10
 ---
 
@@ -24,9 +24,9 @@ Running a router and firewall on dedicated hardware means buying a box that does
 This page documents the exact hardware used to build the second Proxmox node in the lab. It's been running OPNsense and Pi-hole continuously for over 106 days as of this writing. If you had a similar backup incident to the one [documented here](/blog/opnsense-backup-incident/), you already know why keeping the firewall VM isolated on its own node matters.
 
 {{< figure
-  src="feature.png"
-  alt="2U rackmount server chassis front panel"
-  caption="The RackChoice 2U chassis. Replace this with front-of-chassis photo."
+  src="feature.jpg"
+  alt="RackChoice 2U chassis installed in the rack, blue power LED active, patch panel above"
+  caption="Node 2 in the rack. Patch panel above, switched PDU below. Blue LED means it's doing its job."
 >}}
 
 ## Hardware
@@ -45,8 +45,8 @@ All six components sourced from Amazon. The board came used-listed but was verif
 
 {{< figure
   src="internals.jpg"
-  alt="Inside the chassis showing motherboard, RAM, NVMe SSD, and PCIe NIC installed"
-  caption="Replace with real internals photo."
+  alt="ASRock N100M motherboard with Crucial P3 NVMe SSD in the M.2 slot and 2.5G NIC in the PCIe slot"
+  caption="ASRock N100M (Rev. 1.03) with the Crucial P3 1TB NVMe seated in the M.2 slot. The 2.5G dual-port NIC occupies the x16 PCIe slot at the bottom."
 >}}
 
 ## Build Notes
@@ -59,6 +59,12 @@ The ASRock N100M ships with the Intel N100 already soldered on — no separate C
 
 The 2U chassis was chosen over 1U primarily for airflow headroom and the option to add components later. That expansion never happened — the build has stayed the same since day one — but the extra space hasn't caused any problems either. If you're space-constrained in a shallow rack, a 1U would work fine with this board.
 
+{{< figure
+  src="internals-wide.jpg"
+  alt="Interior of the 2U chassis showing Thermaltake 500W PSU, empty drive bays, ASRock N100M motherboard, and cabling"
+  caption="Plenty of room inside. The drive bays on the left are unused — the NVMe handles all storage."
+>}}
+
 ### NIC — Working Within the PCIe Constraint
 
 This is the most consequential decision in the build. The N100M's x16 slot runs at **x2 electrical** — about 16 Gbps of PCIe 3.0 bandwidth. A dual-port 10G NIC would need up to 20 Gbps to saturate both ports simultaneously, which exceeds the slot's budget. 10G was off the table.
@@ -67,8 +73,8 @@ The dual-port 2.5G NIC fits cleanly: two ports at 2.5G each is 5 Gbps combined, 
 
 {{< figure
   src="rear-panel.jpg"
-  alt="Rear panel of the 2U chassis showing dual 2.5G RJ45 ports and PSU"
-  caption="Replace with real rear panel photo."
+  alt="Rear of the node showing dual 2.5G RJ45 ports with green link LEDs active on both interfaces"
+  caption="Both ports active — green LEDs on both interfaces. Left port is WAN, right port trunks to the switch."
 >}}
 
 {{< alert >}}
@@ -127,8 +133,8 @@ Prices at build are from Amazon order history. Current prices verified June 2026
 
 {{< figure
   src="in-rack.jpg"
-  alt="Proxmox node 2 installed in the rack alongside other lab equipment"
-  caption="Replace with real in-rack photo showing node position relative to other gear."
+  alt="RackChoice 2U chassis installed in the rack with patch panel above and switched PDU below, blue power LED active"
+  caption="Node 2 in context. Patch panel above, switched PDU below."
 >}}
 
-The node occupies 2U in the rack. Add a sentence here describing its position relative to other gear (e.g., above/below the switch, NAS, etc.) once the rack photo is taken.
+The node sits directly below the patch panel in the rack, above the switched PDU. It's the only thing in the rack that's routing your traffic and blocking ads at the same time.
