@@ -1,4 +1,7 @@
 {{ define "main" }}
+  {{- $images := .Resources.ByType "image" }}
+  {{- $cover := $images.GetMatch (.Params.cover | default "*cover*") }}
+  {{- $feature := $images.GetMatch (.Params.feature | default "*feature*") | default $cover }}
   <article>
     <header class="max-w-prose article-header">
       {{ if .Params.showBreadcrumbs | default (.Site.Params.article.showBreadcrumbs | default false) }}
@@ -18,6 +21,17 @@
         {{- end -}}
       </div>
     </header>
+
+    {{/* Cover image */}}
+    {{ with $feature }}
+      {{ if eq $.Section "blog" }}
+        <div class="max-w-prose mb-0">
+          {{ $altText := $.Params.featureAlt | default $.Params.coverImageAlt | default $.Params.coverAlt | default "" }}
+          {{ $webp := $.Page.Site.Params.enableImageWebp | default true }}
+          {{ partial "picture.html" (dict "img" . "alt" $altText "class" "rounded-md w-full" "lazy" false "webp" $webp) }}
+        </div>
+      {{ end }}
+    {{ end }}
 
     {{/* Divider between header and body */}}
     <div class="max-w-prose mb-8"><hr class="home-divider"></div>
