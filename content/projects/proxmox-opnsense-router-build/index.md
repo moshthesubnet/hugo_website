@@ -107,7 +107,7 @@ DNS ad-blocking across all VLANs. OPNsense's DHCP server hands out Pi-hole's IP 
 
 ## Cost: Then vs. Now
 
-Prices at build are from Amazon order history. Current prices checked at time of publish — fill in before setting `draft: false`.
+Prices at build are from Amazon order history. Current prices verified June 2026.
 
 | Component | At Build | Current (Jun 2026) |
 |-----------|----------|--------------------|
