@@ -81,6 +81,8 @@ The dual-port 2.5G NIC fits cleanly: two ports at 2.5G each is 5 Gbps combined, 
 **Reader note:** If you want to skip the trunk port and assign a physical interface per VLAN instead, a quad-port 2.5G NIC (4 × 2.5G = 10 Gbps) still fits under the ~16 Gbps PCIe budget and gives you four ports to work with.
 {{< /alert >}}
 
+There's another advantage to virtualizing the firewall that's worth calling out here: NIC compatibility. OPNsense (and BSD-based firewalls in general) has historically been fussy about physical chipsets — Realtek NICs in particular have a reputation for driver quirks that range from throughput degradation to outright instability. When OPNsense runs as a VM, it sees a paravirtualized interface (VirtIO) regardless of what's physically on the board. The hypervisor handles the hardware; OPNsense sees a clean, well-supported virtual NIC every time. I use PCIe passthrough to hand OPNsense the Intel I226 directly, which sidesteps this entirely — but for anyone running a pure VM without passthrough, that abstraction layer removes the Realtek-vs-Intel debate from the equation completely.
+
 ## Services Running
 
 Both services have been running for over a year without intervention.
