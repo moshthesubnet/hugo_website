@@ -14,7 +14,7 @@ tags:
   - firewall
   - self-hosted
 images: ["/projects/proxmox-opnsense-router-build/feature.jpg"]
-weight: 10
+weight: 1
 ---
 
 *By [Skyler King](/docs/bio/), CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
