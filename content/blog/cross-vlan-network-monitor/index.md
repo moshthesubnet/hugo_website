@@ -227,7 +227,6 @@ The health dot row at the top is the other one I check regularly. Seven coloured
 
 ## What Didn't Work the First Time
 
-<!-- [PERSONAL EXPERIENCE] -->
 The first implementation used `scapy` for ARP scanning as a fallback for non-OPNsense subnets. Scapy needs `CAP_NET_RAW`. The moment I tried running it as a non-root user in a container, it failed silently: no error, no results, no indication of why. Spent more time than I want to admit on that before checking the capability requirements.
 
 Switched to nmap subprocess calls for the optional supplemental scanning path. `nmap -sn` doesn't need raw socket access for ping sweeps, it falls back to ICMP echo, which works without root in most environments. Not perfect, but sufficient for the subnets OPNsense doesn't cover.
@@ -236,7 +235,6 @@ Host-networked Docker containers also caused duplicate entries on the first pass
 
 ## How It Got Here
 
-<!-- [PERSONAL EXPERIENCE] -->
 The first commit was a scapy ARP scanner with a MAC OUI lookup and a CLI flag. It was fine for a single subnet. The moment I added a second VLAN it became useless, which is when the API approach clicked.
 
 Docker and Proxmox discovery came next: the MAC extraction for Proxmox is regex against their net config strings, which encode adapter types like `virtio=AA:BB:CC:DD:EE:FF,bridge=vmbr0`. There are six adapter type prefixes to handle. Getting that right took longer than the OPNsense integration did.
@@ -246,6 +244,8 @@ Then persistence, then the syslog receiver. The syslog RFC parsing is annoying b
 The biggest single change was removing scapy from the main discovery loop entirely. That happened after the P1 audit when it became obvious that OPNsense ARP was strictly better in every way: no privileges required, covers all VLANs, returns the same data. Scapy is still in the repo for CLI use but hasn't run in months.
 
 The database schema has migrated idempotently through each phase: `_migrate_add_columns()` checks for column existence before adding, so old databases pick up `ipv6`, `custom_type`, `disappearance_count`, `notes`, `scan_count`, and `syslog_ip` on next startup without losing anything.
+
+This same "don't trust the first VLAN you can see" instinct is what eventually cracked a [camera feed that only stuttered across VLAN boundaries](/blog/camera-feed-stutter-vlan/) — same lab, same underlying lesson, different protocol entirely.
 
 ## Frequently Asked Questions
 
