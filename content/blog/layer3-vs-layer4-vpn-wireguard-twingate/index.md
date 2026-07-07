@@ -8,7 +8,7 @@ summary: "WireGuard and TwinGate both call themselves VPNs. One gives you a netw
 coverImage: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&h=630&fit=crop&q=80"
 coverImageAlt: "Close-up of a silver padlock resting on a dark keyboard, symbolizing network access control and security"
 tags: ["vpn", "wireguard", "ztna", "twingate", "networking", "homelab", "security", "ccna"]
-images: ["/blog/layer3-vs-layer4-vpn-wireguard-twingate/feature.png"]
+images: ["/blog/layer3-vs-layer4-vpn-wireguard-twingate/og-card.png"]
 ---
 
 *By [Skyler King](/docs/bio/), CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*

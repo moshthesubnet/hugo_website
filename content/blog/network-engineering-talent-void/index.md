@@ -13,7 +13,7 @@ tags:
   - career
   - netdevops
   - automation
-images: ["/blog/network-engineering-talent-void/feature.png"]
+images: ["/blog/network-engineering-talent-void/og-card.png"]
 ---
 
 *By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*

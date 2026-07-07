@@ -13,7 +13,7 @@ tags:
   - networking
   - hiring
   - IT-career
-images: ["/blog/job-rejection-response-framework/feature.png"]
+images: ["/blog/job-rejection-response-framework/og-card.png"]
 ---
 
 *By [Skyler King](/docs/bio/), CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*

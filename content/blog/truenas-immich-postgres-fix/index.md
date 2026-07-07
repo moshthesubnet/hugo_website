@@ -17,7 +17,7 @@ tags:
   - docker
   - database
   - incident-response
-images: ["/blog/truenas-immich-postgres-fix/feature.png"]
+images: ["/blog/truenas-immich-postgres-fix/og-card.png"]
 ---
 
 *By [Skyler King](/docs/bio/) (CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.)*

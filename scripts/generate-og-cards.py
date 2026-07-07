@@ -4,8 +4,12 @@ Generate OG-style feature cards for blog post bundles, matching the project
 card style: dark bg · teal left accent · bold serif title · description ·
 tags · url watermark · "BLOG" label.
 
-Writes content/blog/<slug>/feature.png (referenced by each post's images:
+Writes content/blog/<slug>/og-card.png (referenced by each post's images:
 frontmatter for og:image / twitter:image).
+
+NOTE: must NOT write to feature.png — layouts/single.html globs *feature*
+in the bundle and renders it as the in-article hero, so a card there
+duplicates the title under the H1 (see commits 953c5c8 / 8385b41).
 
 Usage:
     python3 scripts/generate-og-cards.py
@@ -174,7 +178,7 @@ def main():
     if not posts:
         sys.exit(f"No post bundles found in {CONTENT_DIR}")
 
-    print(f"Generating {len(posts)} cards into content/blog/<slug>/feature.png\n")
+    print(f"Generating {len(posts)} cards into content/blog/<slug>/og-card.png\n")
 
     for post_path in posts:
         text = post_path.read_text()
@@ -185,9 +189,9 @@ def main():
             continue
 
         slug        = post_path.parent.name
-        output_path = post_path.parent / "feature.png"
+        output_path = post_path.parent / "og-card.png"
 
-        print(f"  {'[dry]' if args.dry_run else ''}  {slug} → feature.png")
+        print(f"  {'[dry]' if args.dry_run else ''}  {slug} → og-card.png")
 
         generate_card(
             title=fm["title"],
