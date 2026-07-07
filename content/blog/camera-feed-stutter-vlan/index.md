@@ -17,7 +17,7 @@ tags:
   - homelab
   - networking
   - incident-response
-images: ["/blog/camera-feed-stutter-vlan/feature.png"]
+images: ["/blog/camera-feed-stutter-vlan/og-card.png"]
 ---
 
 *By [Skyler King](/docs/bio/), CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
