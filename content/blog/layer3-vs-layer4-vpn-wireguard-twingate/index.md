@@ -64,8 +64,6 @@ When a WireGuard peer connects, the OS creates an interface — typically `wg0` 
 
 WireGuard's job is encryption and peer authentication. Access control is left to whatever firewall sits on the receiving end. WireGuard itself doesn't restrict what an authenticated peer can reach — that's OPNsense's job, iptables' job, or whoever's writing the rules.
 
-<!-- [PERSONAL EXPERIENCE] -->
-
 ### My WireGuard Setup — What You Actually Get When You Connect
 
 My WireGuard server runs on OPNsense. My personal peer config:
@@ -107,8 +105,6 @@ Layer 4 "VPNs" like TwinGate don't create a network interface. There's no `wg0`.
 Gartner projected that by 2025, at least 70% of new remote access deployments would use ZTNA rather than traditional VPN services ([Gartner Market Guide for Zero Trust Network Access](https://www.gartner.com/), 2022). The driver isn't throughput — WireGuard is measurably faster than anything the TwinGate connector model adds. The driver is access scope. ZTNA enforces least-privilege architecturally, not via firewall rules that someone has to write, maintain, and get right every single time.
 
 The model is structurally different from a VPN at every step: the client authenticates to the TwinGate cloud, not directly to your network; the connector in your network handles the session proxy; the network topology is invisible to the connecting client; and access is defined per-resource — `postgres.internal:5432`, `grafana.internal:3000`, one door at a time.
-
-<!-- [PERSONAL EXPERIENCE] -->
 
 ### TwinGate in My Lab — The Contractor Access Use Case
 
@@ -174,8 +170,6 @@ The blast radius column is where the decision actually lives:
 <figcaption style="font-size:0.8em;color:#737373;margin-top:4px">Hosts or resources reachable by a compromised credential. WireGuard with AllowedIPs = 10.0.0.0/24 vs a TwinGate connector with one defined resource. Original data from the lab.</figcaption>
 </figure>
 
-<!-- [UNIQUE INSIGHT] -->
-
 Compromised credentials are the leading initial access vector — present in over a third of all data breaches, according to the [Verizon 2024 Data Breach Investigations Report](https://www.verizon.com/business/resources/reports/dbir/) (Verizon DBIR, 2024). The architectural difference between a Layer 3 VPN and a Layer 4 ZTNA solution is a direct answer to that number: if a WireGuard credential leaks, the attacker has the same `/24` access as the legitimate user. If a TwinGate credential leaks, the attacker has access to one port on one host. The layer you choose determines what you're handing over.
 
 {{< figure
@@ -203,8 +197,6 @@ Layer 4 is the right model for everyone else. A contractor who needs database ac
 ## Do You Need One or Both?
 
 In a real homelab or small production environment, the answer is almost always both — running in parallel for different trust levels. They're not competing. They serve different threat models.
-
-<!-- [ORIGINAL DATA] -->
 
 ### My Hybrid Setup
 

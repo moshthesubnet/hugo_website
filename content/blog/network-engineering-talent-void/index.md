@@ -90,7 +90,6 @@ This isn't speculation. The Proceedings of the National Academy of Sciences docu
 
 What leaves with every retiring senior engineer isn't just their title. It's the institutional knowledge that never made it into documentation: why the network was designed the way it was, which vendor configurations were tried and abandoned, which legacy systems interact in undocumented ways, and which workarounds were baked in during an emergency a decade ago that nobody fully understands anymore.
 
-<!-- [UNIQUE INSIGHT] -->
 Here's the part most succession planning frameworks miss: tacit knowledge in network engineering is unusually hard to transfer. Unlike software development, where code is at least partially self-documenting, network state often lives in the heads of the people who built it. Change a BGP configuration and break three things that interact with it in ways that aren't written down anywhere. That's Tuesday for a retiring 20-year veteran.
 
 ### The Institutional Knowledge Problem
@@ -142,7 +141,6 @@ That's not a workforce being replaced by automation. It's a workforce being stra
   <figcaption style="text-align:center;font-size:0.8rem;color:#94a3b8;margin-top:0.5rem;">Source: Composite of Gartner, Randstad workforce research, and industry analysis, 2025–2026</figcaption>
 </figure>
 
-<!-- [UNIQUE INSIGHT] -->
 The automation paradox in network engineering is under-discussed: the same tools reducing the need for junior engineers are also preventing those junior engineers from becoming the senior engineers organizations will desperately need in five years. It's a pipeline problem dressed up as a productivity gain.
 
 ### The Missing Middle
@@ -223,7 +221,6 @@ IDC projects that IT talent shortages will cost organizations worldwide $5.5 tri
 
 An understaffed network team is a cybersecurity risk multiplier. Misconfiguration is one of the leading causes of data breaches, and it spikes when teams are thin, overloaded, and running changes without adequate review cycles.
 
-<!-- [UNIQUE INSIGHT] -->
 Here's the compounding problem: burnout from overload drives further churn. When three engineers carry the workload of five, the first thing to go is rigorous change management. The second thing to go is the engineers themselves. Understaffed teams don't stay at three. They become two, then one, and then the organization is in crisis mode paying a consultancy $400/hour to stabilize infrastructure that six months ago had three capable engineers watching it.
 
 The talent void doesn't announce itself. It shows up quietly in deferred upgrades, slower incident response times, and a backlog of security findings that never quite get remediated.

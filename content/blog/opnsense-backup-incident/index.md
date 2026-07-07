@@ -27,8 +27,6 @@ At 3am on a Tuesday, my scheduled Proxmox backup job killed my network. Not in t
 
 ## What Happened
 
-<!-- [PERSONAL EXPERIENCE] -->
-
 Backup-related errors are the single leading cause of data loss, responsible for [32% of all data loss incidents](https://www.businesswire.com/news/home/20240910352430/en/Zerto-Sponsored-Research-Finds-Backup-Only-Recovery-Solutions-Are-Failing-Organizations-One-Third-of-the-Time) ([IDC/Zerto](https://www.zerto.com), 2024). Most of those failures don't announce themselves. Mine didn't either — it just went quiet and waited for morning.
 
 Proxmox runs nightly vzdump backups at 3am. VM 150 — my OPNsense instance — was included in that job and configured to back up in snapshot mode. Snapshot mode briefly freezes the VM to get a consistent disk image. Brief, measured in seconds. Usually harmless.
@@ -40,8 +38,6 @@ The path between my Proxmox management interface (VLAN 99) and my backup storage
 The VM eventually recovered on its own. But the routing state was corrupt enough that I had to do a full Proxmox host reboot to restore connectivity. At 3am. On a Monday.
 
 ## Root Cause
-
-<!-- [UNIQUE INSIGHT] -->
 
 VM snapshot stun time scales linearly with disk count — measured at approximately [188ms per VMDK under normal conditions](https://knowledge.broadcom.com/external/article/337998/vm-snapshot-stun-times-correlate-with-th.html), with aggregate stun reaching 132.5 seconds in extreme cases ([Broadcom KB #337998](https://knowledge.broadcom.com/external/article/337998/vm-snapshot-stun-times-correlate-with-th.html), [virten.net](https://www.virten.net/2015/10/how-long-are-virtual-machines-stunned-for-snapshots-and-vmotion/)). For most VMs, a fraction of a second is irrelevant. For a firewall, even a 200ms freeze drops in-flight routing state — and that's before accounting for the missing guest agent.
 
@@ -68,8 +64,6 @@ OPNsense already syncs its config to Google Drive on every change. The VM image 
 So the actual problem wasn't the snapshot mechanism. It was that I had the wrong backup strategy for this specific VM, and the wrong strategy was actively breaking my infrastructure.
 
 ## What I Actually Did
-
-<!-- [PERSONAL EXPERIENCE] -->
 
 **Step 1: Remove VM 150 from the vzdump job entirely.**
 
@@ -133,8 +127,6 @@ Runs daily at 2am, an hour before the 3am backup job. The API call runs entirely
 
 ## Where Things Stand
 
-<!-- [ORIGINAL DATA] -->
-
 Config is now backed up to two places:
 
 | Location | Trigger | Requires internet | Requires OPNsense up |
@@ -167,6 +159,8 @@ The circular dependency is gone. The backup job runs on a schedule that doesn't 
 The OPNsense VM can freeze, crash, or get deleted — the config is already on disk before any of that happens.
 
 That's the whole thing. A 4am reboot, a removed VM from a backup job, and a 30-line bash script that pulls XML over a local API call. Sometimes the fix is smaller than the incident that revealed the need for it.
+
+Not every OPNsense incident in this lab has been about backups, either — [a stuttering camera feed](/blog/camera-feed-stutter-vlan/) turned out to be a firewall rule that never accounted for a port I didn't know to look for.
 
 ---
 

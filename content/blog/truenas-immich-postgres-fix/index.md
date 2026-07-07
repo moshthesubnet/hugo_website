@@ -46,7 +46,6 @@ The root cause is in the container image. The new `pgvecto` image (which manages
 
 The critical thing: **the upgrade fails before it modifies any data.** Your Postgres 15 data directory is sitting there untouched. The Immich server container and everything downstream simply never get to start. They depend on `pgvecto_upgrade` completing cleanly, and it never does.
 
-<!-- [PERSONAL EXPERIENCE] -->
 What this looks like in the TrueNAS Apps UI: Immich shows as failed. The app lifecycle log shows the pgvecto container pulling successfully (images already cached from a previous pull), then `pgvecto_upgrade` starting and exiting code 1 in under a second. Nothing after that. The main Immich server container doesn't even attempt to start.
 
 > **First-hand summary for anyone linking directly to this section:** Immich 2.6.x enforces a mandatory Postgres 15-to-18 major version upgrade on TrueNAS Community Edition installs. The new pgvecto container image ships without PG15 binaries, causing `pg_upgrade` to exit code 1 before modifying any data. A `pg_dump` → `pg_restore` procedure recovered all 17,512 assets from an 87MB backup in under 30 minutes, with face tags, albums, and shared links intact. ([truenas/apps issue #4628](https://github.com/truenas/apps/issues/4628))
@@ -115,7 +114,6 @@ What this looks like in the TrueNAS Apps UI: Immich shows as failed. The app lif
 
 ## The Rename Trap: Why 15.bak Inside pgData Still Fails
 
-<!-- [UNIQUE INSIGHT] -->
 Here's the mistake that costs an hour. The obvious first move is renaming the PG15 data directory (`mv 15 15.bak`) so Immich initializes a fresh PG18 database on the next start. It looks like it should work. It doesn't.
 
 The `pgvecto_upgrade` container mounts the **entire `pgData` directory** and scans everything inside it. It doesn't check directory names. It looks for PostgreSQL data files at any path under the mount point. When it finds `15.bak/docker/` and sees PG15 data files, it tries the upgrade again. Same error. Same failure.
@@ -140,7 +138,6 @@ The `.bak` suffix is completely invisible to the upgrade script. The only way to
 
 ## How to Fix It: Complete pg_dump → pg_restore Recovery
 
-<!-- [ORIGINAL DATA] -->
 These steps were run live on a TrueNAS Community Edition system on March 20, 2026. The Immich library had 17,512 assets. The database dump was 87MB. Total time from snapshot to verified restore: under 30 minutes.
 
 {{< alert "warning" >}}
