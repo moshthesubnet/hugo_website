@@ -30,6 +30,7 @@ jobs:
             --root-dir ./public
             --exclude '^#'
             --exclude 'https://www.linkedin.com'
+            --exclude 'https://www.instagram.com'
             --exclude 'https://fonts.googleapis.com'
             --exclude 'https://fonts.gstatic.com'
             --exclude 'https://unpkg.com'
