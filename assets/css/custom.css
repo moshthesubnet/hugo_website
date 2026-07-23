@@ -1,7 +1,7 @@
 /* =========================================================
    Minimal Writer — custom styles
-   Near-black (#111111) · Muted Teal (#5eead4)
-   Georgia (hero/titles) · System sans (body) · Fira Code (code)
+   Near-black · Muted Teal (see assets/css/schemes/minimal.css)
+   Georgia (hero/titles) · IBM Plex Sans (body) · Fira Code (code)
    ========================================================= */
 
 html {
@@ -47,7 +47,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Hero and page titles use Georgia */
 .home-hero-title,
-.article-header h1 {
+.article-header h1,
+.page-title {
   font-family: Georgia, 'Times New Roman', serif;
   font-weight: 400;
 }
@@ -65,15 +66,15 @@ body {
    --------------------------------------------------------- */
 .prose {
   --tw-prose-invert-body:          #b0b0b0;
-  --tw-prose-invert-headings:      #fafafa;
-  --tw-prose-invert-links:         #5eead4;
-  --tw-prose-invert-bold:          #e5e5e5;
-  --tw-prose-invert-code:          #5eead4;
-  --tw-prose-invert-pre-code:      #a3a3a3;
-  --tw-prose-invert-pre-bg:        #1a1a1a;
-  --tw-prose-invert-hr:            #262626;
-  --tw-prose-invert-quote-borders: #262626;
-  --tw-prose-invert-quotes:        #a3a3a3;
+  --tw-prose-invert-headings:      rgb(var(--color-neutral-50), 1);
+  --tw-prose-invert-links:         rgb(var(--color-primary-300), 1);
+  --tw-prose-invert-bold:          rgb(var(--color-neutral-200), 1);
+  --tw-prose-invert-code:          rgb(var(--color-primary-300), 1);
+  --tw-prose-invert-pre-code:      rgb(var(--color-neutral-300), 1);
+  --tw-prose-invert-pre-bg:        rgb(var(--color-neutral-900), 1);
+  --tw-prose-invert-hr:            rgb(var(--color-neutral-700), 1);
+  --tw-prose-invert-quote-borders: rgb(var(--color-neutral-700), 1);
+  --tw-prose-invert-quotes:        rgb(var(--color-neutral-300), 1);
   --tw-prose-invert-counters:      #737373;
   --tw-prose-invert-bullets:       #525252;
 }
@@ -82,7 +83,7 @@ body {
    LINKS
    --------------------------------------------------------- */
 a {
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
   text-decoration: none;
 }
 
@@ -92,7 +93,7 @@ a:focus {
 }
 
 a:visited {
-  color: #4cc9b0;
+  color: rgb(var(--color-secondary-300), 1);
 }
 
 /* No underline on image links or nav links */
@@ -118,6 +119,31 @@ body > header nav button {
   padding-bottom: 0;
 }
 
+/* Keep the nav row horizontal at every width — Congo's default stacks
+   Blog/Projects/About/search vertically below 640px, ~250px of header */
+body > header nav {
+  flex-wrap: wrap;
+}
+
+body > header nav > ul.flex-col {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 1.25rem;
+  row-gap: 0.25rem;
+}
+
+body > header nav > ul.flex-col li {
+  margin: 0 !important;
+}
+
+@media (max-width: 480px) {
+  body > header nav > ul.flex-col {
+    column-gap: 0.75rem;
+  }
+}
+
 /* Hero social links — 44px touch target */
 .home-social-link {
   min-height: 44px;
@@ -133,7 +159,7 @@ button.flex.h-8.w-8 {
 
 /* Active nav link — teal bar sweeping left to right */
 body > header a.nav-active {
-  color: #fafafa !important;
+  color: rgb(var(--color-neutral-50), 1) !important;
   text-decoration: none !important;
 }
 
@@ -153,7 +179,7 @@ body > header li:has(a.nav-active)::after {
   left: 0;
   width: 100%;
   height: 2px;
-  background: #5eead4;
+  background: rgb(var(--color-primary-300), 1);
   clip-path: inset(0 100% 0 0);
   animation: nav-bar-in 0.3s ease forwards;
 }
@@ -167,7 +193,7 @@ body > header li:has(a.nav-active)::after {
    HEADER — minimal, no full-bleed
    --------------------------------------------------------- */
 body > header {
-  border-bottom: 1px solid #262626;
+  border-bottom: 1px solid rgb(var(--color-neutral-700), 1);
 }
 
 body > header,
@@ -176,13 +202,13 @@ body > header a,
 body > header a span,
 body > header button,
 body > header button span {
-  color: #737373 !important;
+  color: rgb(var(--color-neutral-300), 1) !important;
 }
 
 /* Site title in nav */
 body > header a[href="/"] span,
 body > header a[href="/"] {
-  color: #fafafa !important;
+  color: rgb(var(--color-neutral-50), 1) !important;
   font-weight: 500;
 }
 
@@ -205,7 +231,7 @@ body > header a[href="/"] {
 }
 
 .site-logo-link span {
-  color: #fafafa !important;
+  color: rgb(var(--color-neutral-50), 1) !important;
   font-weight: 500;
 }
 
@@ -213,18 +239,18 @@ body > header a[href="/"] {
    FOOTER — minimal
    --------------------------------------------------------- */
 body > footer {
-  border-top: 1px solid #262626;
+  border-top: 1px solid rgb(var(--color-neutral-700), 1);
 }
 
 body > footer a {
-  color: #5eead4 !important;
+  color: rgb(var(--color-primary-300), 1) !important;
 }
 
 /* ---------------------------------------------------------
    HEADINGS — clean, no decorations
    --------------------------------------------------------- */
 .prose h2 {
-  color: #fafafa;
+  color: rgb(var(--color-neutral-50), 1);
   font-size: 1.25rem;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
@@ -233,7 +259,7 @@ body > footer a {
 }
 
 .prose h3 {
-  color: #fafafa;
+  color: rgb(var(--color-neutral-50), 1);
   font-size: 1.1rem;
   margin-top: 2rem;
   margin-bottom: 0.75rem;
@@ -258,8 +284,8 @@ body > footer a {
    BLOCKQUOTES
    --------------------------------------------------------- */
 .prose blockquote {
-  border-left: 2px solid #262626;
-  color: #a3a3a3;
+  border-left: 2px solid rgb(var(--color-neutral-700), 1);
+  color: rgb(var(--color-neutral-300), 1);
   font-style: normal;
   background: transparent;
   padding-left: 1rem;
@@ -269,7 +295,7 @@ body > footer a {
    CODE
    --------------------------------------------------------- */
 .prose code {
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
   font-size: 0.8125rem;
   background: rgba(94, 234, 212, 0.08);
   padding: 0.125rem 0.375rem;
@@ -277,8 +303,8 @@ body > footer a {
 }
 
 .prose pre {
-  background: #1a1a1a;
-  border: 1px solid #262626;
+  background: rgb(var(--color-neutral-900), 1);
+  border: 1px solid rgb(var(--color-neutral-700), 1);
   border-radius: 4px;
   padding: 1rem;
   font-size: 0.8125rem;
@@ -286,7 +312,7 @@ body > footer a {
 }
 
 .prose pre code {
-  color: #a3a3a3;
+  color: rgb(var(--color-neutral-300), 1);
   background: transparent;
   padding: 0;
   border-radius: 0;
@@ -302,31 +328,91 @@ body > footer a {
 
 .prose th {
   text-align: left;
-  color: #525252;
+  color: #8a8a8a;
   font-weight: 400;
   font-size: 0.75rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #262626;
+  padding: 0.5rem 1rem 0.5rem 0;
+  border-bottom: 1px solid rgb(var(--color-neutral-700), 1);
 }
 
 .prose td {
-  color: #a3a3a3;
-  padding: 0.625rem 0;
-  border-bottom: 1px solid #1a1a1a;
+  color: rgb(var(--color-neutral-300), 1);
+  padding: 0.625rem 1rem 0.625rem 0;
+  border-bottom: 1px solid rgb(var(--color-neutral-900), 1);
+}
+
+.prose th:last-child,
+.prose td:last-child {
+  padding-right: 0;
 }
 
 /* ---------------------------------------------------------
-   TABLE OF CONTENTS
+   TABLE OF CONTENTS — "On this page" panel
    --------------------------------------------------------- */
+.toc-panel {
+  background: #151515;
+  border: 1px solid rgba(94, 234, 212, 0.3);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+}
+
+.toc-label {
+  color: #8a8a8a;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 0.75rem;
+}
+
+.toc nav > ol {
+  list-style: decimal;
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.toc ol ol {
+  list-style: decimal;
+  margin: 0.375rem 0 0;
+  padding-left: 1.25rem;
+}
+
+/* Congo ships `.toc li { list-style-type: none }` — needs the extra
+   specificity of .toc-panel to restore the numbers */
+.toc .toc-panel li {
+  list-style-type: decimal;
+  color: #b0b0b0;
+  margin: 0 0 0.5rem;
+  padding-left: 0.25rem;
+  line-height: 1.5;
+}
+
+.toc .toc-panel li:last-child {
+  margin-bottom: 0;
+}
+
+.toc .toc-panel li::marker {
+  color: #8a8a8a;
+}
+
 .toc a {
-  color: #737373;
+  color: rgb(var(--color-neutral-200), 1);
+  text-decoration: none;
 }
 
 .toc a:hover,
 .toc a.active {
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
+  text-decoration: none;
+}
+
+/* Mobile: panel sits above the article body */
+@media (max-width: 1023px) {
+  .toc {
+    margin-bottom: 2rem;
+  }
 }
 
 /* ---------------------------------------------------------
@@ -334,9 +420,9 @@ body > footer a {
    --------------------------------------------------------- */
 article .tag,
 .taxonomy-list a {
-  color: #525252;
+  color: #8a8a8a;
   font-size: 0.75rem;
-  border: 1px solid #262626;
+  border: 1px solid rgb(var(--color-neutral-700), 1);
   padding: 0.1875rem 0.625rem;
   border-radius: 3px;
   text-decoration: none;
@@ -344,7 +430,7 @@ article .tag,
 
 article .tag:hover,
 .taxonomy-list a:hover {
-  color: #a3a3a3;
+  color: rgb(var(--color-neutral-300), 1);
   border-color: #525252;
   text-decoration: none;
 }
@@ -353,14 +439,14 @@ article .tag:hover,
    HOMEPAGE — custom layout
    --------------------------------------------------------- */
 .home-hero-title {
-  color: #fafafa;
+  color: rgb(var(--color-neutral-50), 1);
   font-size: 2rem;
   line-height: 1.35;
   margin-bottom: 1.25rem;
 }
 
 .home-hero-intro {
-  color: #a3a3a3;
+  color: rgb(var(--color-neutral-300), 1);
   font-size: 0.9375rem;
   line-height: 1.7;
   max-width: 540px;
@@ -368,7 +454,7 @@ article .tag:hover,
 
 .home-divider {
   border: none;
-  border-top: 1px solid #262626;
+  border-top: 1px solid rgb(var(--color-neutral-700), 1);
   margin: 0;
 }
 
@@ -377,14 +463,14 @@ article .tag:hover,
 }
 
 .home-section-label {
-  color: #737373;
+  color: rgb(var(--color-neutral-300), 1);
   font-size: 0.75rem;
   font-weight: 400;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-top: 0;
   margin-bottom: 1.5rem;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
 }
 
 .home-entry {
@@ -392,7 +478,7 @@ article .tag:hover,
 }
 
 .home-entry-title {
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
   font-size: 1rem;
   font-weight: 500;
   margin-bottom: 0.25rem;
@@ -405,7 +491,7 @@ article .tag:hover,
 }
 
 .home-entry-desc {
-  color: #525252;
+  color: #8a8a8a;
   font-size: 0.8125rem;
 }
 
@@ -414,11 +500,11 @@ article .tag:hover,
   flex-wrap: wrap;
   gap: 0.5rem 1rem;
   font-size: 0.875rem;
-  color: #a3a3a3;
+  color: rgb(var(--color-neutral-300), 1);
 }
 
 .home-certs-dot {
-  color: #404040;
+  color: rgb(var(--color-neutral-600), 1);
 }
 
 /* ---------------------------------------------------------
@@ -430,7 +516,7 @@ article .tag:hover,
 }
 
 .article-header h1 {
-  color: #fafafa;
+  color: rgb(var(--color-neutral-50), 1);
   font-size: 1.75rem;
   line-height: 1.3;
   margin-bottom: 0.75rem;
@@ -438,12 +524,12 @@ article .tag:hover,
 
 .article-meta-strip {
   font-size: 0.8125rem;
-  color: #525252;
+  color: #8a8a8a;
   margin-top: 0.75rem;
 }
 
 .article-meta-strip a {
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
   text-decoration: none;
 }
 
@@ -457,7 +543,7 @@ article .tag:hover,
 }
 
 .back-link a {
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
   font-size: 0.875rem;
   text-decoration: none;
 }
@@ -491,8 +577,8 @@ article .tag:hover,
    SCROLLBAR
    --------------------------------------------------------- */
 ::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #111111; }
-::-webkit-scrollbar-thumb { background: #262626; border-radius: 4px; }
+::-webkit-scrollbar-track { background: rgb(var(--color-neutral-800), 1); }
+::-webkit-scrollbar-thumb { background: rgb(var(--color-neutral-700), 1); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #525252; }
 
 /* ---------------------------------------------------------
@@ -526,7 +612,7 @@ article .tag:hover,
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
-  border: 2px solid #262626;
+  border: 2px solid rgb(var(--color-neutral-700), 1);
 }
 
 .home-hero-identity {
@@ -534,7 +620,7 @@ article .tag:hover,
 }
 
 .home-hero-name {
-  color: #fafafa;
+  color: rgb(var(--color-neutral-50), 1);
   font-family: Georgia, 'Times New Roman', serif;
   font-size: 3rem;
   font-weight: 700;
@@ -543,13 +629,13 @@ article .tag:hover,
 }
 
 .home-hero-tagline {
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
   font-size: 1.0625rem;
   margin-bottom: 0.75rem;
 }
 
 .home-hero-bio {
-  color: #737373;
+  color: rgb(var(--color-neutral-300), 1);
   font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 1.25rem;
@@ -563,7 +649,7 @@ article .tag:hover,
 }
 
 .home-social-link {
-  color: #5eead4 !important;
+  color: rgb(var(--color-primary-300), 1) !important;
   display: flex;
   align-items: center;
   text-decoration: none !important;
@@ -572,7 +658,7 @@ article .tag:hover,
 
 .home-social-link svg,
 .home-social-link svg path {
-  fill: #5eead4 !important;
+  fill: rgb(var(--color-primary-300), 1) !important;
 }
 
 .home-social-link:hover {
@@ -582,17 +668,17 @@ article .tag:hover,
 
 .home-cta {
   display: inline-block;
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
   font-size: 1rem;
   text-decoration: none !important;
-  border: 1px solid #262626;
+  border: 1px solid rgb(var(--color-neutral-700), 1);
   padding: 0.5rem 1.25rem;
   border-radius: 4px;
   transition: border-color 0.15s;
 }
 
 .home-cta:hover {
-  border-color: #5eead4;
+  border-color: rgb(var(--color-primary-300), 1);
   text-decoration: none !important;
 }
 
@@ -610,7 +696,7 @@ article .tag:hover,
    --------------------------------------------------------- */
 #hero-typewriter::after {
   content: '|';
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
   animation: cursor-blink 0.8s step-end infinite;
   margin-left: 1px;
 }
@@ -645,7 +731,7 @@ article .tag:hover,
 }
 
 .home-contact-sidebar-label {
-  color: #737373;
+  color: rgb(var(--color-neutral-300), 1);
   font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -676,16 +762,16 @@ article .tag:hover,
 }
 
 .home-contact-sidebar-link:hover {
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
   text-decoration: none;
 }
 
 .home-contact-sidebar-link:hover svg {
-  fill: #5eead4;
+  fill: rgb(var(--color-primary-300), 1);
 }
 
 .home-contact-sidebar-note {
-  color: #525252;
+  color: #8a8a8a;
   font-size: 0.8125rem;
   line-height: 1.5;
   margin: 0;
@@ -711,7 +797,7 @@ article .tag:hover,
 }
 
 .home-contact-heading-text {
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
   font-family: Georgia, 'Times New Roman', serif;
   font-size: 1.75rem;
   font-weight: 400;
@@ -722,18 +808,18 @@ article .tag:hover,
 .home-contact-heading-line {
   flex: 1;
   height: 1px;
-  background: #262626;
+  background: rgb(var(--color-neutral-700), 1);
 }
 
 .home-contact-desc {
-  color: #737373;
+  color: rgb(var(--color-neutral-300), 1);
   font-size: 0.9375rem;
   margin-bottom: 1.5rem;
 }
 
 .home-contact-card {
   background: #141414;
-  border: 1px solid #262626;
+  border: 1px solid rgb(var(--color-neutral-700), 1);
   border-radius: 6px;
   padding: 1.75rem;
 }
@@ -755,16 +841,16 @@ article .tag:hover,
   font-size: 0.75rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
 }
 
 .home-contact-field input,
 .home-contact-field textarea {
-  background: #111111 !important;
-  border: 1px solid #262626 !important;
+  background: rgb(var(--color-neutral-800), 1) !important;
+  border: 1px solid rgb(var(--color-neutral-700), 1) !important;
   border-radius: 4px !important;
-  color: #e5e5e5 !important;
-  font-family: system-ui, -apple-system, sans-serif !important;
+  color: rgb(var(--color-neutral-200), 1) !important;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif !important;
   font-size: 0.9375rem !important;
   padding: 0.5rem 0.75rem !important;
   outline: none !important;
@@ -777,23 +863,23 @@ article .tag:hover,
 
 .home-contact-field input::placeholder,
 .home-contact-field textarea::placeholder {
-  color: #404040 !important;
+  color: #8a8a8a !important;
 }
 
 .home-contact-field input:focus,
 .home-contact-field textarea:focus {
-  border-color: #5eead4 !important;
+  border-color: rgb(var(--color-primary-300), 1) !important;
   box-shadow: none !important;
 }
 
 .home-contact-submit {
   width: 100%;
   background: transparent !important;
-  border: 1px solid #262626 !important;
+  border: 1px solid rgb(var(--color-neutral-700), 1) !important;
   border-radius: 4px !important;
-  color: #5eead4 !important;
+  color: rgb(var(--color-primary-300), 1) !important;
   cursor: pointer;
-  font-family: system-ui, -apple-system, sans-serif !important;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif !important;
   font-size: 0.9375rem !important;
   font-weight: 400 !important;
   padding: 0.625rem 1.25rem !important;
@@ -803,17 +889,17 @@ article .tag:hover,
 }
 
 .home-contact-submit:hover {
-  border-color: #5eead4 !important;
+  border-color: rgb(var(--color-primary-300), 1) !important;
   background: transparent !important;
   background-image: none !important;
-  color: #5eead4 !important;
+  color: rgb(var(--color-primary-300), 1) !important;
 }
 
 .home-contact-success {
   display: none;
   align-items: center;
   gap: 0.5rem;
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
   font-size: 0.9375rem;
   padding: 0.75rem 0;
 }
@@ -836,7 +922,7 @@ article .tag:hover,
 
 .home-contact-privacy {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: #8a8a8a;
   margin-top: 0.625rem;
   margin-bottom: 0;
 }
@@ -875,7 +961,7 @@ article .tag:hover,
   inset: -2px;
   border-radius: 50%;
   border: 2px solid transparent;
-  border-top-color: #5eead4;
+  border-top-color: rgb(var(--color-primary-300), 1);
   border-right-color: rgba(94, 234, 212, 0.4);
   animation: ring-spin 4s linear infinite;
 }
@@ -888,7 +974,7 @@ article .tag:hover,
 .home-hero-photo {
   width: 240px !important;
   height: 240px !important;
-  border: 1px solid #262626 !important;
+  border: 1px solid rgb(var(--color-neutral-700), 1) !important;
   position: relative;
   z-index: 2;
   animation: glow-pulse 3s ease-in-out infinite;
@@ -916,12 +1002,12 @@ article .tag:hover,
    --------------------------------------------------------- */
 .home-hero-chip {
   position: absolute;
-  background: #1a1a1a;
-  border: 1px solid #5eead4;
+  background: rgb(var(--color-neutral-900), 1);
+  border: 1px solid rgb(var(--color-primary-300), 1);
   border-radius: 3px;
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
   font-size: 0.75rem;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
   padding: 0.25rem 0.625rem;
   white-space: nowrap;
   z-index: 3;
@@ -954,8 +1040,8 @@ article .tag:hover,
 
 .home-social-label {
   font-size: 0.8125rem;
-  color: #5eead4;
-  font-family: system-ui, -apple-system, sans-serif;
+  color: rgb(var(--color-primary-300), 1);
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
 }
 
 @media (max-width: 640px) {
@@ -966,11 +1052,11 @@ article .tag:hover,
    HERO — typewriter prefix color split
    --------------------------------------------------------- */
 .home-hero-iam {
-  color: #a3a3a3;
+  color: rgb(var(--color-neutral-300), 1);
 }
 
 #hero-typewriter {
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
 }
 
 /* ---------------------------------------------------------
@@ -987,8 +1073,8 @@ article .tag:hover,
   flex-direction: row;
   align-items: flex-start;
   gap: 2rem;
-  background: #1a1a1a;
-  border: 1px solid #262626;
+  background: rgb(var(--color-neutral-900), 1);
+  border: 1px solid rgb(var(--color-neutral-700), 1);
   border-radius: 6px;
   padding: 1.5rem;
   transition: box-shadow 0.3s ease, border-color 0.3s ease;
@@ -1019,22 +1105,22 @@ article .tag:hover,
 }
 
 .home-cred-title {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
   font-size: 1.125rem;
   font-weight: 600;
-  color: #e5e5e5;
+  color: rgb(var(--color-neutral-200), 1);
   line-height: 1.3;
 }
 
 .home-cred-issuer {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
   font-size: 0.875rem;
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
 }
 
 .home-cred-date {
   font-size: 0.8125rem;
-  color: #737373;
+  color: rgb(var(--color-neutral-300), 1);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -1080,7 +1166,7 @@ article .tag:hover,
 }
 
 .entry-card:focus-visible {
-  outline: 2px solid #5eead4;
+  outline: 2px solid rgb(var(--color-primary-300), 1);
   outline-offset: 2px;
 }
 
@@ -1103,7 +1189,7 @@ article .tag:hover,
 .entry-card-icon svg {
   width: 34px;
   height: 34px;
-  stroke: #5eead4;
+  stroke: rgb(var(--color-primary-300), 1);
   opacity: 0.78;
   fill: none;
   stroke-width: 1.6;
@@ -1121,14 +1207,14 @@ article .tag:hover,
   display: block;
   font-family: Georgia, 'Times New Roman', serif;
   font-size: 1.18rem;
-  color: #fafafa;
+  color: rgb(var(--color-neutral-50), 1);
   line-height: 1.25;
   margin-bottom: 0.32rem;
   transition: color 0.15s;
 }
 
 .entry-card:hover .entry-card-title {
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
 }
 
 .entry-card-desc {
@@ -1145,13 +1231,14 @@ article .tag:hover,
 
 .entry-card-meta {
   display: block;
-  color: #737373;
+  color: rgb(var(--color-neutral-300), 1);
   font-size: 0.77rem;
   font-family: 'Fira Code', monospace;
 }
 
 .entry-card-rt {
-  color: #5eead4;
+  color: rgb(var(--color-primary-300), 1);
+  white-space: nowrap;
 }
 
 @media (max-width: 640px) {
@@ -1165,5 +1252,11 @@ article .tag:hover,
   }
   .entry-card-title {
     font-size: 1.05rem;
+  }
+
+  /* Clearance so the last card doesn't sit under Congo's floating
+     scroll-to-top button (sticky, bottom-right, ~136px tall) */
+  .entry-list {
+    padding-bottom: 4rem;
   }
 }

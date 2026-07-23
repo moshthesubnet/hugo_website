@@ -95,7 +95,7 @@ Congo provides shortcodes for common documentation patterns — use these instea
 
 ## Design language
 - Colors: Near-black (#111111) background, muted teal (#5eead4) accent, neutral grays
-- Headings: System sans-serif (body), Georgia (hero/page titles)
+- Headings: IBM Plex Sans (body/headings), Georgia (hero/page titles)
 - Code blocks: Fira Code
 - Aesthetic: minimal, content-first, single-column, no visual gimmicks
 - Tone: professional with personality — dry networking humor, confident first-person

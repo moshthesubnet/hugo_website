@@ -11,6 +11,10 @@ enableInlineShortcodes = true
   page = ["HTML"]
 
 [markup]
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 3
+    ordered = true
   [markup.highlight]
     noClasses = false
   [markup.goldmark.renderer]

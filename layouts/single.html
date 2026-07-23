@@ -37,7 +37,7 @@
     <div class="max-w-prose mb-8"><hr class="home-divider"></div>
 
     <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
-      {{ if and (.Params.showTableOfContents | default (.Site.Params.article.showTableOfContents | default false)) (in .TableOfContents "<ul") }}
+      {{ if and (.Params.showTableOfContents | default (.Site.Params.article.showTableOfContents | default false)) (or (in .TableOfContents "<ul") (in .TableOfContents "<ol")) }}
         <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
           <div class="toc pe-5 lg:sticky lg:top-10 print:hidden">
             {{ partial "toc.html" . }}
