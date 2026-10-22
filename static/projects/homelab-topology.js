@@ -10,6 +10,8 @@ const VLAN_COLOR = {
   30: '#fbbf24',
   40: '#4ade80',
   50: '#c084fc',
+  60: '#60a5fa',
+  70: '#fb923c',
   99: '#34d399',
   999: '#818cf8'
 };
@@ -27,134 +29,90 @@ const VLANS = [{
   id: 30,
   name: 'LAB',
   subnet: '10.30.0.0/24',
-  devices: ['Cisco CML VM', 'Netbox VM', 'LLM Server VM', 'Windows 11 VM', 'Home Assistant VM', 'Raspberry Pi', 'MkDocs LXC', 'Bookstack LXC', 'Twingate LXC']
+  devices: ['Cisco CML VM', 'NetBox VM', 'LLM Server VM', 'C-3PO VM', 'Raspberry Pi', 'Twingate LXC', 'Bookstack LXC', 'NLA Probe LXC']
 }, {
   id: 40,
   name: 'SERVERS',
   subnet: '10.40.0.0/28',
-  devices: ['TrueNAS VM', 'NAS (Backup)', 'Docker Host 1 VM', 'Docker Host 2 VM', 'Docker Host 3 VM', 'Podman Host VM']
+  devices: ['Docker Host 1 VM', 'Docker Host 2 VM', 'Rocky 9 Server VM', 'Gitea LXC', 'Pi-hole LXC', 'Pi-hole 2 LXC', 'NAS (Backup)']
 }, {
   id: 50,
   name: 'IoT',
   subnet: '10.50.0.0/24',
-  devices: ['IoT devices (SSID: IoT WiFi)']
+  devices: ['Home Assistant VM', 'IoT devices (SSID: IoT WiFi)']
+}, {
+  id: 60,
+  name: 'IPv6',
+  subnet: '10.60.0.0/24',
+  devices: ['Reserved for IPv6 testing, no hosts yet']
+}, {
+  id: 70,
+  name: 'DMZ',
+  subnet: '10.70.0.0/28',
+  devices: ['3CX PBX VM']
 }, {
   id: 99,
   name: 'MGMT',
   subnet: '10.99.0.0/24',
-  devices: ['OPNsense VM', 'USW Pro Max 16 PoE', 'Cisco Catalyst 2960X', 'Unifi AP', 'DNS 1', 'DNS 2 LXC']
+  devices: ['OPNsense VM', 'pve1', 'pve2', 'pve3', 'PDM VM', 'TrueNAS VM', 'USW Pro Max 16 PoE', 'Cisco Catalyst 2960X', 'Unifi AP']
 }, {
   id: 999,
   name: 'NATIVE',
-  subnet: 'No IP — trunk only',
+  subnet: 'No IP, trunk only',
   devices: ['Trunk: OPNsense → Dist Switch', 'All inter-switch links']
 }];
-const PROXMOX_GUESTS = [{
-  name: 'DNS 2',
-  type: 'LXC',
-  vlanId: 99,
+const guest = (name, type, vlanId, stopped = false) => ({
+  name,
+  type,
+  vlanId,
+  stopped,
   icon: '>'
+});
+const PROXMOX_NODES = [{
+  name: 'pve1',
+  role: 'Main compute',
+  guests: [guest('Pi-hole', 'LXC', 40), guest('Twingate', 'LXC', 30), guest('Bookstack', 'LXC', 30), guest('NLA Probe', 'LXC', 30), guest('iperf3', 'LXC', null, true), guest('TrueNAS', 'VM', 99), guest('PDM', 'VM', 99), guest('Docker Host 1', 'VM', 40), guest('Docker Host 2', 'VM', 40), guest('Rocky 9 Server', 'VM', 40), guest('Cisco CML', 'VM', 30), guest('NetBox', 'VM', 30), guest('LLM Server', 'VM', 30), guest('C-3PO', 'VM', 30, true), guest('Home Asst.', 'VM', 50), guest('3CX PBX', 'VM', 70, true), guest('Kali Linux', 'VM', 20, true), guest('Parrot OS', 'VM', 20, true), guest('Sec. Onion', 'VM', 20, true), guest('DC01', 'VM', null, true), guest('DC02', 'VM', null, true), guest('WRK01', 'VM', null, true), guest('LNX01', 'VM', null, true)]
 }, {
-  name: 'Twingate',
-  type: 'LXC',
-  vlanId: 30,
-  icon: '>'
-}, {
-  name: 'Bookstack',
-  type: 'LXC',
-  vlanId: 30,
-  icon: '>'
-}, {
-  name: 'MkDocs',
-  type: 'LXC',
-  vlanId: 30,
-  icon: '>'
-}, {
-  name: 'TrueNAS',
-  type: 'VM',
-  vlanId: 40,
-  icon: '>'
-}, {
-  name: 'Docker Host 1',
-  type: 'VM',
-  vlanId: 40,
-  icon: '>'
-}, {
-  name: 'Docker Host 2',
-  type: 'VM',
-  vlanId: 40,
-  icon: '>'
-}, {
-  name: 'Docker Host 3',
-  type: 'VM',
-  vlanId: 40,
-  icon: '>'
-}, {
-  name: 'Windows 11',
-  type: 'VM',
-  vlanId: 30,
-  icon: '>'
-}, {
-  name: 'Home Asst.',
-  type: 'VM',
-  vlanId: 30,
-  icon: '>'
-}, {
-  name: 'Netbox',
-  type: 'VM',
-  vlanId: 30,
-  icon: '>'
-}, {
-  name: 'Cisco CML',
-  type: 'VM',
-  vlanId: 30,
-  icon: '>'
-}, {
-  name: 'LLM Server',
-  type: 'VM',
-  vlanId: 30,
-  icon: '>'
-}, {
-  name: 'Kali Linux',
-  type: 'VM',
-  vlanId: 20,
-  icon: '>'
-}, {
-  name: 'Parrot OS',
-  type: 'VM',
-  vlanId: 20,
-  icon: '>'
-}, {
-  name: 'Sec. Onion',
-  type: 'VM',
-  vlanId: 20,
-  icon: '>'
-}, {
-  name: 'Podman Host',
-  type: 'VM',
-  vlanId: 40,
-  icon: '>'
+  name: 'pve2',
+  role: 'Git / GitOps',
+  guests: [guest('Gitea', 'LXC', 40)]
 }];
 const HIGHLIGHTS = [{
   icon: '~',
   title: 'Virtualised Firewall',
-  desc: 'OPNsense runs as a VM on Proxmox Node 1. All traffic passes through it before reaching the distribution switch, with VLAN-aware firewall rules per segment.'
+  desc: 'OPNsense runs as a VM on its own small node (pve3) with the physical NICs passed through. All traffic passes through it before reaching the distribution switch, with VLAN-aware firewall rules per segment.'
+}, {
+  icon: '~',
+  title: 'Three Nodes, One Pane',
+  desc: 'pve1, pve2 and pve3 are standalone Proxmox hosts, not a cluster. Proxmox Datacenter Manager ties them together for monitoring and management from one place.'
 }, {
   icon: '~',
   title: 'Unifi Distribution Core',
   desc: 'USW Pro Max 16 PoE aggregates every VLAN trunk and provides PoE to the access point. Managed centrally via the Unifi Network Application.'
 }, {
   icon: '~',
+  title: 'Config in Git',
+  desc: 'Docker Compose stacks live in a self-hosted Gitea repo on pve2. Ansible deploys them to both Docker hosts, so the repo is the source of truth instead of whatever happens to be on disk.'
+}, {
+  icon: '~',
   title: 'Isolated Lab Segment',
-  desc: 'VLAN 30 (Lab) contains the LLM Server, Cisco CML, Netbox, Windows 11, Home Assistant, Raspberry Pi, and internal services — kept completely separate from the home network so experiments stay contained.'
+  desc: 'VLAN 30 (Lab) contains the LLM Server, Cisco CML, NetBox, Raspberry Pi, and internal services, kept separate from the home network so experiments stay contained.'
 }, {
   icon: '~',
   title: 'Malware Sandbox',
   desc: 'VLAN 20 hard-isolates Kali, Parrot OS and Security Onion with a deny-all outbound firewall rule, preventing any lateral movement into the main network.'
 }, {
   icon: '~',
+  title: 'Redundant DNS',
+  desc: 'Two Pi-hole instances on separate nodes (pve1 and pve3) sit behind one firewall alias, so name resolution survives either node going down.'
+}, {
+  icon: '~',
+  title: 'DMZ for Voice',
+  desc: 'VLAN 70 is a small DMZ for the self-hosted 3CX phone system, kept apart from every internal segment.'
+}, {
+  icon: '~',
   title: 'Dedicated Management',
-  desc: 'VLAN 99 hosts network management devices alongside DNS infrastructure (DNS 1 & DNS 2). VLAN 999 is the secure native/trunk VLAN with no IP assignment, mitigating VLAN hopping.'
+  desc: 'VLAN 99 holds the firewall, switches, AP, all three Proxmox nodes, PDM and TrueNAS. VLAN 999 is the native trunk VLAN with no IP assignment, mitigating VLAN hopping.'
 }, {
   icon: '~',
   title: 'Zero Trust Remote Access',
@@ -208,7 +166,14 @@ const DeviceNode = ({
 
 const HomelabTopology = () => {
   const [selectedVlan, setSelectedVlan] = useState(null);
-  const [pveExpanded, setPveExpanded] = useState(true);
+  const [pveExpanded, setPveExpanded] = useState({
+    pve1: true,
+    pve2: true
+  });
+  const toggleNode = name => setPveExpanded(prev => ({
+    ...prev,
+    [name]: !prev[name]
+  }));
   const [expandedVlan, setExpandedVlan] = useState(null);
   const toggleFilter = id => setSelectedVlan(prev => prev === id ? null : id);
   const toggleVlanRow = id => setExpandedVlan(prev => prev === id ? null : id);
@@ -220,9 +185,9 @@ const HomelabTopology = () => {
     className: "header"
   }, /*#__PURE__*/React.createElement("h1", null, "Home Lab Network Topology"), /*#__PURE__*/React.createElement("p", {
     className: "subtitle"
-  }, "Proxmox \xB7 OPNsense \xB7 Unifi \xB7 7 VLANs \xB7 17 Guests")), /*#__PURE__*/React.createElement("div", {
+  }, "Proxmox \xB7 OPNsense \xB7 Unifi \xB7 9 VLANs \xB7 26 Guests")), /*#__PURE__*/React.createElement("div", {
     className: "stats-row"
-  }, [['2', 'Proxmox Nodes'], ['13', 'Virtual Machines'], ['4', 'LXC Containers'], ['7', 'VLANs'], ['3', 'Switches / APs'], ['2', 'WiFi SSIDs']].map(([n, l]) => /*#__PURE__*/React.createElement("div", {
+  }, [['3', 'Proxmox Nodes'], ['19', 'Virtual Machines'], ['7', 'LXC Containers'], ['9', 'VLANs'], ['3', 'Switches / APs'], ['2', 'WiFi SSIDs']].map(([n, l]) => /*#__PURE__*/React.createElement("div", {
     key: l,
     className: "stat-card"
   }, /*#__PURE__*/React.createElement("div", {
@@ -251,7 +216,7 @@ const HomelabTopology = () => {
     className: "topology-layer"
   }, /*#__PURE__*/React.createElement("div", {
     className: "layer-label"
-  }, "Edge \xB7 Proxmox Node 1"), /*#__PURE__*/React.createElement("div", {
+  }, "Edge \xB7 pve3"), /*#__PURE__*/React.createElement("div", {
     className: "layer-nodes"
   }, /*#__PURE__*/React.createElement(DeviceNode, {
     icon: "F",
@@ -261,10 +226,10 @@ const HomelabTopology = () => {
     onClick: () => toggleFilter(99)
   }), /*#__PURE__*/React.createElement(DeviceNode, {
     icon: "D",
-    name: "DNS 1",
-    subtitle: "Primary DNS Server",
-    vlanId: 99,
-    onClick: () => toggleFilter(99)
+    name: "Pi-hole 2",
+    subtitle: "Secondary DNS (LXC)",
+    vlanId: 40,
+    onClick: () => toggleFilter(40)
   }))), /*#__PURE__*/React.createElement(Connector, {
     label: "Trunk port \xB7 VLAN 999"
   }), /*#__PURE__*/React.createElement("div", {
@@ -317,51 +282,63 @@ const HomelabTopology = () => {
     className: "topology-layer"
   }, /*#__PURE__*/React.createElement("div", {
     className: "layer-label"
-  }, "Server Layer \xB7 Proxmox Node 2"), /*#__PURE__*/React.createElement("div", {
+  }, "Server Layer \xB7 pve1 + pve2"), /*#__PURE__*/React.createElement("div", {
     style: {
-      width: '100%'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "proxmox-compound"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "proxmox-header",
-    onClick: () => setPveExpanded(e => !e)
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "proxmox-title"
-  }, "PROXMOX NODE 2"), /*#__PURE__*/React.createElement("div", {
-    style: {
+      width: '100%',
       display: 'flex',
-      alignItems: 'center',
-      gap: 16
+      flexDirection: 'column',
+      gap: 12
     }
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "proxmox-meta"
-  }, "13 VMs \xB7 4 LXCs"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: '#5eead4',
-      fontSize: '0.875rem',
-      fontFamily: "'Fira Code', monospace"
-    }
-  }, pveExpanded ? '[-]' : '[+]'))), pveExpanded && /*#__PURE__*/React.createElement("div", {
-    className: "guest-grid"
-  }, PROXMOX_GUESTS.map((g, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    className: `guest-card${dimmed(g) ? ' dimmed' : ''}`,
-    style: {
-      borderLeftColor: vc(g.vlanId)
-    },
-    onClick: () => toggleFilter(g.vlanId)
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: vc(g.vlanId),
-      fontWeight: 700,
-      fontSize: '0.625rem'
-    }
-  }, g.icon), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    className: "guest-name"
-  }, g.name), /*#__PURE__*/React.createElement("div", {
-    className: "guest-type"
-  }, g.type)))))))), /*#__PURE__*/React.createElement(Connector, {
+  }, PROXMOX_NODES.map(node => {
+    const expanded = pveExpanded[node.name];
+    const vms = node.guests.filter(g => g.type === 'VM').length;
+    const lxcs = node.guests.length - vms;
+    const meta = [vms > 0 && `${vms} VM${vms === 1 ? '' : 's'}`, lxcs > 0 && `${lxcs} LXC${lxcs === 1 ? '' : 's'}`].filter(Boolean).join(' \xB7 ');
+    return /*#__PURE__*/React.createElement("div", {
+      key: node.name,
+      className: "proxmox-compound"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "proxmox-header",
+      onClick: () => toggleNode(node.name)
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "proxmox-title"
+    }, node.name.toUpperCase(), /*#__PURE__*/React.createElement("span", {
+      className: "proxmox-meta"
+    }, node.role)), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 16
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "proxmox-meta"
+    }, meta), /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: '#5eead4',
+        fontSize: '0.875rem',
+        fontFamily: "'Fira Code', monospace"
+      }
+    }, expanded ? '[-]' : '[+]'))), expanded && /*#__PURE__*/React.createElement("div", {
+      className: "guest-grid"
+    }, node.guests.map((g, i) => /*#__PURE__*/React.createElement("div", {
+      key: i,
+      className: `guest-card${dimmed(g) ? ' dimmed' : ''}`,
+      style: {
+        borderLeftColor: vc(g.vlanId)
+      },
+      onClick: g.vlanId ? () => toggleFilter(g.vlanId) : undefined
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: vc(g.vlanId),
+        fontWeight: 700,
+        fontSize: '0.625rem'
+      }
+    }, g.icon), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      className: "guest-name"
+    }, g.name), /*#__PURE__*/React.createElement("div", {
+      className: "guest-type"
+    }, g.stopped ? `${g.type} \xB7 stopped` : g.type))))));
+  }))), /*#__PURE__*/React.createElement(Connector, {
     label: "Wireless SSIDs via Unifi AP \xB7 wired via Catalyst 2960X"
   }), /*#__PURE__*/React.createElement("div", {
     className: "topology-layer"
@@ -456,7 +433,7 @@ const HomelabTopology = () => {
       marginLeft: '20px',
       lineHeight: '1.8'
     }
-  }, /*#__PURE__*/React.createElement("li", null, "VLAN 999 is the secure native trunk VLAN \u2014 no IP assignment"), /*#__PURE__*/React.createElement("li", null, "Malware lab (VLAN 20) isolated with strict deny-all firewall rules"), /*#__PURE__*/React.createElement("li", null, "VLAN 99 hosts management devices and DNS infrastructure (DNS 1 & DNS 2)"), /*#__PURE__*/React.createElement("li", null, "Zero Trust remote access via Twingate \u2014 no exposed public ports")))), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("li", null, "VLAN 999 is the secure native trunk VLAN, with no IP assignment"), /*#__PURE__*/React.createElement("li", null, "Malware lab (VLAN 20) isolated with strict deny-all firewall rules"), /*#__PURE__*/React.createElement("li", null, "VLAN 99 is the management network: firewall, switches, AP, Proxmox nodes, PDM and TrueNAS"), /*#__PURE__*/React.createElement("li", null, "Zero Trust remote access via Twingate, no inbound ports needed"), /*#__PURE__*/React.createElement("li", null, "3CX phone system isolated in its own DMZ (VLAN 70)")))), /*#__PURE__*/React.createElement("div", {
     className: "improvements-section"
   }, /*#__PURE__*/React.createElement("div", {
     className: "improvements-title"

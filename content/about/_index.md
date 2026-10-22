@@ -28,7 +28,7 @@ This year I finished WGU's Python for IT Automation course. I'm on a term break 
 
 ## The homelab
 
-Three Proxmox nodes, 20 VMs and LXCs, 7 VLANs, OPNsense firewall, Cisco switches, Unifi wireless. My main desktop runs Windows 11, but I live in Linux for the work that matters. My laptop dual-boots Zorin OS and Windows 11, and the lab itself is Linux-first: Ubuntu Server for general workloads, Rocky Linux for RHEL-family practice, Kali for security tooling, and REMnux for malware analysis, with OPNsense (FreeBSD) on the perimeter and TrueNAS plus Synology handling storage. Self-hosted Gitea holds the config, and Ansible deploys it.
+Three Proxmox nodes, 26 VMs and LXCs, 9 VLANs, OPNsense firewall, Cisco switches, Unifi wireless. My main desktop runs Windows 11, but I live in Linux for the work that matters. My laptop dual-boots Zorin OS and Windows 11, and the lab itself is Linux-first: Ubuntu Server for general workloads, Rocky Linux for RHEL-family practice, Kali for security tooling, and REMnux for malware analysis, with OPNsense (FreeBSD) on the perimeter and TrueNAS plus Synology handling storage. Self-hosted Gitea holds the config, and Ansible deploys it.
 
 I use it to test everything I'm learning, from OSPF adjacencies to automated documentation pipelines. You can [explore the interactive topology diagram](/projects/homelab-topology.html) if you're curious.
 
