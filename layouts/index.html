@@ -3,17 +3,9 @@
 
   {{/* ── Hero Identity Block ──────────────────────────────── */}}
   <section class="home-hero">
-    <div class="home-hero-photo-wrap">
-      <div class="home-hero-ring"></div>
-      <img src="/img/profile.png" alt="{{ .Site.Params.author.name }}" class="home-hero-photo">
-      <span class="home-hero-chip home-hero-chip--tl">Networking</span>
-      <span class="home-hero-chip home-hero-chip--bl">Linux</span>
-      <span class="home-hero-chip home-hero-chip--tr">Cloud</span>
-      <span class="home-hero-chip home-hero-chip--br">Automation</span>
-    </div>
+    <img src="/img/profile.png" alt="{{ .Site.Params.author.name }}" class="home-hero-photo" width="160" height="160">
     <div class="home-hero-identity">
-      <h1 class="home-hero-name">Hi, I'm {{ .Site.Params.author.name }}</h1>
-      <p class="home-hero-tagline"><span class="home-hero-iam">I am</span> <span id="hero-typewriter"></span></p>
+      <h1 class="home-hero-name">{{ .Site.Params.author.name }}</h1>
       <p class="home-hero-bio">{{ .Site.Params.author.bio }}</p>
       {{ with .Site.Params.author.links }}
       <div class="home-social-icons">
@@ -74,42 +66,21 @@
   {{/* ── Credentials ──────────────────────────────────────── */}}
   <section class="home-section">
     <h2 class="home-section-label">CREDENTIALS</h2>
-    <div class="home-cred-grid">
-
-      <div class="home-cred-card">
-        <div class="home-cred-badge">
-          <div data-iframe-width="200" data-iframe-height="240"
-               data-share-badge-id="97a687b5-f243-4a7d-8876-b09488998831"
-               data-share-badge-host="https://www.credly.com"></div>
-        </div>
-        <div class="home-cred-meta">
-          <div class="home-cred-title">Cisco Certified Network Associate</div>
-          <div class="home-cred-issuer">Cisco Systems</div>
-          <div class="home-cred-date">Feb 2025</div>
-        </div>
-      </div>
-
-      <div class="home-cred-card">
-        <div class="home-cred-badge">
-          <div data-iframe-width="200" data-iframe-height="240"
-               data-share-badge-id="9b291214-7552-4ab4-a14b-6267fbe12da0"
-               data-share-badge-host="https://www.credly.com"></div>
-        </div>
-        <div class="home-cred-meta">
-          <div class="home-cred-title">CCNA Cybersecurity</div>
-          <div class="home-cred-issuer">Cisco Systems</div>
-          <div class="home-cred-date">Jun 2025</div>
-        </div>
-      </div>
-
-    </div>
-    <script async src="https://cdn.credly.com/assets/utilities/embed.js"></script>
+    <ul class="home-cred-list">
+      <li><span class="home-cred-name">CompTIA Cloud+ <span class="home-cred-issuer">CompTIA</span></span><span class="home-cred-when">Dec 2025</span></li>
+      <li><span class="home-cred-name"><a href="https://www.credly.com/badges/9b291214-7552-4ab4-a14b-6267fbe12da0" rel="noopener noreferrer">CCNA Cybersecurity</a> <span class="home-cred-issuer">Cisco</span></span><span class="home-cred-when">Jun 2025</span></li>
+      <li><span class="home-cred-name"><a href="https://www.credly.com/badges/97a687b5-f243-4a7d-8876-b09488998831" rel="noopener noreferrer">Cisco CCNA</a> <span class="home-cred-issuer">Cisco</span></span><span class="home-cred-when">Feb 2025</span></li>
+      <li><span class="home-cred-name">ITIL 4 Foundation <span class="home-cred-issuer">PeopleCert</span></span><span class="home-cred-when">Jun 2024</span></li>
+      <li><span class="home-cred-name">LPI Linux Essentials <span class="home-cred-issuer">LPI</span></span><span class="home-cred-when">May 2024</span></li>
+      <li><span class="home-cred-name">CompTIA A+ <span class="home-cred-issuer">CompTIA</span></span><span class="home-cred-when">Mar 2024</span></li>
+    </ul>
+    <p class="home-cred-note">CompTIA Security+ is in progress.</p>
   </section>
 
   <hr class="home-divider">
 
   {{/* ── Contact ───────────────────────────────────────────── */}}
-  <section class="home-section home-contact">
+  <section class="home-section home-contact" id="contact">
     <h2 class="home-section-label">GET IN TOUCH</h2>
     {{ partial "contact-form.html" . }}
   </section>

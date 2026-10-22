@@ -14,6 +14,8 @@ tags:
 images: ["/projects/ospf-lab/feature.png"]
 draft: false
 weight: 5
+thumbnail: false  # feature.png is an OG text card, not a thumbnail
+stack: "Cisco IOL · CML Free Tier · Alpine Linux"
 ---
 
 *A hands-on walkthrough of configuring multi-area OSPF, DHCP, and end-to-end connectivity using Cisco IOL routers and Alpine Linux.*

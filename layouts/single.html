@@ -15,7 +15,7 @@
         {{- if eq .Section "projects" -}}
           Project
           {{- with .Params.stack }} · {{ . }}{{ end -}}
-          {{- with .Params.source }} · <a href="{{ . }}">GitHub →</a>{{ end -}}
+          {{- with .Params.source }} · <a href="{{ . }}">{{ if hasPrefix . "http" }}GitHub →{{ else }}Download →{{ end }}</a>{{ end -}}
         {{- else -}}
           Blog{{ if not .Date.IsZero }} · {{ .Date.Format "January 2006" }}{{ end }} · {{ .ReadingTime }} min read
         {{- end -}}
@@ -49,9 +49,9 @@
       </div>
     </section>
 
-    <section class="max-w-prose home-section home-contact" style="padding-top:3rem;">
-      {{ partial "contact-form.html" . }}
-    </section>
+    <div class="max-w-prose">
+      {{ partial "contact-line.html" . }}
+    </div>
 
     <footer class="max-w-prose pt-8 print:hidden">
       {{/* Back link for projects */}}

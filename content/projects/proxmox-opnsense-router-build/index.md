@@ -15,9 +15,8 @@ tags:
   - self-hosted
 images: ["/projects/proxmox-opnsense-router-build/feature.jpg"]
 weight: 1
+stack: "ASRock N100M · Proxmox · OPNsense · Pi-hole"
 ---
-
-*By [Skyler King](/docs/bio/), CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
 
 Running a router and firewall on dedicated hardware means buying a box that does exactly one job and nothing else. Virtualizing it on Proxmox gets you the same isolation (the firewall is still its own OS on its own virtual disk), but you gain config portability, snapshot-based restore, and the ability to run a second service like a DNS sinkhole on the same physical node without touching the firewall's resources.
 

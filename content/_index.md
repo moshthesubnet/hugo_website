@@ -1,4 +1,4 @@
 ---
 title: "Home"
-images: ["/img/concert-logo.png"]
+images: ["/img/og-default.png"]
 ---

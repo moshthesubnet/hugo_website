@@ -6,7 +6,6 @@ lastmod: 2026-03-23
 draft: false
 description: "Homelab docs go stale fast. My n8n pipeline polls OPNsense weekly, diffs state, and triggers Claude Code via SSH to rewrite docs automatically. Five gotchas that cost real time."
 summary: "OPNsense REST API → n8n on DockerHost1 → Claude Code VM via SSH → NetBox YAML + Obsidian Markdown → Syncthing vault on TrueNAS. A documentation pipeline that updates itself, plus the five gotchas that nearly broke it."
-coverAlt: "Green binary code and data streams cascading on dark background representing automation pipelines and data flow"
 tags:
   - homelab
   - n8n
@@ -20,8 +19,6 @@ tags:
 images: ["/blog/homelab-docs-automation-n8n-claude/og-card.png"]
 ---
 
-*By [Skyler King](/docs/bio/), CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
-
 Homelab documentation has a half-life. You write it once, it's accurate for maybe 48 hours, then you add a VLAN, rename a firewall alias, move a VM, and quietly close the Obsidian tab without updating anything. Six months of weekend tinkering later, you have a vault full of beautiful lies.
 
 {{< alert >}}
@@ -34,7 +31,7 @@ My setup is a seven-VLAN OPNsense network (Lab, Servers, IoT, Home, MGMT, Malwar
 
 ## How It Works
 
-The architecture treats live network state as the single source of truth. n8n polls four OPNsense REST endpoints on a weekly schedule, compares the response against a saved JSON snapshot, and only routes to a Claude Code SSH session when something actually changed. If nothing changed — a quiet week with no new leases, no modified aliases, no route additions — the workflow ends silently and logs nothing. No noise. No manual steps. No "I'll update the docs later."
+The architecture treats live network state as the single source of truth. n8n polls four OPNsense REST endpoints on a weekly schedule, compares the response against a saved JSON snapshot, and only routes to a Claude Code SSH session when something actually changed. If nothing changed (a quiet week with no new leases, no modified aliases, no route additions) the workflow ends silently and logs nothing.
 
 n8n runs in Docker on **DockerHost1** in the Servers VLAN (10.30.40.0/28), alongside the other production containers. The generated docs land on NFS-mounted TrueNAS storage in the MGMT VLAN, which Syncthing replicates to every device.
 
@@ -70,9 +67,9 @@ Weekly cadence fits a homelab where the network topology doesn't change daily. I
 
 ## Setting Up the OPNsense API
 
-The OPNsense REST API is accessible at `https://10.0.99.X/api/` — via the MGMT VLAN gateway, which is where infrastructure management traffic belongs. If you haven't worked with the OPNsense API before, I covered the auth model and endpoint basics in [my earlier post on OPNsense config backups](/blog/opnsense-backup-incident/).
+The OPNsense REST API is accessible at `https://10.0.99.X/api/`, via the MGMT VLAN gateway, which is where infrastructure management traffic belongs. If you haven't worked with the OPNsense API before, I covered the auth model and endpoint basics in [my earlier post on OPNsense config backups](/blog/opnsense-backup-incident/).
 
-Create a dedicated read-only API user: **System → Access → Users**, add a user, generate an API key. Under privileges, assign only what you need — I used `status` and `firewall` read permissions. No write access, no admin.
+Create a dedicated read-only API user: **System → Access → Users**, add a user, generate an API key. Under privileges, assign only what you need. I used `status` and `firewall` read permissions. No write access, no admin.
 
 The four endpoints I'm pulling:
 
@@ -80,7 +77,7 @@ The four endpoints I'm pulling:
 GET /api/interfaces/overview/export          # interface state
 GET /api/firewall/alias/searchItem           # firewall aliases
 GET /api/routes/routes/searchroute           # static routes
-GET /api/dhcpv4/leases/search_lease          # DHCP leases (26.1+)
+GET /api/dnsmasq/leases/search               # DHCP leases (26.1+, Dnsmasq)
 ```
 
 That last endpoint matters, and I'll come back to it in the gotchas.
@@ -91,7 +88,7 @@ n8n's HTTP Request nodes handle auth with HTTP Basic using the API key and secre
 
 n8n 2.10.3 runs in Docker on DockerHost1 in the Servers VLAN (10.30.40.0/28). The workflow has six stages: a schedule trigger, four parallel HTTP Request nodes, chained Merge nodes to consolidate the results, a Code node that diffs against saved state, an IF node that branches on whether anything changed, and the SSH execution pipeline.
 
-The parallel API pull nodes each connect to a chain of Merge nodes. n8n Merge nodes only accept two inputs — you discover this the first time you try to fan in four data sources at once. The fix: chain them. Interfaces + Aliases into Merge1, Routes + DHCP into Merge2, then Merge1 + Merge2 into Merge3, which feeds Build State Object. Annoying, functional, expanded in gotcha five.
+The parallel API pull nodes each connect to a chain of Merge nodes. n8n Merge nodes only accept two inputs, which you discover the first time you try to fan in four data sources at once. The fix: chain them. Interfaces + Aliases into Merge1, Routes + DHCP into Merge2, then Merge1 + Merge2 into Merge3, which feeds Build State Object. Annoying, functional, expanded in gotcha five.
 
 The diff logic in the Code node compares each section independently:
 
@@ -117,18 +114,18 @@ If `has_changes` is true, the IF node routes to SSH execution. If not, the workf
 
 ## Triggering Claude Code Over SSH
 
-The SSH node connects to the Claude Code VM on the Lab VLAN (10.30.30.0/24) — a dedicated Ubuntu 24.04 VM on Proxmox that exists solely to run Claude Code sessions. It's separate from TrueNAS, separate from DockerHost1. Keeping it isolated means a runaway prompt can't touch anything important.
+The SSH node connects to the Claude Code VM on the Lab VLAN (10.30.30.0/24), a dedicated Ubuntu 24.04 VM on Proxmox that exists solely to run Claude Code sessions. It's separate from TrueNAS, separate from DockerHost1. Keeping it isolated means a runaway prompt can't touch anything important.
 
 The command:
 
 ```bash
-/home/claude/.npm-global/bin/claude \
+/home/skyler/.local/bin/claude \
   --print \
   --no-auto-updates \
   "$(cat /tmp/doc-prompt.txt)"
 ```
 
-The prompt is pre-written by the n8n Code node and dropped to `/tmp/doc-prompt.txt` via a separate Write File operation before the SSH call. The `--print` flag makes Claude Code output to stdout and exit rather than opening an interactive session — that's the behavior you need for automation.
+The prompt is pre-written by the n8n Code node and written to `/tmp/doc-prompt.txt` by a separate SSH node before this one runs, which sidesteps shell escaping on a large JSON payload. The `--print` flag makes Claude Code output to stdout and exit rather than opening an interactive session, which is the behavior you need for automation.
 
 ## Five Gotchas That Cost Real Time
 
@@ -140,27 +137,31 @@ When n8n connects over SSH and runs a command, it's a non-interactive, non-login
 
 The fix: use the full path to the binary. Find it with `which claude` in an interactive session, copy the absolute path, hardcode it in the SSH command. No aliases, no PATH magic.
 
-If your Claude Code binary is installed via npm globally, it's probably at `/home/user/.npm-global/bin/claude` or `/usr/local/bin/claude`. If it's not where you expect, `find / -name claude -type f 2>/dev/null` will locate it.
+Depending on how you installed it, the binary is probably at `~/.local/bin/claude`, `~/.npm-global/bin/claude`, or `/usr/local/bin/claude`. If it's not where you expect, `find / -name claude -type f 2>/dev/null` will locate it.
 
 ### 2. OPNsense 26.1 Changed the DHCP API Endpoint
 
 OPNsense 26.1 "Witty Woodpecker" made Dnsmasq the default DHCP server for fresh installs, replacing ISC-DHCP. The API path and response schema changed when the underlying daemon changed.
 
-The current endpoint for lease queries on 26.1:
+The lease endpoint moved with it:
 
 ```http
-GET /api/dhcpv4/leases/search_lease
+# Old (pre-26.1, ISC-DHCP)
+GET /api/dhcpv4/leases/searchlease
+
+# New (26.1+, Dnsmasq)
+GET /api/dnsmasq/leases/search
 ```
 
-If you wrote automation against an older OPNsense version, test the endpoint before assuming the schema is identical. The `active_lease` field moved. I was filtering on a key that no longer existed and getting empty results with no error — valid JSON, just not the JSON I expected. The [OPNsense 26.1 release notes](https://docs.opnsense.org/releases/CE_26.1.html) document this under the DHCP section.
+If you wrote automation against an older OPNsense version, test the endpoint before assuming anything. The old path still answers with valid JSON and zero results, so there is no error to catch. I was filtering on a key that no longer existed and getting empty results with no error: valid JSON, just not the JSON I expected. The [OPNsense 26.1 release notes](https://docs.opnsense.org/releases/CE_26.1.html) document this under the DHCP section.
 
-### 3. n8n Code Nodes Run on n8n's Docker Host — Not on Your Vault Host
+### 3. n8n Code Nodes Run on n8n's Docker Host, Not on Your Vault Host
 
-This one cost several runs before I understood what was happening. A Code node in n8n executes JavaScript on the machine running n8n — DockerHost1 in the Servers VLAN. Not on llm-server. Not on the machine where `/mnt/vault1337` is NFS-mounted. Doing `fs.writeFileSync('/mnt/vault1337/homelab/...')` in a Code node writes to DockerHost1's filesystem, where that path doesn't exist. The error: `ENOENT: no such file or directory`.
+This one cost several runs before I understood what was happening. A Code node in n8n executes JavaScript on the machine running n8n, which is DockerHost1 in the Servers VLAN. Not on llm-server. Not on the machine where `/mnt/vault1337` is NFS-mounted. Doing `fs.writeFileSync('/mnt/vault1337/homelab/...')` in a Code node writes to DockerHost1's filesystem, where that path doesn't exist. The error: `ENOENT: no such file or directory`.
 
 The instinct is to mount the vault on DockerHost1 too. Don't. It means two NFS clients writing to the same paths, more permission surface, and another mount to break. The actual fix: route all vault writes through SSH nodes, targeting the host that already has the vault mounted.
 
-Since `Buffer` isn't available in n8n expression evaluators — only in Code nodes — you can't base64-encode in the SSH command expression directly. The pattern that works:
+Since `Buffer` isn't available in n8n expression evaluators (only in Code nodes), you can't base64-encode in the SSH command expression directly. The pattern that works:
 
 1. **Code node**: parse Claude's output, pre-encode each file as base64 and attach it to the item JSON:
 ```javascript
@@ -177,7 +178,7 @@ No filesystem access required on DockerHost1. The target host handles the write.
 
 ### 4. NFS Permissions Are Now the SSH Host's Problem
 
-The documentation output lands on a TrueNAS dataset mounted over NFS at `/mnt/vault1337` on the Claude Code VM — owned by the Syncthing user at UID 568, a TrueNAS-specific service account. Since vault writes go through SSH nodes (see gotcha three), the n8n container itself never touches NFS. No `group_add`, no volume mounts on DockerHost1 needed.
+The documentation output lands on a TrueNAS dataset mounted over NFS at `/mnt/vault1337` on the Claude Code VM, owned by the Syncthing user at UID 568, a TrueNAS-specific service account. Since vault writes go through SSH nodes (see gotcha three), the n8n container itself never touches NFS. No `group_add`, no volume mounts on DockerHost1 needed.
 
 The permissions problem shifts entirely to the SSH target host. That host's user needs write access to the NFS mount. My fix: created a supplementary group on TrueNAS (GID 3000), added it to the dataset ACL with write permissions, added the SSH user to that group on llm-server, and confirmed NFS export honors the GID:
 
@@ -200,7 +201,7 @@ Merge nodes accept exactly two inputs. With four parallel API calls, you need th
 
 ## The Output
 
-The generated output has two forms: structured YAML for NetBox and narrative Markdown for the Obsidian vault. Claude returns both in a single stdout response, separated by a `===SPLIT===` delimiter. The Parse Claude Response Code node splits on that, strips any code fences Claude adds, and pre-encodes each output as base64. Separate SSH nodes then write each file to the vault host using `echo '...' | base64 -d > /path/to/file` — safely passing arbitrary text through the shell without escaping issues.
+The generated output has two forms: structured YAML for NetBox and narrative Markdown for the Obsidian vault. Claude returns both in a single stdout response, separated by a `===SPLIT===` delimiter. The Parse Claude Response Code node splits on that, strips any code fences Claude adds, and pre-encodes each output as base64. Separate SSH nodes then write each file to the vault host using `echo '...' | base64 -d > /path/to/file`, which passes arbitrary text through the shell without escaping issues.
 
 The NetBox YAML output for a DHCP entry on the Lab VLAN:
 
@@ -235,46 +236,18 @@ Download the template below and import it into your n8n workspace:
 {{< button href="/downloads/Homelab%20Topology%20Docs%20Pipeline%20template.json" download="Homelab Topology Docs Pipeline template.json" >}}Download Workflow Template{{< /button >}}
 
 {{< alert >}}
-**Note:** This workflow routes all file writes through SSH — the n8n container never touches the vault directly. You need SSH access from n8n to a host that has your vault mounted, and an OPNsense API credential and SSH credential configured in n8n. It will work on n8n Cloud as long as the SSH target is reachable.
+**Note:** This workflow routes all file writes through SSH. The n8n container never touches the vault directly. You need SSH access from n8n to a host that has your vault mounted, and an OPNsense API credential and SSH credential configured in n8n. It will work on n8n Cloud as long as the SSH target is reachable.
 {{< /alert >}}
 
 ## What's Next
 
-Next is Proxmox API collection. Same workflow pattern, pointed at the Proxmox API instead of OPNsense — VM inventory, container states, storage pools. Pve1 and Pve3 are both on the MGMT VLAN, so the API is already reachable from DockerHost1. Auth model is the same: API tokens with explicit permission scopes.
+Proxmox API collection is next: the same workflow pattern pointed at the Proxmox API for VM inventory, container states, and storage pools. After that, the one I actually want, which is pushing the NetBox YAML into NetBox's own API instead of leaving it in the vault as reference material.
 
-After that, Pi-hole. DNS query logs and the local record list from both instances on the Servers VLAN. Mostly useful for maintaining a source-of-truth list of local DNS entries that doesn't live exclusively inside Pi-hole's admin UI.
-
-The one I actually want most: NetBox push. Right now the YAML lands in the vault as reference material. The next step is wiring up the NetBox API — NetBox runs on the Lab VLAN and already has IPAM data — so records go directly into IPAM. Not just documenting the network; being the network record.
-
-The longer-term goal: treat the Obsidian vault as a queryable graph. Link firewall alias definitions to the services that use them. Cross-reference DHCP leases against VM inventory. Surface when a lease exists for an IP with no corresponding DNS entry. Documentation as infrastructure, not an afterthought.
-
-That's the whole thing. A weekly cron, four API calls, a string comparison, and an SSH session that hands off to Claude Code. The docs update themselves now. The vault stopped lying.
+That's the whole thing. A weekly cron, four API calls, a string comparison, and an SSH session that hands off to Claude Code. The docs update themselves now.
 
 ---
 
 *Running OPNsense 26.1.3, n8n 2.10.3 on Docker, TrueNAS SCALE 24.10.2, and Claude Code on Ubuntu 24.04. The NFS mount is persistent across reboots and the n8n workflow runs without manual intervention. Until it doesn't, at which point I'll write about that too.*
-
-## Frequently Asked Questions
-
-**Can you use the Anthropic API directly instead of Claude Code?**
-
-Yes, and for simpler cases it's cleaner. A direct API call from n8n completes in seconds and has fewer failure modes than an SSH session. The reason to route through Claude Code instead: if you're already paying for Claude Pro, Claude Code automation runs on that subscription at no additional cost. The Anthropic API bills separately per token.
-
-**Does this work with routers other than OPNsense?**
-
-The n8n workflow pattern works with any network device that exposes a REST API — pfSense, Mikrotik RouterOS 7+, or Ubiquiti UniFi all have documented REST interfaces. The diff logic and Claude Code SSH execution are router-agnostic. Swap the HTTP Request nodes and adjust the payload schema for your device.
-
-**How do you handle SSH authentication between n8n and Claude Code?**
-
-SSH key authentication. The n8n container mounts a private key at a known path; the Claude Code VM's `authorized_keys` file holds the corresponding public key. Password-based SSH in automation is a bad pattern — harder to rotate, easier to leak, and impossible to scope to a single host.
-
-**What happens when the pipeline fails?**
-
-n8n logs all execution failures with the error message and the node that threw it. I set up an Error Trigger workflow that sends a notification on failure. Because documentation isn't real-time-critical, a missed run means the docs are one week behind — acceptable for a homelab.
-
-**Is the Claude Code VM always running?**
-
-Yes, it's a persistent Ubuntu 24.04 VM on Proxmox in the Lab VLAN — 2 vCPUs, 4GB RAM, mostly idle between weekly runs. With a weekly schedule you could technically spin it up on demand and the overhead wouldn't matter much. I leave it running anyway — idle VM cost is negligible and it removes one more thing that can fail on trigger day.
 
 <script type="application/ld+json">
 {
@@ -290,8 +263,8 @@ Yes, it's a persistent Ubuntu 24.04 VM on Proxmox in the Lab VLAN — 2 vCPUs, 4
       "author": {
         "@type": "Person",
         "@id": "https://moshthesubnet.com/#author",
-        "name": "Skyler",
-        "url": "https://moshthesubnet.com"
+        "name": "Skyler King",
+        "url": "https://moshthesubnet.com/about/"
       },
       "publisher": {
         "@type": "Organization",
@@ -301,17 +274,26 @@ Yes, it's a persistent Ubuntu 24.04 VM on Proxmox in the Lab VLAN — 2 vCPUs, 4
       },
       "image": {
         "@type": "ImageObject",
-        "url": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&h=630&fit=crop&q=80&fm=webp",
+        "url": "https://moshthesubnet.com/blog/homelab-docs-automation-n8n-claude/og-card.png",
         "width": 1200,
-        "height": 630,
-        "caption": "Dense network cables in a dark server rack lit by green LEDs"
+        "height": 630
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": "https://moshthesubnet.com/blog/homelab-docs-automation-n8n-claude/"
       },
       "articleSection": "Homelab",
-      "keywords": ["homelab", "n8n", "automation", "OPNsense", "Claude Code", "documentation", "networking", "TrueNAS", "Obsidian"],
+      "keywords": [
+        "homelab",
+        "n8n",
+        "automation",
+        "OPNsense",
+        "Claude Code",
+        "documentation",
+        "networking",
+        "TrueNAS",
+        "Obsidian"
+      ],
       "inLanguage": "en-US"
     },
     {
@@ -337,53 +319,14 @@ Yes, it's a persistent Ubuntu 24.04 VM on Proxmox in the Lab VLAN — 2 vCPUs, 4
           "item": "https://moshthesubnet.com/blog/homelab-docs-automation-n8n-claude/"
         }
       ]
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "https://moshthesubnet.com/blog/homelab-docs-automation-n8n-claude/#faq",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Can you use the Anthropic API directly instead of Claude Code for homelab automation?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. A direct API call from n8n completes in seconds and has fewer failure modes than SSH. The reason to route through Claude Code instead: if you're already paying for Claude Pro, Claude Code automation runs on that subscription at no additional cost. The Anthropic API bills separately per token."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does this n8n documentation pipeline work with routers other than OPNsense?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. The pattern works with any network device that exposes a REST API — pfSense, Mikrotik RouterOS 7+, and Ubiquiti UniFi all have documented REST interfaces. The diff logic and Claude Code SSH execution are router-agnostic. Swap the HTTP Request nodes and adjust the payload schema for your device."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do you authenticate the SSH connection between n8n and Claude Code?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "SSH key authentication. The n8n container mounts a private key at a known path; the Claude Code VM's authorized_keys file holds the corresponding public key. Password-based SSH in automation is bad practice — harder to rotate, easier to leak, and impossible to scope to a single host."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What happens when the n8n to Claude Code automation pipeline fails?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "n8n logs all execution failures with the error message and the node that threw it. An Error Trigger workflow sends a notification on failure. Because documentation is not real-time-critical, a failed run means the docs miss one weekly update — acceptable for a homelab environment."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does the Claude Code VM need to be running at all times?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, it runs as a persistent Ubuntu 24.04 VM on Proxmox in the Lab VLAN — 2 vCPUs, 4GB RAM, mostly idle between weekly runs. With a weekly schedule you could spin it up on demand without much overhead penalty. It stays on anyway — idle cost is negligible and it removes one more failure point on trigger day."
-          }
-        }
-      ]
     }
   ]
 }
 </script>
+
+<!-- Assumptions (2026-10-22 voice pass, delete after review):
+- Corrected to match the project page: 26.1 DHCP endpoint is /api/dnsmasq/leases/search; claude binary at /home/skyler/.local/bin/claude; the prompt file is written by an SSH node. If the blog version was the accurate one, the project page is what needs fixing instead.
+- "What's Next" cut from four paragraphs to two sentences. The Pi-hole integration and the "vault as a queryable graph" idea are gone from the post; restore them if they are still plans.
+- Removed closers: "No noise. No manual steps. No 'I'll update the docs later.'" and "The vault stopped lying." and "Not just documenting the network; being the network record."
+- Em dashes inside the text diagram, shell comments, and YAML example were left alone (code, not prose).
+-->

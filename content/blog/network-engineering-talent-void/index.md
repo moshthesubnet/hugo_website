@@ -6,7 +6,6 @@ lastmod: 2026-04-03
 draft: false
 description: "The BLS projects 12% growth in network engineering through 2034 — nearly triple the national average — while a retirement wave, automation, and a widening skills gap converge into a structural workforce crisis."
 summary: "Over 25,000 annual openings projected through 2034 at 12% BLS-confirmed growth, while a retirement wave pulls institutional knowledge out the door and automation dismantles the apprenticeship pipeline. The network engineering talent void isn't coming. It's already here."
-coverAlt: "Long corridor of illuminated server racks in a modern data center facility"
 tags:
   - networking
   - workforce
@@ -15,8 +14,6 @@ tags:
   - automation
 images: ["/blog/network-engineering-talent-void/og-card.png"]
 ---
-
-*By [Skyler King](/docs/bio/) — CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
 
 The U.S. Bureau of Labor Statistics projects more than 25,000 new network engineering openings annually through 2034, at a growth rate nearly triple the national average. Those numbers don't capture the full picture. They measure new roles, not the wave of retirements that will compound them. This isn't a temporary hiring blip from a slow quarter. It's a structural problem that has been building for years and is about to get significantly worse.
 
@@ -31,8 +28,6 @@ The companies that recognize this now will build pipelines. The rest will compet
 ---
 
 ## How Bad Is the Network Engineering Talent Shortage Right Now?
-
-![Wide-angle view of a data center corridor with rows of active server racks](https://images.unsplash.com/photo-1600132806370-bf17e65e942f?w=1200&h=630&fit=crop&q=80&fm=webp)
 
 The U.S. Bureau of Labor Statistics projects more than 25,000 new network engineering openings annually through 2034, a 12% growth rate nearly three times faster than the average for all occupations ([BLS](https://www.bls.gov/ooh/computer-and-information-technology/home.htm), 2024). That growth figure measures new roles only. Factor in the replacement demand from retirements, and the effective annual opening count is considerably higher. Demand is rising. Supply isn't keeping pace. That gap is the definition of a structural shortage.
 
@@ -109,8 +104,6 @@ Gartner projects that 80% of the engineering workforce will need significant ups
 Here's why: the entry-level and mid-level tasks that automation now handles were never just tasks. They were training. Manually configuring routers, troubleshooting connectivity issues ticket by ticket, spending two years monitoring SNMP traps and learning what normal looks like. That repetitive, often tedious work is how engineers build the pattern recognition that makes them effective at senior levels. Remove those rungs and you don't just reduce headcount. You break the pipeline.
 
 That's not a workforce being replaced by automation. It's a workforce being stranded by it.
-
-![Network engineer working with server hardware in a data center environment](https://images.unsplash.com/photo-1573164574572-cb89e39749b4?w=1200&h=630&fit=crop&q=80&fm=webp)
 
 <figure>
   <svg viewBox="0 0 420 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;font-family:system-ui,sans-serif;">
@@ -215,8 +208,6 @@ Infrastructure projects stall when network architects aren't available to sign o
 
 IDC projects that IT talent shortages will cost organizations worldwide $5.5 trillion in losses by 2026 ([IDC](https://www.businesswire.com/news/home/20240514939927/en/IT-Skills-Shortage-Expected-to-Impact-Nine-out-of-Ten-Organizations-by-2026-with-a-Cost-of-5.5-Trillion-in-Delays-Quality-Issues-and-Revenue-Loss-According-to-IDC), 2024). Network engineering contributes disproportionately to that figure because the function is foundational. When the network team is understaffed, every downstream project slows.
 
-![Dense bundle of network patch cables organized in a server rack panel](https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=1200&h=630&fit=crop&q=80&fm=webp)
-
 ### The Security Exposure Angle
 
 An understaffed network team is a cybersecurity risk multiplier. Misconfiguration is one of the leading causes of data breaches, and it spikes when teams are thin, overloaded, and running changes without adequate review cycles.
@@ -224,7 +215,6 @@ An understaffed network team is a cybersecurity risk multiplier. Misconfiguratio
 Here's the compounding problem: burnout from overload drives further churn. When three engineers carry the workload of five, the first thing to go is rigorous change management. The second thing to go is the engineers themselves. Understaffed teams don't stay at three. They become two, then one, and then the organization is in crisis mode paying a consultancy $400/hour to stabilize infrastructure that six months ago had three capable engineers watching it.
 
 The talent void doesn't announce itself. It shows up quietly in deferred upgrades, slower incident response times, and a backlog of security findings that never quite get remediated.
-
 
 ---
 
@@ -235,7 +225,6 @@ Senior network engineering roles routinely take months to fill in most markets. 
 Internal upskilling is the fastest lever. Pairing mid-level network engineers with cloud architects for structured 90-day cross-training, sponsoring Cisco DevNet or AWS Advanced Networking certifications with explicit career path commitments, and creating mentorship tracks between senior engineers and high-potential juniors are all producing measurable retention and capability gains faster than external hiring.
 
 Rethinking job descriptions matters more than most leaders realize. A job description that demands seven certifications and ten years of experience in every listed technology gets 40 applications from overqualified candidates who'll leave in 18 months. A competency-based description that articulates what the person needs to be able to *do* — and what the organization will teach them — opens the pipeline to candidates who grow into the role and stay.
-
 
 ### The Case for NetDevOps
 
@@ -318,83 +307,35 @@ I believe current Network Engineers should pressure their current employers to p
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Skyler King",
-  "url": "https://moshthesubnet.com/docs/bio/",
+  "url": "https://moshthesubnet.com/about/",
   "jobTitle": "Network Engineering Student",
   "alumniOf": {
     "@type": "CollegeOrUniversity",
     "name": "Western Governors University"
   },
   "hasCredential": [
-    { "@type": "EducationalOccupationalCredential", "name": "CCNA" },
-    { "@type": "EducationalOccupationalCredential", "name": "CCNA Cybersecurity (CBROPS)" },
-    { "@type": "EducationalOccupationalCredential", "name": "CompTIA Cloud+" }
-  ],
-  "knowsAbout": ["Network Engineering", "Cloud Networking", "Network Security", "NetDevOps", "Network Automation"]
-}
-</script>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
     {
-      "@type": "Question",
-      "name": "Is the network engineering talent shortage getting worse?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. The retirement wave accelerates through the late 2020s as Baby Boomer engineers exit the workforce. Simultaneously, automation is reducing the entry-level pipeline that develops senior talent. The BLS projects 12% job growth through 2034, meaning demand rises while supply contracts from both ends."
-      }
+      "@type": "EducationalOccupationalCredential",
+      "name": "CCNA"
     },
     {
-      "@type": "Question",
-      "name": "Will AI replace network engineers?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. AI automates tasks, not the discipline. Configuration, monitoring, and fault detection are increasingly automated, but architecture, security design, vendor negotiation, and complex troubleshooting still require human judgment. The engineers at risk are those who only do tasks that AI tools can already replicate."
-      }
+      "@type": "EducationalOccupationalCredential",
+      "name": "CCNA Cybersecurity"
     },
     {
-      "@type": "Question",
-      "name": "What is the most in-demand network engineering skill right now?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Cloud networking and network automation (Python/Ansible) are the top two in-demand skills, based on CIO survey data from 2024-2025. Zero-trust architecture and AIOps follow closely. Engineers who can combine any two of these areas command the strongest compensation premiums in the current market."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How long does it take to build a replacement for a senior network engineer?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Realistically, 7-10 years of hands-on experience is required to produce a senior network architect. This timeline can be compressed with structured mentorship and cross-training programs, but it cannot be eliminated — which is the core reason the retirement wave is so disruptive to organizations."
-      }
+      "@type": "EducationalOccupationalCredential",
+      "name": "CompTIA Cloud+"
     }
+  ],
+  "knowsAbout": [
+    "Network Engineering",
+    "Cloud Networking",
+    "Network Security",
+    "NetDevOps",
+    "Network Automation"
   ]
 }
 </script>
-
-## Frequently Asked Questions
-
-### Is the network engineering talent shortage getting worse?
-
-Yes, and the trajectory is clear. The retirement wave accelerates through the late 2020s as Baby Boomer engineers who joined during the 1990s internet build-out exit the workforce. At the same time, automation is reducing the entry-level pipeline that grows senior talent. The BLS projects 12% growth through 2034 ([BLS](https://www.bls.gov/), 2024), meaning demand rises while supply contracts from both ends.
-
-### Will AI replace network engineers?
-
-No. AI automates tasks, not the discipline. Configuration, monitoring, and fault detection are increasingly automated, but architecture, security design, vendor negotiation, and complex troubleshooting still require human judgment. The engineers at risk are those who only do tasks those tools can replicate.
-
-For a ground-level look at AI-assisted network automation, see [how I automated homelab documentation with n8n and Claude Code](/blog/homelab-docs-automation-n8n-claude/) — the same pattern enterprises are now scaling up.
-
-### What is the most in-demand network engineering skill right now?
-
-Cloud networking and network automation (Python/Ansible) are the top two, based on CIO survey data. Zero-trust architecture and AIOps follow closely. Engineers who can combine any two of these three areas are in the shortest supply and receive the strongest compensation premium.
-
-### How long does it take to build a replacement for a senior network engineer?
-
-Realistically, 7-10 years of hands-on experience produces a senior architect. That timeline can be compressed with structured mentorship and cross-training programs, but it can't be eliminated. This is the core reason the retirement wave is so disruptive. You can't hire your way out of a 10-year development cycle.
-
----
 
 ## Conclusion
 

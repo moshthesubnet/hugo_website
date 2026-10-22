@@ -3,13 +3,13 @@ label = "English"
 weight = 1
 
 [params]
-  description = "Network and cloud engineering — projects, writing, and homelab documentation."
+  description = "Help desk at an MSP, network engineering student at WGU, homelab writeups and the automation I'm learning on the way."
 
   [params.author]
     name = "Skyler King"
     image = "assets/github_profile.png"
-    headline = "Networking | Cloud | IT"
-    bio = "OT to IT is only one letter on paper. Former occupational therapy assistant, future network and cloud engineer."
+    headline = "Networking · Homelab · Automation"
+    bio = "I work help desk at an MSP and study network engineering at WGU. I run a homelab with more VLANs than it needs and write down what breaks. Working toward network automation, from the networking side."
     links = [
       { github = "https://github.com/moshthesubnet" },
       { linkedin = "https://www.linkedin.com/in/skylerkingnetwork" },

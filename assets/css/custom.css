@@ -4,6 +4,38 @@
    Georgia (hero/titles) · IBM Plex Sans (body) · Fira Code (code)
    ========================================================= */
 
+/* ---------------------------------------------------------
+   FONTS — self-hosted (static/fonts), latin subset, swap.
+   Plex upright and Fira Code are variable (wght axis), so one
+   file per face covers every weight the CSS uses.
+   --------------------------------------------------------- */
+@font-face {
+  font-family: 'Fira Code';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/fira-code.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-italic.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 html {
   color-scheme: dark;
 }
@@ -123,6 +155,7 @@ body > header nav button {
    Blog/Projects/About/search vertically below 640px, ~250px of header */
 body > header nav {
   flex-wrap: wrap;
+  column-gap: 1.25rem;
 }
 
 body > header nav > ul.flex-col {
@@ -233,6 +266,13 @@ body > header a[href="/"] {
 .site-logo-link span {
   color: rgb(var(--color-neutral-50), 1) !important;
   font-weight: 500;
+}
+
+/* Narrow phones: icon-only home link so the menu stays on one row */
+@media (max-width: 420px) {
+  .site-logo-link span {
+    display: none;
+  }
 }
 
 /* ---------------------------------------------------------
@@ -566,10 +606,6 @@ article .tag:hover,
    REDUCED MOTION — disable all decorative animations
    --------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .home-hero-ring::before          { animation: none; }
-  .home-hero-photo                 { animation: none; }
-  .home-hero-chip                  { animation: none; }
-  #hero-typewriter::after          { animation: none; opacity: 1; }
   body > header li:has(a.nav-active)::after { animation: none; clip-path: none; }
 }
 
@@ -607,30 +643,24 @@ article .tag:hover,
 }
 
 .home-hero-photo {
-  width: 240px;
-  height: 240px;
-  border-radius: 50%;
+  width: 160px;
+  height: 160px;
+  border-radius: 6px;
   object-fit: cover;
   flex-shrink: 0;
-  border: 2px solid rgb(var(--color-neutral-700), 1);
+  border: 1px solid rgb(var(--color-neutral-700), 1);
 }
 
 .home-hero-identity {
-  margin-left: auto;
+  max-width: 600px;
 }
 
 .home-hero-name {
   color: rgb(var(--color-neutral-50), 1);
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: 3rem;
-  font-weight: 700;
+  font-size: 2.25rem;
+  font-weight: 400;
   line-height: 1.15;
-  margin-bottom: 0.375rem;
-}
-
-.home-hero-tagline {
-  color: rgb(var(--color-primary-300), 1);
-  font-size: 1.0625rem;
   margin-bottom: 0.75rem;
 }
 
@@ -689,21 +719,6 @@ article .tag:hover,
     gap: 1.5rem;
     padding-bottom: 2.5rem;
   }
-}
-
-/* ---------------------------------------------------------
-   HERO — typewriter cursor
-   --------------------------------------------------------- */
-#hero-typewriter::after {
-  content: '|';
-  color: rgb(var(--color-primary-300), 1);
-  animation: cursor-blink 0.8s step-end infinite;
-  margin-left: 1px;
-}
-
-@keyframes cursor-blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
 }
 
 /* ---------------------------------------------------------
@@ -934,104 +949,6 @@ article .tag:hover,
 }
 
 /* ---------------------------------------------------------
-   HERO — glowing animated photo ring
-   --------------------------------------------------------- */
-.home-hero-photo-wrap {
-  position: relative;
-  width: 304px;
-  height: 304px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Dim base ring */
-.home-hero-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 2px solid rgba(94, 234, 212, 0.2);
-}
-
-/* Spinning arc overlay */
-.home-hero-ring::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  border-top-color: rgb(var(--color-primary-300), 1);
-  border-right-color: rgba(94, 234, 212, 0.4);
-  animation: ring-spin 4s linear infinite;
-}
-
-@keyframes ring-spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Photo — override old border, add glow pulse */
-.home-hero-photo {
-  width: 240px !important;
-  height: 240px !important;
-  border: 1px solid rgb(var(--color-neutral-700), 1) !important;
-  position: relative;
-  z-index: 2;
-  animation: glow-pulse 3s ease-in-out infinite;
-}
-
-@keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 18px rgba(94, 234, 212, 0.2); }
-  50%       { box-shadow: 0 0 32px rgba(94, 234, 212, 0.4); }
-}
-
-@media (max-width: 640px) {
-  .home-hero-photo-wrap {
-    width: 200px;
-    height: 200px;
-  }
-
-  .home-hero-photo {
-    width: 160px !important;
-    height: 160px !important;
-  }
-}
-
-/* ---------------------------------------------------------
-   HERO — floating skill chip badges
-   --------------------------------------------------------- */
-.home-hero-chip {
-  position: absolute;
-  background: rgb(var(--color-neutral-900), 1);
-  border: 1px solid rgb(var(--color-primary-300), 1);
-  border-radius: 3px;
-  color: rgb(var(--color-primary-300), 1);
-  font-size: 0.75rem;
-  font-family: 'IBM Plex Sans', system-ui, sans-serif;
-  padding: 0.25rem 0.625rem;
-  white-space: nowrap;
-  z-index: 3;
-  animation: chip-float 3s ease-in-out infinite;
-}
-
-.home-hero-chip--tl { top: 12%;  left: -18%; animation-delay: 0s;     }
-.home-hero-chip--bl { bottom: 18%; left: -14%; animation-delay: 0.75s;  }
-.home-hero-chip--tr { top: 18%;  right: -14%; animation-delay: 1.5s;   }
-.home-hero-chip--br { bottom: 12%; right: -18%; animation-delay: 2.25s; }
-
-@keyframes chip-float {
-  0%, 100% { transform: translateY(0);   }
-  50%       { transform: translateY(-6px); }
-}
-
-@media (max-width: 640px) {
-  .home-hero-chip {
-    font-size: 0.65rem;
-    padding: 0.2rem 0.4rem;
-  }
-}
-
-/* ---------------------------------------------------------
    HERO — social icon + label
    --------------------------------------------------------- */
 .home-social-link {
@@ -1049,92 +966,80 @@ article .tag:hover,
 }
 
 /* ---------------------------------------------------------
-   HERO — typewriter prefix color split
-   --------------------------------------------------------- */
-.home-hero-iam {
-  color: rgb(var(--color-neutral-300), 1);
-}
-
-#hero-typewriter {
-  color: rgb(var(--color-primary-300), 1);
-}
-
-/* ---------------------------------------------------------
    HOMEPAGE — credentials section
    --------------------------------------------------------- */
-.home-cred-grid {
+.home-cred-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 3rem;
+}
+
+.home-cred-list li {
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid rgb(var(--color-neutral-700), 1);
+  font-size: 0.9375rem;
 }
 
-.home-cred-card {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 2rem;
-  background: rgb(var(--color-neutral-900), 1);
-  border: 1px solid rgb(var(--color-neutral-700), 1);
-  border-radius: 6px;
-  padding: 1.5rem;
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-.home-cred-card:hover {
-  border-color: rgba(94, 234, 212, 0.4);
-  box-shadow: 0 0 40px rgba(94, 234, 212, 0.1), 0 0 0 1px rgba(94, 234, 212, 0.2);
-}
-
-.home-cred-badge {
-  flex-shrink: 0;
-  width: 200px;
-  background: #2a2a2a;
-  border-radius: 12px;
-  overflow: hidden;
-  min-height: 240px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.home-cred-meta {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.home-cred-title {
-  font-family: 'IBM Plex Sans', system-ui, sans-serif;
-  font-size: 1.125rem;
-  font-weight: 600;
+.home-cred-name {
   color: rgb(var(--color-neutral-200), 1);
-  line-height: 1.3;
+}
+
+.home-cred-name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-cred-name a:hover {
+  color: rgb(var(--color-primary-300), 1);
+  text-decoration: none;
 }
 
 .home-cred-issuer {
-  font-family: 'IBM Plex Sans', system-ui, sans-serif;
-  font-size: 0.875rem;
-  color: rgb(var(--color-primary-300), 1);
+  color: #8a8a8a;
+  font-size: 0.8125rem;
+  margin-left: 0.25rem;
 }
 
-.home-cred-date {
-  font-size: 0.8125rem;
+.home-cred-when {
   color: rgb(var(--color-neutral-300), 1);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.77rem;
+  white-space: nowrap;
+}
+
+.home-cred-note {
+  color: #8a8a8a;
+  font-size: 0.8125rem;
+  margin: 1rem 0 0;
 }
 
 @media (max-width: 640px) {
-  .home-cred-card {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+  .home-cred-list {
+    grid-template-columns: 1fr;
   }
+}
 
-  .home-cred-badge {
-    width: 200px;
-  }
+/* ---------------------------------------------------------
+   CONTACT LINE — replaces the full form on articles and lists
+   --------------------------------------------------------- */
+.contact-line {
+  color: #8a8a8a;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 3rem 0 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgb(var(--color-neutral-700), 1);
+}
+
+.contact-line a {
+  color: rgb(var(--color-primary-300), 1);
 }
 
 /* ---------------------------------------------------------
@@ -1184,6 +1089,20 @@ article .tag:hover,
 
 .entry-card:hover .entry-card-icon {
   border-color: rgba(94, 234, 212, 0.5);
+}
+
+.entry-card-icon--thumb {
+  background: rgb(var(--color-neutral-900), 1);
+  overflow: hidden;
+}
+
+.entry-card-thumb {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  margin: 0;
 }
 
 .entry-card-icon svg {

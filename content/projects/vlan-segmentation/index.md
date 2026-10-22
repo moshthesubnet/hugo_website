@@ -14,6 +14,8 @@ tags:
 images: ["/projects/vlan-segmentation/feature.png"]
 draft: false
 weight: 6
+thumbnail: false  # feature.png is an OG text card, not a thumbnail
+stack: "Cisco IOS · OPNsense · 802.1Q"
 ---
 
 ## Project Overview

@@ -6,8 +6,6 @@ lastUpdated: "2026-07-07"
 draft: false
 description: "My Home Assistant camera stuttered only across VLANs. iperf3 showed 1.87 Gbps, 0% loss. The real cause: a moving WebRTC port my firewall rule never covered."
 summary: "A camera feed that stuttered only across VLANs, and the elimination process that found the real cause. iperf3 was clean, the proxy bypass changed nothing, two competing camera integrations were muddying every test, and go2rtc's WebRTC media connection never had a path through the firewall."
-coverImage: "https://images.unsplash.com/photo-1695668548342-c0c1ad479aee?w=1200&h=630&fit=crop&q=80&fm=webp"
-coverImageAlt: "Dark server rack with illuminated network equipment and patch cables"
 tags:
   - home-assistant
   - go2rtc
@@ -19,8 +17,6 @@ tags:
   - incident-response
 images: ["/blog/camera-feed-stutter-vlan/og-card.png"]
 ---
-
-*By [Skyler King](/docs/bio/), CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
 
 My Home Assistant camera tile stutters every couple of seconds. Not offline, not frozen, just a steady little hitch, like the video is skipping a frame on a loop. It only happens when I'm viewing it from a device on a different VLAN than the camera. From the camera's own VLAN, it's glass-smooth.
 
@@ -79,37 +75,11 @@ My OPNsense rule for cross-VLAN access to Home Assistant allowed one thing: TCP 
 
 Pinning a rule to a moving target doesn't work, so I didn't try. The fix was to allow Home Assistant out on any port, scoped specifically to that one device instead of the network at large. Playback smoothed out on every VLAN immediately.
 
-{{< figure
-  src="https://images.unsplash.com/photo-1549109926-58f039549485?w=1200&h=630&fit=crop&q=80&fm=webp"
-  alt="White security camera mounted on an exterior wall"
-  caption="The camera, pictured here being blameless. The problem was a port nobody wrote down."
->}}
-
 ## The Rule I Write Now
 
 There's no port number to memorize here; mine wasn't fixed long enough to memorize anyway. The mistake was writing a firewall rule for the port I already knew instead of the ports the service actually uses, and for anything doing WebRTC or ICE negotiation, that number can genuinely move from session to session. Sometimes the honest fix is a scoped-but-open rule rather than a tighter one. I already do [cross-VLAN traffic auditing](/blog/cross-vlan-network-monitor/) in this lab specifically because ARP and assumptions don't reach across VLAN boundaries. This is the same lesson from a different angle: check what a service actually does on the wire before you write a rule for what you assume it does.
 
 Every new self-hosted service that touches more than one VLAN in my [lab now gets a documentation-versus-reality check](/blog/opnsense-backup-incident/) before I trust the "obvious" port to be the whole story.
-
----
-
-## Frequently Asked Questions
-
-### Why does a Home Assistant camera feed only stutter on some VLANs?
-
-Home Assistant's live view runs through go2rtc, which negotiates a WebRTC session with a separate media connection outside the reverse proxy. If a firewall rule only covers the web UI port, devices on VLANs without a rule broad enough for that media connection will see the video fail while signaling still succeeds. The result is a stutter that looks network-related but is actually a missing firewall path.
-
-### What port does go2rtc need open for WebRTC?
-
-Documentation lists `8555` (TCP and UDP) as the standalone default, alongside `1984` for the web UI and `8554` for RTSP ([go2rtc documentation](https://github.com/AlexxIT/go2rtc/blob/master/internal/webrtc/README.md)). That default doesn't always hold in practice: a packet capture on my own firewall showed the WebRTC media connection landing on a different port every session. If you see the same thing, don't chase a moving port: scope a rule that allows the Home Assistant host on any port instead, specific to the device that needs it.
-
-### How do you tell whether a stutter is a network problem or an application problem?
-
-Test the cheapest, most decisive layers first. Run iperf3 across the relevant network path to rule out raw throughput and packet loss, then bypass any reverse proxy and hit the service directly. If the symptom persists in both tests, the network and proxy are both innocent, and the cause is somewhere in the application's own connection handling.
-
-### Why did bypassing the reverse proxy show the exact same stutter?
-
-Because the reverse proxy only carries the WebRTC signaling connection. The media connection, the actual video, opens directly to the origin server on its own port, bypassing the proxy entirely. An issue on that media path shows up identically whether the proxy is in the loop or not, which is why bypassing it ruled out the proxy without touching the actual cause.
 
 <script type="application/ld+json">
 {
@@ -125,8 +95,8 @@ Because the reverse proxy only carries the WebRTC signaling connection. The medi
       "author": {
         "@type": "Person",
         "@id": "https://moshthesubnet.com/#author",
-        "name": "Skyler",
-        "url": "https://moshthesubnet.com"
+        "name": "Skyler King",
+        "url": "https://moshthesubnet.com/about/"
       },
       "publisher": {
         "@type": "Organization",
@@ -136,17 +106,26 @@ Because the reverse proxy only carries the WebRTC signaling connection. The medi
       },
       "image": {
         "@type": "ImageObject",
-        "url": "https://images.unsplash.com/photo-1695668548342-c0c1ad479aee?w=1200&h=630&fit=crop&q=80&fm=webp",
+        "url": "https://moshthesubnet.com/blog/camera-feed-stutter-vlan/og-card.png",
         "width": 1200,
-        "height": 630,
-        "caption": "Dark server rack with illuminated network equipment and patch cables"
+        "height": 630
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": "https://moshthesubnet.com/blog/camera-feed-stutter-vlan/"
       },
       "articleSection": "Homelab",
-      "keywords": ["Home Assistant", "go2rtc", "WebRTC", "OPNsense", "VLAN", "homelab", "networking", "firewall", "incident response"],
+      "keywords": [
+        "Home Assistant",
+        "go2rtc",
+        "WebRTC",
+        "OPNsense",
+        "VLAN",
+        "homelab",
+        "networking",
+        "firewall",
+        "incident response"
+      ],
       "inLanguage": "en-US"
     },
     {
@@ -172,45 +151,12 @@ Because the reverse proxy only carries the WebRTC signaling connection. The medi
           "item": "https://moshthesubnet.com/blog/camera-feed-stutter-vlan/"
         }
       ]
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "https://moshthesubnet.com/blog/camera-feed-stutter-vlan/#faq",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Why does a Home Assistant camera feed only stutter on some VLANs?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Home Assistant's live view runs through go2rtc, which negotiates a WebRTC session with a separate media connection outside the reverse proxy. If a firewall rule only covers the web UI port, devices on VLANs without a rule broad enough for that media connection will see the video fail while signaling still succeeds. The result is a stutter that looks network-related but is actually a missing firewall path."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What port does go2rtc need open for WebRTC?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Documentation lists 8555 (TCP and UDP) as the standalone default, alongside 1984 for the web UI and 8554 for RTSP. That default doesn't always hold in practice: a packet capture on the firewall can show the WebRTC media connection landing on a different port every session. If that happens, don't chase a moving port. Scope a rule that allows the Home Assistant host on any port instead, specific to the device that needs it."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do you tell whether a stutter is a network problem or an application problem?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Test the cheapest, most decisive layers first. Run iperf3 across the relevant network path to rule out raw throughput and packet loss, then bypass any reverse proxy and hit the service directly. If the symptom persists in both tests, the network and proxy are both innocent, and the cause is somewhere in the application's own connection handling."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why did bypassing the reverse proxy show the exact same stutter?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The reverse proxy only carries the WebRTC signaling connection. The media connection, the actual video, opens directly to the origin server on its own port, bypassing the proxy entirely. An issue on that media path shows up identically whether the proxy is in the loop or not, which is why bypassing it ruled out the proxy without touching the actual cause."
-          }
-        }
-      ]
     }
   ]
 }
 </script>
+
+<!-- Assumptions (2026-10-22 voice pass, delete after review):
+- Only mechanical changes here: FAQ section and FAQ schema removed, two Unsplash photos removed, JSON-LD author set to your full name. Prose untouched; this post was the reference for the others.
+- The TL;DR blockquote stays because it reads as your summary, not as an SEO box. Say the word and it goes too.
+-->

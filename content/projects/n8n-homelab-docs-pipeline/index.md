@@ -17,6 +17,9 @@ images: ["/projects/n8n-homelab-docs-pipeline/feature.png"]
 draft: false
 mermaid: true
 weight: 3
+thumbnail: false  # feature.png is an OG text card, not a thumbnail
+stack: "n8n · OPNsense API · Claude Code · SSH"
+source: "/downloads/Homelab%20Topology%20Docs%20Pipeline%20template.json"
 ---
 
 ## What It Does
@@ -245,7 +248,7 @@ flowchart LR
 
 ## n8n Workflow Breakdown
 
-The workflow has 23 nodes across six logical stages. Both triggers fan into the same pipeline — the weekly schedule runs at 6am, the manual trigger is for on-demand runs.
+The workflow has 23 nodes across six logical stages. Both triggers fan into the same pipeline: the weekly schedule runs at 6am, the manual trigger is for on-demand runs.
 
 {{< mermaid >}}
 flowchart TD
@@ -336,7 +339,7 @@ flowchart TD
 
 ### Stage 1: Triggers
 
-Both the weekly schedule (Monday, 6am) and the manual trigger fan out simultaneously to all four HTTP Request nodes. There's no ordering between them — n8n fires all four in parallel.
+Both the weekly schedule (Monday, 6am) and the manual trigger fan out simultaneously to all four HTTP Request nodes. There's no ordering between them. n8n fires all four in parallel.
 
 ### Stage 2: API Collection
 
@@ -355,11 +358,11 @@ Merge nodes accept exactly two inputs, so the four responses are consolidated wi
 
 ### Stage 4: State & Diff
 
-`Build State Object` assembles a single JSON document with a `collected_at` timestamp and all four data sections, then fans out to two nodes simultaneously: it triggers `Read Previous State` (a Code node using `fs.readFileSync` to load `opnsense-state.json` from `/mnt/vault1337/homelab/topology/devices/`, `continueOnFail: true` to handle the first run) and feeds `Diff: Detect Changes` directly. Both paths converge at the Diff node, which compares each section independently — interfaces, aliases, routes, and DHCP leases — and produces a `has_changes` boolean and a human-readable `changes` array.
+`Build State Object` assembles a single JSON document with a `collected_at` timestamp and all four data sections, then fans out to two nodes simultaneously: it triggers `Read Previous State` (a Code node using `fs.readFileSync` to load `opnsense-state.json` from `/mnt/vault1337/homelab/topology/devices/`, `continueOnFail: true` to handle the first run) and feeds `Diff: Detect Changes` directly. Both paths converge at the Diff node, which compares each section independently (interfaces, aliases, routes, and DHCP leases) and produces a `has_changes` boolean and a human-readable `changes` array.
 
 ### Stage 5: Claude Pipeline
 
-If changes are detected, `Build Claude Prompt` constructs the full prompt with the current state JSON and the changes list. A dedicated SSH node (`SSH: Write to tmp file`) writes the prompt to `/tmp/doc-prompt.txt` on the Claude Code VM first — avoiding shell escaping issues with large JSON payloads embedded in command strings. A second SSH node then runs Claude:
+If changes are detected, `Build Claude Prompt` constructs the full prompt with the current state JSON and the changes list. A dedicated SSH node (`SSH: Write to tmp file`) writes the prompt to `/tmp/doc-prompt.txt` on the Claude Code VM first, which avoids shell escaping issues with large JSON payloads embedded in command strings. A second SSH node then runs Claude:
 
 ```bash
 /home/skyler/.local/bin/claude \
@@ -390,13 +393,13 @@ GET /api/routes/routes/searchroute       # static routes
 GET /api/dnsmasq/leases/search           # DHCP leases (OPNsense 26.1 / Dnsmasq)
 ```
 
-Auth is HTTP Basic with a read-only API key scoped to `status` and `firewall` permissions — no write access, no admin. The API user was created under **System → Access → Users** specifically for this workflow.
+Auth is HTTP Basic with a read-only API key scoped to `status` and `firewall` permissions: no write access, no admin. The API user was created under **System → Access → Users** specifically for this workflow.
 
 ---
 
 ## Documentation Output
 
-NetBox YAML — structured topology data formatted for NetBox IPAM import:
+NetBox YAML: structured topology data formatted for NetBox IPAM import:
 
 ```yaml
 prefixes:
@@ -414,7 +417,7 @@ ip_addresses:
     assigned_object_type: dcim.interface
 ```
 
-Obsidian Markdown — a human-readable topology doc with:
+Obsidian Markdown: a human-readable topology doc with:
 - Wiki-links to host entries (`[[NetBox]]`, `[[DockerHost1]]`, etc.)
 - DHCP lease tables per VLAN
 - Firewall alias inventory
@@ -428,13 +431,13 @@ The changelog is what actually gets read. Full state is background context. The 
 
 ### NFS Permissions (SSH Host, Not n8n Container)
 
-TrueNAS runs Syncthing at UID 568 — a platform-specific service account. File writes go through SSH nodes targeting the Claude Code VM (llm-server), which has the vault NFS-mounted at `/mnt/vault1337`. The n8n container itself never touches NFS.
+TrueNAS runs Syncthing at UID 568, a platform-specific service account. File writes go through SSH nodes targeting the Claude Code VM (llm-server), which has the vault NFS-mounted at `/mnt/vault1337`. The n8n container itself never touches NFS.
 
 Fix: Created a supplementary group (GID 3000) on TrueNAS, added it to the dataset ACL with write permissions, and added the SSH user on llm-server to that group. No Docker Compose changes needed on the n8n host.
 
 ### Claude Code PATH in Non-Interactive SSH
 
-n8n SSH sessions are non-interactive and non-login — `.bashrc` and `.profile` don't load. The `claude` binary is invisible to the shell.
+n8n SSH sessions are non-interactive and non-login, so `.bashrc` and `.profile` don't load. The `claude` binary is invisible to the shell.
 
 Fix: Hardcode the full binary path. For a user-local npm install:
 
@@ -446,7 +449,7 @@ Find it with `which claude` in an interactive session, then never use a shell al
 
 ### Code Node Filesystem Isolation
 
-n8n Code nodes execute on the machine running n8n (DockerHost1 in the Servers VLAN). `fs.writeFileSync('/mnt/vault1337/...')` in a Code node tries to write to that path on DockerHost1 — where it doesn't exist. The error is `ENOENT`, which looks like a permissions problem but isn't.
+n8n Code nodes execute on the machine running n8n (DockerHost1 in the Servers VLAN). `fs.writeFileSync('/mnt/vault1337/...')` in a Code node tries to write to that path on DockerHost1, where it doesn't exist. The error is `ENOENT`, which looks like a permissions problem but isn't.
 
 Fix: Route all vault writes through SSH nodes targeting llm-server, which has `/mnt/vault1337` NFS-mounted. Since `Buffer` is not available in n8n expression evaluators, pre-encode content as base64 in Code nodes, then use SSH nodes to decode and write:
 
@@ -466,7 +469,7 @@ GET /api/dhcpv4/leases/searchlease
 GET /api/dnsmasq/leases/search
 ```
 
-The old endpoint returns valid JSON with zero results — no error, just silence. Check the [OPNsense 26.1 release notes](https://docs.opnsense.org/releases/CE_26.1.html) if your lease queries come back empty after an upgrade.
+The old endpoint returns valid JSON with zero results: no error, just silence. Check the [OPNsense 26.1 release notes](https://docs.opnsense.org/releases/CE_26.1.html) if your lease queries come back empty after an upgrade.
 
 ### Merge Node Input Limit
 

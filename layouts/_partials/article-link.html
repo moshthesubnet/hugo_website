@@ -1,7 +1,13 @@
 {{- $page := . -}}
+{{- /* feature image as thumbnail unless the page opts out (e.g. its feature is an OG text card) */ -}}
+{{- $img := ($page.Resources.ByType "image").GetMatch "feature*" -}}
+{{- if eq $page.Params.thumbnail false }}{{ $img = false }}{{ end -}}
 <a href="{{ $page.Permalink }}" class="entry-card" aria-label="{{ $page.Title }}">
-  <span class="entry-card-icon" aria-hidden="true">
-    {{- if eq $page.Section "projects" -}}
+  <span class="entry-card-icon{{ if $img }} entry-card-icon--thumb{{ end }}" aria-hidden="true">
+    {{- if $img -}}
+      {{- $thumb := $img.Fill "192x192 Center webp q85" -}}
+      <img class="entry-card-thumb" src="{{ $thumb.RelPermalink }}" width="96" height="96" loading="lazy" alt="">
+    {{- else if eq $page.Section "projects" -}}
       <svg viewBox="0 0 24 24"><path d="M8 9l-3 3 3 3"/><path d="M16 9l3 3-3 3"/><path d="M13.5 7l-3 10"/></svg>
     {{- else -}}
       <svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13H6z"/><path d="M15 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>

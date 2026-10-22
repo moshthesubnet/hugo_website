@@ -48,7 +48,13 @@
     </section>
     {{ partial "pagination.html" . }}
   {{ end }}
-  <section class="max-w-prose home-section home-contact" style="padding-top:3rem;">
-    {{ partial "contact-form.html" . }}
-  </section>
+  {{ if gt (len .RegularPages) 0 }}
+    <div class="max-w-prose">
+      {{ partial "contact-line.html" . }}
+    </div>
+  {{ else }}
+    <section class="max-w-prose home-section home-contact" style="padding-top:3rem;">
+      {{ partial "contact-form.html" . }}
+    </section>
+  {{ end }}
 {{ end }}

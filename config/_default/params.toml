@@ -1,4 +1,4 @@
-images = ["/img/concert-logo.png"]
+images = ["/img/og-default.png"]
 colorScheme = "minimal"
 defaultAppearance = "dark"
 autoSwitchAppearance = false

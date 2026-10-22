@@ -14,6 +14,8 @@ tags:
 images: ["/projects/local-ai-coding-agent/feature.png"]
 draft: false
 weight: 4
+thumbnail: false  # feature.png is an OG text card, not a thumbnail
+stack: "Proxmox · Ubuntu · Ollama · Aider"
 ---
 
 ## Project Overview
@@ -204,7 +206,6 @@ curl http://10.30.X.30:11434/api/tags
 
 ## Future Enhancements
 
-- **GPU Passthrough:** Implement PCIe passthrough in Proxmox to assign a dedicated Nvidia GPU to the Ubuntu VM, drastically increasing token-per-second (t/s) generation speed
 - **Open WebUI Implementation:** Spin up a Docker container for Open WebUI on the VM to provide a ChatGPT-like interface for general-purpose queries
 - **Model Auto-Updating:** Write a cron job or Ansible playbook to periodically run `ollama pull <model>` to ensure local models are updated
 

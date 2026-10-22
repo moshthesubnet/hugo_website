@@ -6,7 +6,6 @@ lastmod: 2026-03-09
 draft: false
 description: "ARP can't cross VLANs. I built a FastAPI app that queries OPNsense, Proxmox, and Docker APIs for a complete homelab device inventory: no raw sockets, no root required."
 summary: "ARP broadcast → hits one VLAN → sees nothing else. OPNsense REST API → global ARP table for every VLAN → Proxmox API → VM name, node, power state → Docker API → containers with correct host attribution. All merged into SQLite. No raw sockets. No root."
-coverAlt: "Close-up of a green circuit board with rows of electronic components under cool blue lighting."
 tags:
   - homelab
   - python
@@ -19,46 +18,15 @@ tags:
 images: ["/blog/cross-vlan-network-monitor/og-card.png"]
 ---
 
-*By [Skyler King](/docs/bio/), CCNA-certified network engineering student at WGU, building toward a career in cloud and hybrid networking.*
-
 I wanted a dashboard that showed every device on my homelab network. Not just the ones on my workstation's VLAN: every VM, every LXC, every container, across all seven VLANs. One page, everything, live state.
 
 The naive approach is to run a scanner. I tried that. It saw exactly one VLAN.
 
 {{< alert >}}
-**TL;DR:** 38% of organizations can't identify all devices accessing their networks ([Ivanti, 2025](https://www.ivanti.com/blog/state-of-cybersecurity-report)). ARP broadcasts don't cross VLAN boundaries, so a segmented homelab is structurally worse. I built a FastAPI app that queries OPNsense's global ARP table, Proxmox's VM inventory, and Docker Engine directly: no raw sockets, no root. Everything lands in SQLite and renders on a dark-mode dashboard.
+**TL;DR:** ARP broadcasts don't cross VLAN boundaries, so a scanner in a segmented homelab sees one VLAN and nothing else. I built a FastAPI app that queries OPNsense's global ARP table, Proxmox's VM inventory, and Docker Engine directly: no raw sockets, no root. Everything lands in SQLite and renders on a dark-mode dashboard.
 {{< /alert >}}
 
 ## The ARP Problem
-
-38% of organizations can't identify all devices accessing their networks, according to Ivanti's 2025 State of Cybersecurity report, and that's in environments with dedicated security tooling. Add VLAN segmentation and the number gets worse. 71% of security teams say visibility gaps actively delay threat detection ([AlgoSec, 2025](https://algosec.com/state-of-network-security/)), and the root cause is usually the same: scanners that can only see one layer-2 segment at a time.
-
-<figure>
-<svg role="img" aria-label="Horizontal bar chart titled Network Visibility Gap showing three statistics: 38% of organizations cannot identify all devices (Ivanti 2025), 71% of security teams say visibility gaps delay detection (AlgoSec 2025), and over 90% of ransomware attacks involved unmanaged devices (Microsoft MDDR 2024)." xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 210" style="max-width:620px;width:100%;background:transparent;">
-  <title>Network Visibility Gap: Key Statistics</title>
-  <rect x="0" y="0" width="620" height="210" fill="#0f172a" rx="8"/>
-  <text x="310" y="26" text-anchor="middle" fill="#e2e8f0" font-family="system-ui,sans-serif" font-size="13" font-weight="600">Network Visibility Gap</text>
-  <!-- Bar 1: 38% -->
-  <text x="215" y="62" text-anchor="end" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="11">Can't identify all devices</text>
-  <rect x="222" y="50" width="144" height="18" rx="3" fill="#14b8a6"/>
-  <text x="372" y="63" fill="#5eead4" font-family="system-ui,sans-serif" font-size="12" font-weight="600">38%</text>
-  <!-- Bar 2: 71% -->
-  <text x="215" y="102" text-anchor="end" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="11">Visibility gaps delay detection</text>
-  <rect x="222" y="90" width="269" height="18" rx="3" fill="#2dd4bf"/>
-  <text x="497" y="103" fill="#99f6e4" font-family="system-ui,sans-serif" font-size="12" font-weight="600">71%</text>
-  <!-- Bar 3: 90%+ -->
-  <text x="215" y="142" text-anchor="end" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="11">Ransomware via unmanaged devices</text>
-  <rect x="222" y="130" width="342" height="18" rx="3" fill="#0d9488"/>
-  <text x="570" y="143" fill="#5eead4" font-family="system-ui,sans-serif" font-size="12" font-weight="600">90%+</text>
-  <!-- Scale labels -->
-  <text x="222" y="168" fill="#475569" font-family="system-ui,sans-serif" font-size="10">0%</text>
-  <text x="317" y="168" fill="#475569" font-family="system-ui,sans-serif" font-size="10">25%</text>
-  <text x="412" y="168" fill="#475569" font-family="system-ui,sans-serif" font-size="10">50%</text>
-  <text x="507" y="168" fill="#475569" font-family="system-ui,sans-serif" font-size="10">75%</text>
-  <text x="310" y="193" text-anchor="middle" fill="#475569" font-family="system-ui,sans-serif" font-size="10">Sources: Ivanti 2025 · AlgoSec 2025 · Microsoft MDDR 2024</text>
-</svg>
-<figcaption>The visibility problem isn't unique to homelabs: it's a structural issue in any segmented network.</figcaption>
-</figure>
 
 ARP is a layer-2 protocol. When you run a scanner on VLAN 30, it sends broadcast frames. Broadcasts stop at router boundaries. VLAN 30 can't see VLAN 10, VLAN 99, or anything else that a router sits between.
 
@@ -114,8 +82,6 @@ Each scan cycle, active leases are used to populate hostnames on newly discovere
 If you're on OPNsense 26.1+, the DHCP lease endpoint changed from `dhcp/leases/search_lease` to `dnsmasq/leases/search` when the default DHCP backend switched to Dnsmasq. If you're getting empty results with no error, that's probably it.
 {{< /alert >}}
 
-OPNsense maintains the global ARP table for every VLAN it routes, exposing it through an authenticated REST API. A single call to `GET /api/diagnostics/interface/getArp` returns IP-MAC-interface tuples covering every device on every routed subnet, without raw socket access or elevated privileges on the scanning host. Ivanti's 2025 research found 38% of organizations lack full device visibility ([Ivanti](https://www.ivanti.com/blog/state-of-cybersecurity-report), 2025); the OPNsense API approach closes that gap in one query.
-
 ## Proxmox: the name behind the IP
 
 OPNsense gives me IP and MAC. Proxmox gives me the name.
@@ -128,7 +94,7 @@ Stopped VMs are still tracked. Their ARP entries disappear when the lease expire
 
 ## Docker: Containers Without Phantom IPs
 
-71.1% of developers globally use Docker ([Docker, 2025](https://www.docker.com/resources/sonatype-developer-survey/)), with a median of 11.5 containers per host in orchestrated environments ([Datadog, 2023](https://www.datadoghq.com/container-report/)). At that density, a scanner that only resolves layer-3 addresses gives you one row where there could be a dozen services, and no indication which host is actually responsible for them.
+A scanner that only resolves layer-3 addresses gives you one row for a Docker host where there could be a dozen services, and no indication which host is responsible for them.
 
 Docker's engine API (`GET /containers/json`) returns running containers with their network configurations. The tricky part is host-networked containers, ones running with `--network host`. Those containers share the host's MAC address and IP, so they don't have their own ARP entry. If you create a device record for each one, you end up with phantom IPs that duplicate the host.
 
@@ -137,8 +103,6 @@ The fix: check whether a container's network mode is `host`, and if so, collect 
 There's also a host attribution feature for bridge-networked containers. Every container now carries a `docker_host` field: the IP extracted from the TCP socket URL (`tcp://10.30.40.2:2375`). In the dashboard, the container's detail panel shows a **Host** row that resolves `docker_host` against the device list. If the Docker host has an alias set, it shows `"DockerHost1 (10.30.40.2)"`. If not, it shows the raw IP. Setting an alias on the host retroactively improves the label for every container on it without a re-scan.
 
 Multiple Docker hosts are queried in parallel. TCP sockets (`tcp://host:2375`) are the practical option for remote daemons, unauthenticated, but restricted at the firewall to the scanner's IP only.
-
-Docker containers using `--network host` share the daemon host's MAC and IP, creating duplicate device rows in any inventory that doesn't account for this. With 71.1% of developers now running Docker ([Docker](https://www.docker.com/resources/sonatype-developer-survey/), 2025) and 11.5 containers per host as a realistic baseline ([Datadog](https://www.datadoghq.com/container-report/), 2023), container-aware attribution is a practical requirement, not an edge case.
 
 ## SNMP: ARP Caches from Anything Else
 
@@ -233,45 +197,9 @@ Switched to nmap subprocess calls for the optional supplemental scanning path. `
 
 Host-networked Docker containers also caused duplicate entries on the first pass. Every `--network host` container was getting its own device row with the same IP as the host. The attribution logic, checking `container['HostConfig']['NetworkMode'] == 'host'` and merging rather than inserting, fixed it. The dashboard went from looking wrong to looking correct.
 
-## How It Got Here
+The syslog parsing deserves one more note. OPNsense sends RFC 3164, and that timestamp format has a year-rollover edge case in December that I didn't discover until January. The rsyslog relay case, where the UDP source is `127.0.0.1` because syslog is being forwarded, was another one that only showed up once the thing was running for real.
 
-The first commit was a scapy ARP scanner with a MAC OUI lookup and a CLI flag. It was fine for a single subnet. The moment I added a second VLAN it became useless, which is when the API approach clicked.
-
-Docker and Proxmox discovery came next: the MAC extraction for Proxmox is regex against their net config strings, which encode adapter types like `virtio=AA:BB:CC:DD:EE:FF,bridge=vmbr0`. There are six adapter type prefixes to handle. Getting that right took longer than the OPNsense integration did.
-
-Then persistence, then the syslog receiver. The syslog RFC parsing is annoying because OPNsense sends RFC 3164 but the timestamp format has a year-rollover edge case in December that I didn't discover until January. The rsyslog relay case, where UDP source is `127.0.0.1` because syslog is being forwarded, was another one that only showed up in production.
-
-The biggest single change was removing scapy from the main discovery loop entirely. That happened after the P1 audit when it became obvious that OPNsense ARP was strictly better in every way: no privileges required, covers all VLANs, returns the same data. Scapy is still in the repo for CLI use but hasn't run in months.
-
-The database schema has migrated idempotently through each phase: `_migrate_add_columns()` checks for column existence before adding, so old databases pick up `ipv6`, `custom_type`, `disappearance_count`, `notes`, `scan_count`, and `syslog_ip` on next startup without losing anything.
-
-This same "don't trust the first VLAN you can see" instinct is what eventually cracked a [camera feed that only stuttered across VLAN boundaries](/blog/camera-feed-stutter-vlan/) — same lab, same underlying lesson, different protocol entirely.
-
-## Frequently Asked Questions
-
-**Why not just use Nmap for everything?**
-
-Nmap doesn't cross VLAN boundaries any better than ARP does. You can run it against a CIDR that spans multiple subnets, but from the host's perspective, it's still sending probes from one layer-3 location. It also has no VM or container context: it sees IPs, not what's running behind them.
-
-**What's the performance overhead?**
-
-The OPNsense API calls complete in under a second. Proxmox API calls depend on how many nodes you have and how many VMs are on each: two nodes with fifty guests takes a few seconds total. Docker is fast. Full cycle on my setup is around four seconds. Sqlite writes are synchronous but negligible at this scale.
-
-**Do you need the QEMU Guest Agent installed on every VM?**
-
-No. Guest Agent IP resolution is best-effort. If the agent isn't installed or the call fails, the app uses the ARP-sourced IP from OPNsense as a fallback. VMs without the Guest Agent still appear in the inventory: they just use ARP for their IP rather than the agent report.
-
-**How do you handle VMs that share an IP through NAT or load balancers?**
-
-They show up as a single ARP entry. There's no way to distinguish them at the layer-3 level without inspecting traffic, which this app deliberately avoids. If you're running HAProxy or a NAT rule that maps multiple backends to one IP, those backends won't appear separately in the inventory.
-
-**Can this run in Docker itself?**
-
-Yes. The included `docker-compose.yml` uses `network_mode: host`, which is the practical option: it binds directly to the host's network stack and avoids the port mapping complexity for UDP 514. If you can't use host networking, binding port 514 requires either root in the container or `--cap-add NET_BIND_SERVICE`. The easier workaround is remapping to a high port (`SYSLOG_PORT=5140`) at the Docker layer and reconfiguring OPNsense to send there instead. Everything except the syslog receiver runs fine unprivileged.
-
-**What's the security case for tracking every device by MAC?**
-
-Microsoft's 2024 Digital Defense Report found over 90% of ransomware attacks involved unmanaged or unmonitored devices as the initial access point. Most of those devices aren't intentionally hidden: they're just outside whatever scanner is in use. Keying inventory on MAC address means devices that rotate IPs or go offline temporarily don't vanish from the record. A device that appears on the network gets a row. That row persists until explicitly removed.
+The phase-by-phase build history is on the [project page](/projects/cross-vlan-network-monitor/). The same instinct, not trusting the one VLAN you can see, is what eventually cracked a [camera feed that only stuttered across VLAN boundaries](/blog/camera-feed-stutter-vlan/). Same lab, different protocol.
 
 ---
 
@@ -293,8 +221,8 @@ Microsoft's 2024 Digital Defense Report found over 90% of ransomware attacks inv
       "author": {
         "@type": "Person",
         "@id": "https://moshthesubnet.com/#author",
-        "name": "Skyler",
-        "url": "https://moshthesubnet.com"
+        "name": "Skyler King",
+        "url": "https://moshthesubnet.com/about/"
       },
       "publisher": {
         "@type": "Organization",
@@ -304,17 +232,27 @@ Microsoft's 2024 Digital Defense Report found over 90% of ransomware attacks inv
       },
       "image": {
         "@type": "ImageObject",
-        "url": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=630&fit=crop&q=80",
+        "url": "https://moshthesubnet.com/blog/cross-vlan-network-monitor/og-card.png",
         "width": 1200,
-        "height": 630,
-        "caption": "Close-up of a green circuit board with rows of electronic components under cool blue lighting"
+        "height": 630
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": "https://moshthesubnet.com/blog/cross-vlan-network-monitor/"
       },
       "articleSection": "Homelab",
-      "keywords": ["homelab", "network monitoring", "VLAN", "OPNsense", "Proxmox", "Docker", "FastAPI", "Python", "ARP", "cross-VLAN"],
+      "keywords": [
+        "homelab",
+        "network monitoring",
+        "VLAN",
+        "OPNsense",
+        "Proxmox",
+        "Docker",
+        "FastAPI",
+        "Python",
+        "ARP",
+        "cross-VLAN"
+      ],
       "inLanguage": "en-US"
     },
     {
@@ -340,53 +278,14 @@ Microsoft's 2024 Digital Defense Report found over 90% of ransomware attacks inv
           "item": "https://moshthesubnet.com/blog/cross-vlan-network-monitor/"
         }
       ]
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "https://moshthesubnet.com/blog/cross-vlan-network-monitor/#faq",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Why not just use Nmap for cross-VLAN network discovery?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Nmap doesn't cross VLAN boundaries any better than ARP does. It sends probes from one layer-3 location and has no VM or container context. It sees IPs, not what's running behind them. OPNsense's global ARP table already has every device across every routed VLAN in a single API call."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does the QEMU Guest Agent need to be installed on every Proxmox VM?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. Guest Agent IP resolution is best-effort. If the agent isn't installed or the call fails, the app falls back to the ARP-sourced IP from OPNsense. VMs without the Guest Agent still appear in the inventory."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can the cross-VLAN network monitor run in Docker?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. The only complication is the syslog receiver on UDP 514: binding a port below 1024 requires either root in the container or NET_BIND_SERVICE capability, or remapping to a higher port at the Docker layer. Everything else runs fine unprivileged."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How does the app handle host-networked Docker containers?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Containers using --network host share the daemon host's MAC and IP. The app detects this and attributes them back to the physical host's ARP entry rather than creating duplicate device records with phantom IPs."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is the security case for tracking every network device by MAC address?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Microsoft's 2024 Digital Defense Report found over 90% of ransomware attacks involved unmanaged or unmonitored devices as the initial access point. Keying inventory on MAC address means devices that rotate IPs or go temporarily offline don't escape the record: a device that appears on the network gets a row that persists until explicitly removed."
-          }
-        }
-      ]
     }
   ]
 }
 </script>
+
+<!-- Assumptions (2026-10-22 voice pass, delete after review):
+- Cut: the Ivanti/AlgoSec/Microsoft statistics (TL;DR, opener, chart, and the two repeated "capsule" paragraphs) and the Docker/Datadog adoption stats. None of them were about your lab.
+- "How It Got Here" is gone from the post because the project page's Development History covers it phase by phase; I kept the two syslog war stories (December rollover, rsyslog relay) since they only existed here.
+- The FAQ answer about tracking by MAC (Microsoft ransomware stat) went with the FAQ section.
+- Restored the italic footer and the GitHub source link, which the FAQ removal had swept away.
+-->
