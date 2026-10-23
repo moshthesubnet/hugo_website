@@ -9,7 +9,9 @@ static/assets/homelab_topology.svg
 .wrangler/
 opnsense.md
 prompt.md
-Homelab Topology Docs Pipeline.jsoncontent-calendar/
+Homelab Topology Docs Pipeline.json
+content-calendar/
 .gstack/
 .superpowers
-static/previews/docs/
+static/previews/
+docs/
